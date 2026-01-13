@@ -1,5 +1,15 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": "Lg0jJRnwJbfJIyD8H9EGH",
+      "name": "Shaikh Nadeem",
+      "email": "nadeemshaikh@gmail.com",
+      "passwordHash": "$2b$10$/gobc6WDW2OIczIfNtXMUesc293iQN8gTVW3fM8FE55SCxjcEif3C",
+      "role": "landlord",
+      "mobile": "",
+      "aadhaar": ""
+    }
+  ],
   "properties": [],
   "verificationRequests": [],
   "history": [],
