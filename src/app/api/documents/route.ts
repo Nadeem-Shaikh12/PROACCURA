@@ -17,9 +17,9 @@ export async function GET(request: Request) {
     try {
         let documents;
         if (role === 'landlord') {
-            documents = db.getDocumentsByLandlord(userId);
+            documents = await db.getDocumentsByLandlord(userId);
         } else {
-            documents = db.getDocumentsByTenant(userId);
+            documents = await db.getDocumentsByTenant(userId);
         }
         return NextResponse.json({ documents });
     } catch (error) {
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        const newDoc = db.addDocument({
+        const newDoc = await db.addDocument({
             id: crypto.randomUUID(),
             tenantId: finalTenantId,
             landlordId: finalLandlordId,
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
         const notifyTargetId = payload.role === 'landlord' ? finalTenantId : finalLandlordId;
         const notifyTargetRole = payload.role === 'landlord' ? 'tenant' : 'landlord';
 
-        db.addNotification({
+        await db.addNotification({
             id: crypto.randomUUID(),
             userId: notifyTargetId,
             role: notifyTargetRole,

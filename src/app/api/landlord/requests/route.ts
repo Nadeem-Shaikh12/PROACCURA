@@ -26,17 +26,17 @@ export async function GET() {
         // Or filter manually if getRequests returns all (it does)
 
         // Assuming db.getRequests() returns all requests
-        const allRequests = db.getRequests();
+        const allRequests = await db.getRequests();
         const requests = allRequests.filter(r => r.landlordId === landlordId && r.status === 'pending');
 
         // Enhance with property name if possible
-        const enhancedRequests = requests.map(req => {
-            const property = req.propertyId ? db.findPropertyById(req.propertyId) : null;
+        const enhancedRequests = await Promise.all(requests.map(async (req) => {
+            const property = req.propertyId ? await db.findPropertyById(req.propertyId) : null;
             return {
                 ...req,
                 propertyName: property ? property.name : 'Unknown Property'
             };
-        });
+        }));
 
         return NextResponse.json({ requests: enhancedRequests });
     } catch (error) {

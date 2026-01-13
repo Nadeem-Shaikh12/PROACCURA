@@ -23,7 +23,7 @@ export async function POST(req: Request) {
         const { id, status, remarks, ...extraData } = body;
 
         // Security: Fetch request first to check ownership
-        const allRequests = db.getRequests();
+        const allRequests = await db.getRequests();
         const existingRequest = allRequests.find(r => r.id === id);
 
         if (!existingRequest) {
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
         }
 
         // Update request status
-        const updatedRequest = db.updateRequestStatus(id, status, remarks, extraData);
+        const updatedRequest = await db.updateRequestStatus(id, status, remarks, extraData);
 
         if (!updatedRequest) {
             return NextResponse.json({ error: 'Failed to update' }, { status: 500 });
@@ -45,12 +45,12 @@ export async function POST(req: Request) {
         // Logic for history and notifications
         if (status === 'approved') {
             // STRICT RULE: Check if tenant already has an ACTIVE stay
-            const existingStay = db.getTenantStay(updatedRequest.tenantId);
+            const existingStay = await db.getTenantStay(updatedRequest.tenantId);
             if (existingStay) {
                 return NextResponse.json({ error: 'Tenant already has an active tenancy. They must move out first.' }, { status: 400 });
             }
 
-            db.addHistory({
+            await db.addHistory({
                 id: crypto.randomUUID(),
                 tenantId: updatedRequest.tenantId,
                 type: 'JOINED',
@@ -60,7 +60,7 @@ export async function POST(req: Request) {
             });
 
             // MAGIC MOMENT: Establish the TenantStay connection
-            db.addTenantStay({
+            await db.addTenantStay({
                 id: crypto.randomUUID(),
                 tenantId: updatedRequest.tenantId,
                 landlordId: payload.userId as string,
@@ -71,15 +71,15 @@ export async function POST(req: Request) {
 
             // UPDATE PROPERTY OCCUPANCY
             if (existingRequest.propertyId) {
-                const property = db.findPropertyById(existingRequest.propertyId);
+                const property = await db.findPropertyById(existingRequest.propertyId);
                 if (property) {
                     const newOccupancy = Math.min(property.units, (property.occupiedUnits || 0) + 1);
-                    db.updateProperty(property.id, { occupiedUnits: newOccupancy });
+                    await db.updateProperty(property.id, { occupiedUnits: newOccupancy });
                 }
             }
 
             // Notify Tenant
-            db.addNotification({
+            await db.addNotification({
                 id: crypto.randomUUID(),
                 userId: updatedRequest.tenantId,
                 role: 'tenant',
@@ -91,10 +91,10 @@ export async function POST(req: Request) {
             });
         } else if (status === 'moved_out') {
             // CRITICAL: Update TenantStay status to MOVED_OUT
-            const endedStay = db.endTenantStay(updatedRequest.tenantId);
+            const endedStay = await db.endTenantStay(updatedRequest.tenantId);
 
             // Add MOVE_OUT history
-            db.addHistory({
+            await db.addHistory({
                 id: crypto.randomUUID(),
                 tenantId: updatedRequest.tenantId,
                 type: 'MOVE_OUT',
@@ -105,15 +105,15 @@ export async function POST(req: Request) {
 
             // UPDATE PROPERTY OCCUPANCY (Decrement)
             if (endedStay && endedStay.propertyId) {
-                const property = db.findPropertyById(endedStay.propertyId);
+                const property = await db.findPropertyById(endedStay.propertyId);
                 if (property) {
                     const newOccupancy = Math.max(0, (property.occupiedUnits || 0) - 1);
-                    db.updateProperty(property.id, { occupiedUnits: newOccupancy });
+                    await db.updateProperty(property.id, { occupiedUnits: newOccupancy });
                 }
             }
 
             // Notify Tenant
-            db.addNotification({
+            await db.addNotification({
                 id: crypto.randomUUID(),
                 userId: updatedRequest.tenantId,
                 role: 'tenant',
@@ -125,7 +125,7 @@ export async function POST(req: Request) {
             });
         } else if (status === 'rejected') {
             // Notify Tenant
-            db.addNotification({
+            await db.addNotification({
                 id: crypto.randomUUID(),
                 userId: updatedRequest.tenantId,
                 role: 'tenant',

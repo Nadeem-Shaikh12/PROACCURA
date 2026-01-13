@@ -16,18 +16,18 @@ export async function GET() {
         const { payload } = await jwtVerify(token, JWT_SECRET);
         if (payload.role !== 'landlord') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
-        const bills = db.getBillsByLandlord(payload.userId as string);
+        const bills = await db.getBillsByLandlord(payload.userId as string);
 
         // Enrich with tenant name
-        const billsWithNames = bills.map(bill => {
-            const tenant = db.getTenantStay(bill.tenantId);
+        const billsWithNames = await Promise.all(bills.map(async (bill) => {
+            const tenant = await db.getTenantStay(bill.tenantId);
             // We need to fetch user details to get name, but getTenantStay returns stay object
             // Let's iterate users just for this (inefficient but works for file DB)
             // Actually, let's just use getLandlordTenants to cross-reference
             // Or better, db.ts should allow finding user by ID.
             // For now, let's return raw bill, UI can fetch tenant list to map names.
             return bill;
-        });
+        }));
 
         return NextResponse.json({ bills: billsWithNames });
     } catch (error) {
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
         const body = await req.json();
         const { tenantId, stayId, amount, type, dueDate, month } = body;
 
-        const newBill = db.addBill({
+        const newBill = await db.addBill({
             id: crypto.randomUUID(),
             landlordId: payload.userId as string,
             tenantId,
@@ -61,7 +61,7 @@ export async function POST(req: Request) {
         });
 
         // Notify Tenant
-        db.addNotification({
+        await db.addNotification({
             id: crypto.randomUUID(),
             userId: tenantId,
             role: 'tenant',
@@ -93,14 +93,14 @@ export async function DELETE(req: Request) {
         if (!billId) return NextResponse.json({ error: 'Missing bill ID' }, { status: 400 });
 
         // Basic security check: find the bill first to ensure it belongs to this landlord
-        const landlordBills = db.getBillsByLandlord(payload.userId as string);
+        const landlordBills = await db.getBillsByLandlord(payload.userId as string);
         const billToDelete = landlordBills.find(b => b.id === billId);
 
         if (!billToDelete) {
             return NextResponse.json({ error: 'Bill not found or unauthorized' }, { status: 404 });
         }
 
-        const success = db.deleteBill(billId);
+        const success = await db.deleteBill(billId);
 
         if (success) {
             return NextResponse.json({ success: true, message: 'Bill removed successfully' });

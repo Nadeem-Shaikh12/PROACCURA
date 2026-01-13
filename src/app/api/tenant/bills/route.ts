@@ -16,7 +16,7 @@ export async function GET() {
         const { payload } = await jwtVerify(token, JWT_SECRET);
         if (payload.role !== 'tenant') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
-        const bills = db.getBillsByTenant(payload.userId as string);
+        const bills = await db.getBillsByTenant(payload.userId as string);
         return NextResponse.json({ bills });
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -36,11 +36,11 @@ export async function POST(req: Request) {
         const body = await req.json();
         const { billId } = body;
 
-        const paidBill = db.payBill(billId);
+        const paidBill = await db.payBill(billId);
 
         if (paidBill) {
             // Log Payment in History
-            db.addHistory({
+            await db.addHistory({
                 id: nanoid(),
                 tenantId: payload.userId as string,
                 type: 'PAYMENT',
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
             });
 
             // Notify Landlord
-            db.addNotification({
+            await db.addNotification({
                 id: nanoid(),
                 userId: paidBill.landlordId,
                 role: 'landlord',

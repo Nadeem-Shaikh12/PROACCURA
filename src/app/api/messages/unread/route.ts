@@ -15,8 +15,8 @@ export async function GET() {
         const { payload } = await jwtVerify(token, JWT_SECRET);
         const userId = payload.userId as string;
 
-        const count = db.getUnreadCount(userId);
-        const countsBySender = db.getUnreadCountsBySender(userId);
+        const count = await db.getUnreadCount(userId);
+        const countsBySender = await db.getUnreadCountsBySender(userId);
 
         return NextResponse.json({ count, countsBySender });
     } catch (error) {

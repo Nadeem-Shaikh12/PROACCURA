@@ -16,7 +16,7 @@ export async function GET() {
         const role = payload.role;
 
         if (role === 'landlord') {
-            const tenants = db.getLandlordTenants(payload.userId as string);
+            const tenants = await db.getLandlordTenants(payload.userId as string);
             // Deduplicate tenants if needed, mapping to minimal contact info
             const contacts = tenants.map(t => ({
                 id: t.tenantId,
@@ -32,13 +32,13 @@ export async function GET() {
             return NextResponse.json({ contacts: uniqueContacts });
 
         } else if (role === 'tenant') {
-            const stay = db.getTenantStay(payload.userId as string);
+            const stay = await db.getTenantStay(payload.userId as string);
             if (!stay) {
                 return NextResponse.json({ contacts: [] });
             }
 
-            const property = db.findPropertyById(stay.propertyId);
-            const landlord = property ? db.findUserById(property.landlordId) : null;
+            const property = await db.findPropertyById(stay.propertyId);
+            const landlord = property ? await db.findUserById(property.landlordId) : null;
 
             if (landlord) {
                 return NextResponse.json({

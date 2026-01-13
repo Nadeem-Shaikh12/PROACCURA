@@ -28,21 +28,21 @@ export async function GET(req: Request) {
         // Wait, I can modify db.ts. 
         // For now, let's implement the route assuming `getAllProperties` exists, and I will add it to db.ts immediately.
 
-        const properties = db.getAllProperties();
+        const properties = await db.getAllProperties();
 
-        const filtered = properties
+        const filtered = await Promise.all(properties
             .filter(p =>
                 p.name.toLowerCase().includes(query) ||
                 p.address.toLowerCase().includes(query) ||
                 p.type.toLowerCase().includes(query)
             )
-            .map(p => {
-                const landlord = db.findUserById(p.landlordId);
+            .map(async (p) => {
+                const landlord = await db.findUserById(p.landlordId);
                 return {
                     ...p,
                     landlordName: landlord?.name || 'Unknown Landlord'
                 };
-            });
+            }));
 
         return NextResponse.json({ properties: filtered });
     } catch (error) {

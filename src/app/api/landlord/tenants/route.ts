@@ -15,7 +15,7 @@ export async function GET() {
         const { payload } = await jwtVerify(token, JWT_SECRET);
         if (payload.role !== 'landlord') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
-        const tenants = db.getLandlordTenants(payload.userId as string);
+        const tenants = await db.getLandlordTenants(payload.userId as string);
 
         return NextResponse.json({ tenants });
     } catch (error) {

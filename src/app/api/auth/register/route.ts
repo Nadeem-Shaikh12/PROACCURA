@@ -25,7 +25,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Password does not meet security requirements' }, { status: 400 });
         }
 
-        const existingUser = db.findUserByEmail(email);
+        const existingUser = await db.findUserByEmail(email);
         if (existingUser) {
             return NextResponse.json({ error: 'User already exists' }, { status: 409 });
         }
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
         const passwordHash = await bcrypt.hash(password, 10);
         const userId = nanoid();
 
-        const newUser = db.addUser({
+        const newUser = await db.addUser({
             id: userId,
             name,
             email,
@@ -69,8 +69,8 @@ export async function POST(req: Request) {
         });
 
         return response;
-    } catch (error) {
+    } catch (error: any) {
         console.error('Registration Error:', error);
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+        return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
     }
 }

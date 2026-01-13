@@ -1,12 +1,12 @@
 {
   "users": [],
+  "properties": [],
   "verificationRequests": [],
-  "tenantStays": [],
   "history": [],
   "notifications": [],
-  "properties": [],
   "bills": [],
   "documents": [],
   "messages": [],
-  "reviews": []
+  "reviews": [],
+  "tenantStays": []
 }

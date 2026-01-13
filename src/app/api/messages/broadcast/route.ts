@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 
         if (!content) return NextResponse.json({ error: 'Message content is required' }, { status: 400 });
 
-        const tenants = db.getLandlordTenants(landlordId);
+        const tenants = await db.getLandlordTenants(landlordId);
         const messages = tenants.map(t => ({
             id: nanoid(),
             senderId: landlordId,
@@ -33,7 +33,9 @@ export async function POST(req: Request) {
         }));
 
         // In a real DB we might do a bulk insert. Here we loop.
-        messages.forEach(m => db.addMessage(m));
+        for (const m of messages) {
+            await db.addMessage(m);
+        }
 
         return NextResponse.json({ success: true, count: messages.length });
     } catch (error) {

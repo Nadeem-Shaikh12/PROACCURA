@@ -10,9 +10,9 @@ export async function GET(request: Request) {
     }
 
     try {
-        const properties = db.getProperties(landlordId);
-        const bills = db.getBillsByLandlord(landlordId);
-        const tenants = db.getLandlordTenants(landlordId);
+        const properties = await db.getProperties(landlordId);
+        const bills = await db.getBillsByLandlord(landlordId);
+        const tenants = await db.getLandlordTenants(landlordId);
 
         // 1. Occupancy Stats
         let totalUnits = 0;

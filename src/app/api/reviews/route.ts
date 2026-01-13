@@ -7,7 +7,7 @@ export async function GET(req: Request) {
     const userId = searchParams.get('userId'); // "Get reviews FOR this user"
 
     if (userId) {
-        const reviews = db.getReviews(userId);
+        const reviews = await db.getReviews(userId);
         return NextResponse.json(reviews);
     }
 
@@ -50,11 +50,11 @@ export async function POST(req: Request) {
             };
         }
 
-        const review = db.addReview(reviewData);
+        const review = await db.addReview(reviewData);
 
         // If it's a transactional review, notify the reviewee
         if (body.revieweeId) {
-            db.addNotification({
+            await db.addNotification({
                 id: Math.random().toString(36).substr(2, 9),
                 userId: body.revieweeId,
                 role: 'tenant', // This technically depends on who the reviewee is. 

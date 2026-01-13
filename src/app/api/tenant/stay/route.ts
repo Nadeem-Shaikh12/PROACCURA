@@ -15,21 +15,21 @@ export async function GET() {
         const { payload } = await jwtVerify(token, JWT_SECRET);
         if (payload.role !== 'tenant') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
-        const stay = db.getTenantStay(payload.userId as string);
+        const stay = await db.getTenantStay(payload.userId as string);
 
         if (!stay) {
             return NextResponse.json({ stay: null });
         }
 
         // Hydrate with property details
-        const property = db.findPropertyById(stay.propertyId);
-        const landlord = property ? db.findUserById(property.landlordId) : null;
+        const property = await db.findPropertyById(stay.propertyId);
+        const landlord = property ? await db.findUserById(property.landlordId) : null;
 
         // Hydrate with Trust Score
         // We need to import the new utility dynamically or add logic here
         // Ideally, we import. Let's assume TS compilation works.
         const { calculateTrustScore } = await import('@/lib/score'); // Dynamic import to avoid cycles/issues
-        const history = db.getTenantHistory(payload.userId as string);
+        const history = await db.getTenantHistory(payload.userId as string);
         const trustScore = calculateTrustScore(history);
 
         return NextResponse.json({

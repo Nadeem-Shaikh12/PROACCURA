@@ -20,7 +20,7 @@ export async function GET() {
         // Proactively check for monthly milestones
         await checkAndTriggerMonthlyNotifications(payload.userId as string, payload.role as 'landlord' | 'tenant');
 
-        const notifications = db.getNotifications(payload.userId as string);
+        const notifications = await db.getNotifications(payload.userId as string);
         return NextResponse.json({ notifications });
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -40,12 +40,12 @@ export async function POST(req: Request) {
         const { id, action } = await req.json();
 
         if (action === 'markAllRead') {
-            db.markAllNotificationsAsRead(payload.userId as string);
+            await db.markAllNotificationsAsRead(payload.userId as string);
             return NextResponse.json({ success: true });
         }
 
         if (id) {
-            db.updateNotification(id, { isRead: true });
+            await db.updateNotification(id, { isRead: true });
             return NextResponse.json({ success: true });
         }
 

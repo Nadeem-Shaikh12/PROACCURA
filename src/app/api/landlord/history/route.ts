@@ -28,12 +28,12 @@ export async function POST(req: Request) {
         }
 
         // Verify the landlord "owns" this tenant
-        const request = db.findRequestByTenantId(tenantId);
+        const request = await db.findRequestByTenantId(tenantId);
         if (!request || request.landlordId !== payload.userId) {
             return NextResponse.json({ error: 'Unauthorized to modify this tenant' }, { status: 403 });
         }
 
-        const newRecord = db.addHistory({
+        const newRecord = await db.addHistory({
             id: nanoid(),
             tenantId,
             type,
@@ -63,7 +63,7 @@ export async function POST(req: Request) {
                 notifyType = 'PAYMENT_RECEIVED';
             }
 
-            db.addNotification({
+            await db.addNotification({
                 id: nanoid(),
                 userId: tenantId,
                 role: 'tenant',

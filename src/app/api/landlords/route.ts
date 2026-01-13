@@ -18,7 +18,7 @@ export async function GET() {
         // Optional: Restrict to tenants only? Or allow anyone logged in?
         // Let's allow any authenticated user for now.
 
-        const landlords = db.getLandlords();
+        const landlords = await db.getLandlords();
         return NextResponse.json({ landlords });
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

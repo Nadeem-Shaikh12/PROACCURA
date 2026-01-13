@@ -22,7 +22,7 @@ export async function POST(req: Request) {
         const { propertyId, fullName, mobile, idProofType, idProofNumber, city, paymentStatus, paymentAmount, transactionId } = await req.json();
 
         // Check for existing pending request
-        const existingRequest = db.findRequestByTenantId(payload.userId as string);
+        const existingRequest = await db.findRequestByTenantId(payload.userId as string);
         if (existingRequest && existingRequest.status === 'pending') {
             return NextResponse.json({ error: 'Verification process is already pending. Landlord will connect with you.' }, { status: 409 });
         }
@@ -31,12 +31,12 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
         }
 
-        const property = db.findPropertyById(propertyId);
+        const property = await db.findPropertyById(propertyId);
         if (!property) {
             return NextResponse.json({ error: 'Invalid Property ID' }, { status: 404 });
         }
 
-        const newRequest = db.addRequest({
+        const newRequest = await db.addRequest({
             id: crypto.randomUUID(),
             tenantId: payload.userId as string,
             fullName,
@@ -73,12 +73,12 @@ export async function GET() {
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
         }
 
-        const request = db.findRequestByTenantId(payload.userId as string);
+        const request = await db.findRequestByTenantId(payload.userId as string);
         console.log(`[API GET] Tenant Verify Check for ${payload.userId}:`, request);
 
         let landlordName = '';
         if (request) {
-            const landlord = db.findUserById(request.landlordId);
+            const landlord = await db.findUserById(request.landlordId);
             landlordName = landlord ? landlord.name : 'Unknown Landlord';
         }
 

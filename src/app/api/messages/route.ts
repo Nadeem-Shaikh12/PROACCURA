@@ -23,9 +23,9 @@ export async function GET(request: Request) {
         }
 
         // Mark messages as read when fetching
-        db.markMessagesAsRead(chatWith, payload.userId as string);
+        await db.markMessagesAsRead(chatWith, payload.userId as string);
 
-        const messages = db.getMessages(payload.userId as string, chatWith);
+        const messages = await db.getMessages(payload.userId as string, chatWith);
         return NextResponse.json({ messages });
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        const newMessage = db.addMessage({
+        const newMessage = await db.addMessage({
             id: crypto.randomUUID(),
             senderId: payload.userId as string,
             receiverId,
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
         });
 
         // Create a notification for the receiver
-        db.addNotification({
+        await db.addNotification({
             id: crypto.randomUUID(),
             userId: receiverId,
             type: 'REMARK_ADDED', // Valid type for general alerts

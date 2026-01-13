@@ -22,7 +22,7 @@ export async function GET(req: Request) {
         // User Request says: "GET /tenant/history -> returns only his records"
 
         if (payload.role === 'tenant') {
-            const history = db.getTenantHistory(payload.userId as string);
+            const history = await db.getTenantHistory(payload.userId as string);
             return NextResponse.json({ history });
         } else {
             // Landlord can view history of any tenant provided they specify tenantId
@@ -33,7 +33,7 @@ export async function GET(req: Request) {
                 return NextResponse.json({ error: 'Tenant ID required for landlords' }, { status: 400 });
             }
 
-            const history = db.getTenantHistory(tenantId);
+            const history = await db.getTenantHistory(tenantId);
             return NextResponse.json({ history });
         }
 

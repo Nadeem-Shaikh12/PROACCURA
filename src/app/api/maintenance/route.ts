@@ -34,7 +34,7 @@ export async function POST(request: Request) {
         MOCK_MAINTENANCE_REQUESTS.push(newRequest);
 
         // Notify Landlord
-        db.addNotification({
+        await db.addNotification({
             id: crypto.randomUUID(),
             userId: newRequest.landlordId,
             role: 'landlord',
@@ -64,7 +64,7 @@ export async function PATCH(request: Request) {
         const req = MOCK_MAINTENANCE_REQUESTS[reqIndex];
 
         // Notify Tenant
-        db.addNotification({
+        await db.addNotification({
             id: crypto.randomUUID(),
             userId: req.tenantId,
             role: 'tenant',

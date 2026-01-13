@@ -9,7 +9,7 @@ export async function GET(req: Request) {
         return NextResponse.json({ error: 'Missing landlordId' }, { status: 400 });
     }
 
-    const properties = db.getProperties(landlordId);
+    const properties = await db.getProperties(landlordId);
     return NextResponse.json({ properties });
 }
 
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        const newProperty = db.addProperty({
+        const newProperty = await db.addProperty({
             id: Math.random().toString(36).substr(2, 9),
             landlordId,
             name,
@@ -47,7 +47,7 @@ export async function PUT(req: Request) {
 
         if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
 
-        const updated = db.updateProperty(id, updates);
+        const updated = await db.updateProperty(id, updates);
         return NextResponse.json({ property: updated });
     } catch (e) {
         return NextResponse.json({ error: 'Update failed' }, { status: 400 });
@@ -60,6 +60,6 @@ export async function DELETE(req: Request) {
 
     if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
 
-    db.deleteProperty(id);
+    await db.deleteProperty(id);
     return NextResponse.json({ success: true });
 }

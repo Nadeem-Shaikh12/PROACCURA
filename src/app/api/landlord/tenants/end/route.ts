@@ -21,16 +21,16 @@ export async function POST(req: Request) {
         if (payload.role !== 'landlord') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
         // Update stay status
-        const stays = db.getLandlordTenants(payload.userId as string);
+        const stays = await db.getLandlordTenants(payload.userId as string);
         const stay = stays.find(s => s.id === stayId);
 
         if (!stay) return NextResponse.json({ error: 'Stay not found' }, { status: 404 });
 
         // End the stay in DB
-        db.endTenantStay(stay.tenantId);
+        await db.endTenantStay(stay.tenantId);
 
         // Notify tenant
-        db.addNotification({
+        await db.addNotification({
             id: Math.random().toString(36).substr(2, 9),
             userId: stay.tenantId,
             role: 'tenant',
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
         });
 
         // Add to history
-        db.addHistory({
+        await db.addHistory({
             id: Math.random().toString(36).substr(2, 9),
             tenantId: stay.tenantId,
             type: 'MOVE_OUT',

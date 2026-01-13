@@ -15,7 +15,7 @@ export async function PUT(req: Request) {
         const { payload } = await jwtVerify(token, JWT_SECRET);
         const { mobile, city, state, aadhaarNumber } = await req.json();
 
-        const updatedUser = db.updateUser(payload.userId as string, {
+        const updatedUser = await db.updateUser(payload.userId as string, {
             tenantProfile: {
                 mobile,
                 city,

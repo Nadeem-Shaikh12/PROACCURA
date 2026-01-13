@@ -4,12 +4,13 @@ import { MOCK_LEASES, MOCK_SCHEDULES } from '@/lib/store';
 export async function checkAndTriggerMonthlyNotifications(userId: string, role: 'landlord' | 'tenant') {
     // Existing Monthly Milestone Logic
     if (role === 'tenant') {
-        const request = db.findRequestByTenantId(userId);
+        const request = await db.findRequestByTenantId(userId);
         if (request && request.status === 'approved' && request.joiningDate) {
             await processMonthlyLogic(request.tenantId, request.joiningDate, 'tenant', request.fullName);
         }
     } else {
-        const requests = db.getRequests().filter(r => r.landlordId === userId && r.status === 'approved');
+        const allRequests = await db.getRequests();
+        const requests = allRequests.filter(r => r.landlordId === userId && r.status === 'approved');
         for (const req of requests) {
             await processMonthlyLogic(req.tenantId, req.joiningDate!, 'landlord', req.fullName, userId);
         }
@@ -25,8 +26,8 @@ async function checkAlerts(userId: string, role: 'landlord' | 'tenant') {
         ? MOCK_LEASES.filter(l => l.landlordId === userId)
         : MOCK_LEASES.filter(l => l.tenantId === userId);
 
-    leases.forEach(lease => {
-        if (lease.status !== 'ACTIVE') return;
+    for (const lease of leases) {
+        if (lease.status !== 'ACTIVE') continue;
         const expiryDate = new Date(lease.endDate);
         const today = new Date();
         const diffTime = expiryDate.getTime() - today.getTime();
@@ -35,14 +36,14 @@ async function checkAlerts(userId: string, role: 'landlord' | 'tenant') {
         if (diffDays <= 30 && diffDays > 0) {
             const title = 'Lease Expiring Soon';
             const message = `The lease for ${lease.propertyName} expires in ${diffDays} days.`;
-            triggerNotification(userId, role, 'LEASE_EXPIRY', title, message);
+            await triggerNotification(userId, role, 'LEASE_EXPIRY', title, message);
         }
-    });
+    }
 
     // 2. Check Rent Dues (Tenant mainly)
     if (role === 'tenant') {
         const schedules = MOCK_SCHEDULES.filter(s => s.tenantId === userId && s.isActive);
-        schedules.forEach(sched => {
+        for (const sched of schedules) {
             const dueDate = new Date(sched.nextDueDate);
             const today = new Date();
             const diffTime = dueDate.getTime() - today.getTime();
@@ -51,19 +52,19 @@ async function checkAlerts(userId: string, role: 'landlord' | 'tenant') {
             if (diffDays <= 3 && diffDays >= 0) {
                 const title = 'Rent Due Soon';
                 const message = `Rent of ₹${sched.amount} is due in ${diffDays === 0 ? 'today' : diffDays + ' days'}. Payment is required.`;
-                triggerNotification(userId, role, 'PAYMENT_PENDING', title, message);
+                await triggerNotification(userId, role, 'PAYMENT_PENDING', title, message);
             }
-        });
+        }
     }
 }
 
-function triggerNotification(userId: string, role: string, type: string, title: string, message: string) {
-    const existingNotifications = db.getNotifications(userId);
+async function triggerNotification(userId: string, role: string, type: string, title: string, message: string) {
+    const existingNotifications = await db.getNotifications(userId);
     // Avoid spamming the same notification repeatedly (basic check)
     const alreadyExists = existingNotifications.find(n => n.title === title && n.message === message && !n.isRead);
 
     if (!alreadyExists) {
-        db.addNotification({
+        await db.addNotification({
             id: crypto.randomUUID(),
             userId,
             role: role as any,
@@ -90,7 +91,7 @@ async function processMonthlyLogic(tenantId: string, joiningDateStr: string, rol
         const notificationType = 'MONTH_COMPLETED';
 
         // Check if this specific notification already exists
-        const existingNotifications = db.getNotifications(role === 'landlord' ? landlordId! : tenantId);
+        const existingNotifications = await db.getNotifications(role === 'landlord' ? landlordId! : tenantId);
         const alreadyNotified = existingNotifications.find(n => n.type === 'MONTH_COMPLETED' && n.message.includes(`month ${cycleNumber}`));
 
         if (!alreadyNotified) {
@@ -99,7 +100,7 @@ async function processMonthlyLogic(tenantId: string, joiningDateStr: string, rol
                 ? `Tenant ${tenantName} has completed month ${cycleNumber} of their stay.`
                 : `Congratulations! You have completed month ${cycleNumber} of your stay.`;
 
-            db.addNotification({
+            await db.addNotification({
                 id: crypto.randomUUID(),
                 userId: role === 'landlord' ? landlordId! : tenantId,
                 role: role,
@@ -111,7 +112,7 @@ async function processMonthlyLogic(tenantId: string, joiningDateStr: string, rol
             });
 
             // Also trigger "New Billing Cycle" notification
-            db.addNotification({
+            await db.addNotification({
                 id: crypto.randomUUID(),
                 userId: role === 'landlord' ? landlordId! : tenantId,
                 role: role,
@@ -126,4 +127,3 @@ async function processMonthlyLogic(tenantId: string, joiningDateStr: string, rol
         }
     }
 }
-

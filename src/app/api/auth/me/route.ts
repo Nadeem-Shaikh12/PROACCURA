@@ -16,7 +16,7 @@ export async function GET() {
     try {
         const { payload } = await jwtVerify(token, JWT_SECRET);
         const userId = payload.userId as string;
-        const user = db.findUserById(userId);
+        const user = await db.findUserById(userId);
 
         if (!user) {
             const response = NextResponse.json({ user: null });
