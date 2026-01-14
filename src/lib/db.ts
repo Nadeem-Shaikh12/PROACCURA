@@ -8,11 +8,6 @@ import dbConnect from './mongoose';
 // Re-export types
 export type { User, Property, VerificationRequest, TenantHistory, Notification, Bill, Message, Review, TenantStay };
 
-// CONFIGURATION
-// Check if we assume production or if MONGODB_URI is present
-const MONGODB_URI = process.env.MONGODB_URI;
-// Only use Mongo if we are in production AND have a URI
-const USE_MONGO = process.env.NODE_ENV === 'production' && !!MONGODB_URI;
 const DB_PATH = path.join(process.cwd(), 'data', 'db.json');
 
 // --- JSON IMPLEMENTATION ---
@@ -31,11 +26,22 @@ interface JSONSchema {
 
 // --- HYBRID ADAPTER ---
 class DBAdapter {
+    private useMongo: boolean;
+
+    constructor() {
+        const MONGODB_URI = process.env.MONGODB_URI;
+        this.useMongo = process.env.NODE_ENV === 'production' && !!MONGODB_URI;
+    }
 
     // HELPER: Connect to Mongo if needed
     private async init() {
-        if (USE_MONGO) {
-            await dbConnect();
+        if (this.useMongo) {
+            try {
+                await dbConnect();
+            } catch (error) {
+                console.error("MongoDB Connection Failed (Falling back to JSON):", error);
+                this.useMongo = false;
+            }
         }
     }
 
@@ -62,7 +68,7 @@ class DBAdapter {
     // =========================================================================
 
     async getUsers() {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.User.find({}).lean();
             return res as unknown as User[];
@@ -73,7 +79,7 @@ class DBAdapter {
     }
 
     async addUser(user: User) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.User.create(user);
             return res.toObject() as unknown as User;
@@ -86,7 +92,7 @@ class DBAdapter {
     }
 
     async findUserByEmail(email: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.User.findOne({ email }).lean();
             return res as unknown as User | null;
@@ -97,7 +103,7 @@ class DBAdapter {
     }
 
     async findUserById(id: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.User.findOne({ id }).lean();
             return res as unknown as User | null;
@@ -108,7 +114,7 @@ class DBAdapter {
     }
 
     async getLandlords() {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.User.find({ role: 'landlord' }).select('id name').lean();
             return res as unknown as { id: string; name: string }[];
@@ -121,7 +127,7 @@ class DBAdapter {
     }
 
     async updateUser(id: string, updates: Partial<User>) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.User.findOneAndUpdate({ id }, updates, { new: true }).lean();
             return res as unknown as User | null;
@@ -139,7 +145,7 @@ class DBAdapter {
     // VERIFICATION REQUEST METHODS
     // =========================================================================
     async getRequests() {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.VerificationRequest.find({}).lean();
             return res as unknown as VerificationRequest[];
@@ -150,7 +156,7 @@ class DBAdapter {
     }
 
     async findRequestByTenantId(tenantId: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.VerificationRequest.findOne({ tenantId }).sort({ submittedAt: -1 }).lean();
             return res as unknown as VerificationRequest | undefined;
@@ -163,7 +169,7 @@ class DBAdapter {
     }
 
     async findRequestById(id: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.VerificationRequest.findOne({ id }).lean();
             return res as unknown as VerificationRequest | undefined;
@@ -174,7 +180,7 @@ class DBAdapter {
     }
 
     async addRequest(req: VerificationRequest) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.VerificationRequest.create(req);
             return res.toObject() as unknown as VerificationRequest;
@@ -187,7 +193,7 @@ class DBAdapter {
     }
 
     async updateRequest(id: string, updates: Partial<VerificationRequest>) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.VerificationRequest.findOneAndUpdate({ id }, updates, { new: true }).lean();
             return res as unknown as VerificationRequest | null;
@@ -202,7 +208,7 @@ class DBAdapter {
     }
 
     async updateRequestStatus(id: string, status: 'approved' | 'rejected' | 'moved_out', remarks?: string, extraData?: { joiningDate?: string, rentNotes?: string, utilityDetails?: string }) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const updates: any = { status, updatedAt: new Date().toISOString() };
             if (remarks !== undefined) updates.remarks = remarks;
@@ -258,7 +264,7 @@ class DBAdapter {
     // HISTORY METHODS
     // =========================================================================
     async addHistory(record: TenantHistory) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.History.create(record);
             return res.toObject() as unknown as TenantHistory;
@@ -271,7 +277,7 @@ class DBAdapter {
     }
 
     async getTenantHistory(tenantId: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.History.find({ tenantId }).sort({ date: -1 }).lean();
             return res as unknown as TenantHistory[];
@@ -285,7 +291,7 @@ class DBAdapter {
     // NOTIFICATION METHODS
     // =========================================================================
     async getNotifications(userId: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Notification.find({ userId }).sort({ createdAt: -1 }).lean();
             return res as unknown as Notification[];
@@ -296,7 +302,7 @@ class DBAdapter {
     }
 
     async addNotification(notification: Notification) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Notification.create(notification);
             return res.toObject() as unknown as Notification;
@@ -309,7 +315,7 @@ class DBAdapter {
     }
 
     async updateNotification(id: string, updates: Partial<Notification>) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Notification.findOneAndUpdate({ id }, updates, { new: true }).lean();
             return res as unknown as Notification | null;
@@ -324,7 +330,7 @@ class DBAdapter {
     }
 
     async markAllNotificationsAsRead(userId: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             await Models.Notification.updateMany({ userId }, { isRead: true });
         } else {
@@ -345,7 +351,7 @@ class DBAdapter {
     // PROPERTY METHODS
     // =========================================================================
     async findPropertyById(id: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Property.findOne({ id }).lean();
             return res as unknown as Property | undefined;
@@ -356,7 +362,7 @@ class DBAdapter {
     }
 
     async getProperties(landlordId: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Property.find({ landlordId }).lean();
             return res as unknown as Property[];
@@ -367,7 +373,7 @@ class DBAdapter {
     }
 
     async getAllProperties() {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Property.find({}).lean();
             return res as unknown as Property[];
@@ -378,7 +384,7 @@ class DBAdapter {
     }
 
     async addProperty(property: Property) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Property.create(property);
             return res.toObject() as unknown as Property;
@@ -391,7 +397,7 @@ class DBAdapter {
     }
 
     async deleteProperty(id: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             await Models.Property.deleteOne({ id });
         } else {
@@ -402,7 +408,7 @@ class DBAdapter {
     }
 
     async updateProperty(id: string, updates: Partial<Property>) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Property.findOneAndUpdate({ id }, updates, { new: true }).lean();
             return res as unknown as Property | null;
@@ -420,7 +426,7 @@ class DBAdapter {
     // TENANT STAY METHODS
     // =========================================================================
     async addTenantStay(stay: TenantStay) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.TenantStay.create(stay);
             return res.toObject() as unknown as TenantStay;
@@ -433,7 +439,7 @@ class DBAdapter {
     }
 
     async endTenantStay(tenantId: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const stay = await Models.TenantStay.findOne({ tenantId, status: 'ACTIVE' });
             if (stay) {
@@ -457,7 +463,7 @@ class DBAdapter {
     }
 
     async getTenantStay(tenantId: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.TenantStay.findOne({ tenantId, status: 'ACTIVE' }).lean();
             return res as unknown as TenantStay | undefined;
@@ -468,7 +474,7 @@ class DBAdapter {
     }
 
     async getLandlordTenants(landlordId: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const stays = await Models.TenantStay.find({ landlordId, status: 'ACTIVE' }).lean();
             const results = await Promise.all(stays.map(async (stay) => {
@@ -502,7 +508,7 @@ class DBAdapter {
     // BILL METHODS
     // =========================================================================
     async addBill(bill: Bill) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Bill.create(bill);
             return res.toObject() as unknown as Bill;
@@ -515,7 +521,7 @@ class DBAdapter {
     }
 
     async getBillsByLandlord(landlordId: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Bill.find({ landlordId }).lean();
             return res as unknown as Bill[];
@@ -526,7 +532,7 @@ class DBAdapter {
     }
 
     async getBillsByTenant(tenantId: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Bill.find({ tenantId }).lean();
             return res as unknown as Bill[];
@@ -537,7 +543,7 @@ class DBAdapter {
     }
 
     async payBill(billId: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const bill = await Models.Bill.findOne({ id: billId });
             if (bill) {
@@ -582,7 +588,7 @@ class DBAdapter {
     }
 
     async deleteBill(billId: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Bill.deleteOne({ id: billId });
             return res.deletedCount > 0;
@@ -599,7 +605,7 @@ class DBAdapter {
     // DOCUMENT METHODS
     // =========================================================================
     async addDocument(doc: StoredDocument) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Document.create(doc);
             return res.toObject() as unknown as StoredDocument;
@@ -612,7 +618,7 @@ class DBAdapter {
     }
 
     async getDocumentsByLandlord(landlordId: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Document.find({ landlordId }).lean();
             return res as unknown as StoredDocument[];
@@ -623,7 +629,7 @@ class DBAdapter {
     }
 
     async getDocumentsByTenant(tenantId: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Document.find({ tenantId }).lean();
             return res as unknown as StoredDocument[];
@@ -637,7 +643,7 @@ class DBAdapter {
     // MESSAGE METHODS
     // =========================================================================
     async addMessage(message: Message) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Message.create(message);
             return res.toObject() as unknown as Message;
@@ -650,7 +656,7 @@ class DBAdapter {
     }
 
     async getMessages(userId1: string, userId2: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Message.find({
                 $or: [
@@ -669,7 +675,7 @@ class DBAdapter {
     }
 
     async markMessagesAsRead(senderId: string, receiverId: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             await Models.Message.updateMany({ senderId, receiverId, isRead: false }, { isRead: true });
         } else {
@@ -687,7 +693,7 @@ class DBAdapter {
     }
 
     async getUnreadCount(userId: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             return await Models.Message.countDocuments({ receiverId: userId, isRead: false });
         } else {
@@ -697,7 +703,7 @@ class DBAdapter {
     }
 
     async getUnreadCountsBySender(userId: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const results = await Models.Message.aggregate([
                 { $match: { receiverId: userId, isRead: false } },
@@ -724,7 +730,7 @@ class DBAdapter {
     // REVIEW METHODS
     // =========================================================================
     async addReview(review: Review) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Review.create(review);
             return res.toObject() as unknown as Review;
@@ -737,7 +743,7 @@ class DBAdapter {
     }
 
     async getReviews(userId: string) {
-        if (USE_MONGO) {
+        if (this.useMongo) {
             await this.init();
             const res = await Models.Review.find({ revieweeId: userId }).sort({ createdAt: -1 }).lean();
             return res as unknown as Review[];
