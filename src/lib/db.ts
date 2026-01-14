@@ -27,6 +27,7 @@ interface JSONSchema {
 // --- HYBRID ADAPTER ---
 class DBAdapter {
     private useMongo: boolean;
+    private inMemoryCache: JSONSchema | null = null;
 
     constructor() {
         const MONGODB_URI = process.env.MONGODB_URI;
@@ -47,20 +48,37 @@ class DBAdapter {
 
     // HELPER: Read JSON
     private async readJSON(): Promise<JSONSchema> {
+        if (this.inMemoryCache) return this.inMemoryCache;
+
         try {
             const data = await fs.readFile(DB_PATH, 'utf-8');
-            return JSON.parse(data);
+            this.inMemoryCache = JSON.parse(data);
+            return this.inMemoryCache!;
         } catch (error) {
-            return {
-                users: [], properties: [], verificationRequests: [], history: [],
-                notifications: [], bills: [], documents: [], messages: [], reviews: [], tenantStays: []
-            };
+            // If file missing or read error, return empty structure (or default)
+            // But initialize cache so we can write to it later
+            if (!this.inMemoryCache) {
+                this.inMemoryCache = {
+                    users: [], properties: [], verificationRequests: [], history: [],
+                    notifications: [], bills: [], documents: [], messages: [], reviews: [], tenantStays: []
+                };
+            }
+            return this.inMemoryCache;
         }
     }
 
     // HELPER: Write JSON
     private async writeJSON(data: JSONSchema): Promise<void> {
-        await fs.writeFile(DB_PATH, JSON.stringify(data, null, 2), 'utf-8');
+        this.inMemoryCache = data; // Always update memory
+        try {
+            await fs.writeFile(DB_PATH, JSON.stringify(data, null, 2), 'utf-8');
+        } catch (error: any) {
+            if (error.code === 'EROFS') {
+                console.warn("Read-only file system detected. Data saved to memory only.");
+            } else {
+                console.error("Failed to write to DB file:", error);
+            }
+        }
     }
 
     // =========================================================================
