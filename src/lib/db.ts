@@ -68,8 +68,8 @@ class DBAdapter {
     // =========================================================================
 
     async getUsers() {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.User.find({}).lean();
             return res as unknown as User[];
         } else {
@@ -79,8 +79,8 @@ class DBAdapter {
     }
 
     async addUser(user: User) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.User.create(user);
             return res.toObject() as unknown as User;
         } else {
@@ -92,8 +92,8 @@ class DBAdapter {
     }
 
     async findUserByEmail(email: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.User.findOne({ email }).lean();
             return res as unknown as User | null;
         } else {
@@ -103,8 +103,8 @@ class DBAdapter {
     }
 
     async findUserById(id: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.User.findOne({ id }).lean();
             return res as unknown as User | null;
         } else {
@@ -114,8 +114,8 @@ class DBAdapter {
     }
 
     async getLandlords() {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.User.find({ role: 'landlord' }).select('id name').lean();
             return res as unknown as { id: string; name: string }[];
         } else {
@@ -127,8 +127,8 @@ class DBAdapter {
     }
 
     async updateUser(id: string, updates: Partial<User>) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.User.findOneAndUpdate({ id }, updates, { new: true }).lean();
             return res as unknown as User | null;
         } else {
@@ -145,8 +145,8 @@ class DBAdapter {
     // VERIFICATION REQUEST METHODS
     // =========================================================================
     async getRequests() {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.VerificationRequest.find({}).lean();
             return res as unknown as VerificationRequest[];
         } else {
@@ -156,8 +156,8 @@ class DBAdapter {
     }
 
     async findRequestByTenantId(tenantId: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.VerificationRequest.findOne({ tenantId }).sort({ submittedAt: -1 }).lean();
             return res as unknown as VerificationRequest | undefined;
         } else {
@@ -169,8 +169,8 @@ class DBAdapter {
     }
 
     async findRequestById(id: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.VerificationRequest.findOne({ id }).lean();
             return res as unknown as VerificationRequest | undefined;
         } else {
@@ -180,8 +180,8 @@ class DBAdapter {
     }
 
     async addRequest(req: VerificationRequest) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.VerificationRequest.create(req);
             return res.toObject() as unknown as VerificationRequest;
         } else {
@@ -193,8 +193,8 @@ class DBAdapter {
     }
 
     async updateRequest(id: string, updates: Partial<VerificationRequest>) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.VerificationRequest.findOneAndUpdate({ id }, updates, { new: true }).lean();
             return res as unknown as VerificationRequest | null;
         } else {
@@ -208,8 +208,8 @@ class DBAdapter {
     }
 
     async updateRequestStatus(id: string, status: 'approved' | 'rejected' | 'moved_out', remarks?: string, extraData?: { joiningDate?: string, rentNotes?: string, utilityDetails?: string }) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const updates: any = { status, updatedAt: new Date().toISOString() };
             if (remarks !== undefined) updates.remarks = remarks;
             if (extraData) {
@@ -264,8 +264,8 @@ class DBAdapter {
     // HISTORY METHODS
     // =========================================================================
     async addHistory(record: TenantHistory) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.History.create(record);
             return res.toObject() as unknown as TenantHistory;
         } else {
@@ -277,8 +277,8 @@ class DBAdapter {
     }
 
     async getTenantHistory(tenantId: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.History.find({ tenantId }).sort({ date: -1 }).lean();
             return res as unknown as TenantHistory[];
         } else {
@@ -291,8 +291,8 @@ class DBAdapter {
     // NOTIFICATION METHODS
     // =========================================================================
     async getNotifications(userId: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Notification.find({ userId }).sort({ createdAt: -1 }).lean();
             return res as unknown as Notification[];
         } else {
@@ -302,8 +302,8 @@ class DBAdapter {
     }
 
     async addNotification(notification: Notification) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Notification.create(notification);
             return res.toObject() as unknown as Notification;
         } else {
@@ -315,8 +315,8 @@ class DBAdapter {
     }
 
     async updateNotification(id: string, updates: Partial<Notification>) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Notification.findOneAndUpdate({ id }, updates, { new: true }).lean();
             return res as unknown as Notification | null;
         } else {
@@ -330,8 +330,8 @@ class DBAdapter {
     }
 
     async markAllNotificationsAsRead(userId: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             await Models.Notification.updateMany({ userId }, { isRead: true });
         } else {
             const db = await this.readJSON();
@@ -351,8 +351,8 @@ class DBAdapter {
     // PROPERTY METHODS
     // =========================================================================
     async findPropertyById(id: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Property.findOne({ id }).lean();
             return res as unknown as Property | undefined;
         } else {
@@ -362,8 +362,8 @@ class DBAdapter {
     }
 
     async getProperties(landlordId: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Property.find({ landlordId }).lean();
             return res as unknown as Property[];
         } else {
@@ -373,8 +373,8 @@ class DBAdapter {
     }
 
     async getAllProperties() {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Property.find({}).lean();
             return res as unknown as Property[];
         } else {
@@ -384,8 +384,8 @@ class DBAdapter {
     }
 
     async addProperty(property: Property) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Property.create(property);
             return res.toObject() as unknown as Property;
         } else {
@@ -397,8 +397,8 @@ class DBAdapter {
     }
 
     async deleteProperty(id: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             await Models.Property.deleteOne({ id });
         } else {
             const db = await this.readJSON();
@@ -408,8 +408,8 @@ class DBAdapter {
     }
 
     async updateProperty(id: string, updates: Partial<Property>) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Property.findOneAndUpdate({ id }, updates, { new: true }).lean();
             return res as unknown as Property | null;
         } else {
@@ -426,8 +426,8 @@ class DBAdapter {
     // TENANT STAY METHODS
     // =========================================================================
     async addTenantStay(stay: TenantStay) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.TenantStay.create(stay);
             return res.toObject() as unknown as TenantStay;
         } else {
@@ -439,8 +439,8 @@ class DBAdapter {
     }
 
     async endTenantStay(tenantId: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const stay = await Models.TenantStay.findOne({ tenantId, status: 'ACTIVE' });
             if (stay) {
                 stay.status = 'MOVED_OUT';
@@ -463,8 +463,8 @@ class DBAdapter {
     }
 
     async getTenantStay(tenantId: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.TenantStay.findOne({ tenantId, status: 'ACTIVE' }).lean();
             return res as unknown as TenantStay | undefined;
         } else {
@@ -474,8 +474,8 @@ class DBAdapter {
     }
 
     async getLandlordTenants(landlordId: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const stays = await Models.TenantStay.find({ landlordId, status: 'ACTIVE' }).lean();
             const results = await Promise.all(stays.map(async (stay) => {
                 const tenant = await Models.User.findOne({ id: stay.tenantId }).lean();
@@ -508,8 +508,8 @@ class DBAdapter {
     // BILL METHODS
     // =========================================================================
     async addBill(bill: Bill) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Bill.create(bill);
             return res.toObject() as unknown as Bill;
         } else {
@@ -521,8 +521,8 @@ class DBAdapter {
     }
 
     async getBillsByLandlord(landlordId: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Bill.find({ landlordId }).lean();
             return res as unknown as Bill[];
         } else {
@@ -532,8 +532,8 @@ class DBAdapter {
     }
 
     async getBillsByTenant(tenantId: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Bill.find({ tenantId }).lean();
             return res as unknown as Bill[];
         } else {
@@ -543,8 +543,8 @@ class DBAdapter {
     }
 
     async payBill(billId: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const bill = await Models.Bill.findOne({ id: billId });
             if (bill) {
                 bill.status = 'PAID';
@@ -588,8 +588,8 @@ class DBAdapter {
     }
 
     async deleteBill(billId: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Bill.deleteOne({ id: billId });
             return res.deletedCount > 0;
         } else {
@@ -605,8 +605,8 @@ class DBAdapter {
     // DOCUMENT METHODS
     // =========================================================================
     async addDocument(doc: StoredDocument) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Document.create(doc);
             return res.toObject() as unknown as StoredDocument;
         } else {
@@ -618,8 +618,8 @@ class DBAdapter {
     }
 
     async getDocumentsByLandlord(landlordId: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Document.find({ landlordId }).lean();
             return res as unknown as StoredDocument[];
         } else {
@@ -629,8 +629,8 @@ class DBAdapter {
     }
 
     async getDocumentsByTenant(tenantId: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Document.find({ tenantId }).lean();
             return res as unknown as StoredDocument[];
         } else {
@@ -643,8 +643,8 @@ class DBAdapter {
     // MESSAGE METHODS
     // =========================================================================
     async addMessage(message: Message) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Message.create(message);
             return res.toObject() as unknown as Message;
         } else {
@@ -656,8 +656,8 @@ class DBAdapter {
     }
 
     async getMessages(userId1: string, userId2: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Message.find({
                 $or: [
                     { senderId: userId1, receiverId: userId2 },
@@ -675,8 +675,8 @@ class DBAdapter {
     }
 
     async markMessagesAsRead(senderId: string, receiverId: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             await Models.Message.updateMany({ senderId, receiverId, isRead: false }, { isRead: true });
         } else {
             const db = await this.readJSON();
@@ -693,8 +693,8 @@ class DBAdapter {
     }
 
     async getUnreadCount(userId: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             return await Models.Message.countDocuments({ receiverId: userId, isRead: false });
         } else {
             const db = await this.readJSON();
@@ -703,8 +703,8 @@ class DBAdapter {
     }
 
     async getUnreadCountsBySender(userId: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const results = await Models.Message.aggregate([
                 { $match: { receiverId: userId, isRead: false } },
                 { $group: { _id: '$senderId', count: { $sum: 1 } } }
@@ -730,8 +730,8 @@ class DBAdapter {
     // REVIEW METHODS
     // =========================================================================
     async addReview(review: Review) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Review.create(review);
             return res.toObject() as unknown as Review;
         } else {
@@ -743,8 +743,8 @@ class DBAdapter {
     }
 
     async getReviews(userId: string) {
+        await this.init();
         if (this.useMongo) {
-            await this.init();
             const res = await Models.Review.find({ revieweeId: userId }).sort({ createdAt: -1 }).lean();
             return res as unknown as Review[];
         } else {
