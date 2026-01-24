@@ -56,7 +56,7 @@
         "mobile": "9876543210",
         "city": "Aurangabad",
         "state": "Maharashtra",
-        "aadhaarNumber": "1029384756",
+        "aadhaarNumber": "9876543210",
         "isProfileComplete": true,
         "paymentStatus": "PENDING"
       }
@@ -77,6 +77,32 @@
         "isProfileComplete": true,
         "paymentStatus": "PENDING"
       }
+    },
+    {
+      "id": "9JOKiD-1EATH05WO-feHb",
+      "name": "test tenant ",
+      "email": "kshitij@gmail.com",
+      "passwordHash": "$2b$10$1p4l0BkkhM6N43k0tUHCrOcANZltAjVvN1BpeSmgt/5AcKXDX2pwu",
+      "role": "tenant",
+      "mobile": "",
+      "aadhaar": "",
+      "tenantProfile": {
+        "mobile": "08767683071",
+        "city": "Aurangabad",
+        "state": "Maharashtra",
+        "aadhaarNumber": "123456789",
+        "isProfileComplete": true,
+        "paymentStatus": "PENDING"
+      }
+    },
+    {
+      "id": "wtTo9PmsS_KIPU5wJaQJw",
+      "name": "Landlord1",
+      "email": "kshitij2@gmail.com",
+      "passwordHash": "$2b$10$rXvnPrDIc0wrtndv2EB3Zuh2Tq03kCey7gi8RVJOQzO1PIrHpLiuq",
+      "role": "landlord",
+      "mobile": "",
+      "aadhaar": ""
     }
   ],
   "properties": [
@@ -86,10 +112,43 @@
       "name": "Harsh Tambatkar",
       "address": "Aurangabad",
       "units": 20,
-      "occupiedUnits": 3,
+      "occupiedUnits": 4,
       "type": "Apartment",
       "monthlyRent": 1500,
       "createdAt": "2026-01-24T07:00:41.611Z"
+    },
+    {
+      "id": "uoihn3q4r",
+      "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
+      "name": "shoke sky line",
+      "address": "latur",
+      "units": 2,
+      "occupiedUnits": 0,
+      "type": "Apartment",
+      "monthlyRent": 3000,
+      "createdAt": "2026-01-24T11:20:52.341Z"
+    },
+    {
+      "id": "ewvfjijwm",
+      "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
+      "name": "nuger collage chuke ",
+      "address": "Near Aurangabad railway station ",
+      "units": 3,
+      "occupiedUnits": 0,
+      "type": "Apartment",
+      "monthlyRent": 7000,
+      "createdAt": "2026-01-24T11:21:59.993Z"
+    },
+    {
+      "id": "1rsy4bade",
+      "landlordId": "wtTo9PmsS_KIPU5wJaQJw",
+      "name": "moon delight penthouse ",
+      "address": "pune, railway road",
+      "units": 3,
+      "occupiedUnits": 0,
+      "type": "Apartment",
+      "monthlyRent": 6000,
+      "createdAt": "2026-01-24T11:31:48.916Z"
     }
   ],
   "verificationRequests": [
@@ -146,6 +205,24 @@
       "submittedAt": "2026-01-24T09:00:05.007Z",
       "updatedAt": "2026-01-24T09:00:30.928Z",
       "verifiedAt": "2026-01-24T09:00:30.928Z"
+    },
+    {
+      "id": "978c3cce-fdb1-4d72-9b80-e305dbe98e4a",
+      "tenantId": "NyejtA5hpFcWtMEjVREpk",
+      "fullName": "Kshitij Pingale",
+      "mobile": "9876543210",
+      "idProofType": "Aadhaar",
+      "idProofNumber": "9876543210",
+      "city": "Aurangabad",
+      "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
+      "propertyId": "clomzuo8y",
+      "status": "approved",
+      "paymentStatus": "paid",
+      "paymentAmount": 116.82,
+      "transactionId": "TXN_RDOTKF0SP",
+      "submittedAt": "2026-01-24T11:10:07.557Z",
+      "updatedAt": "2026-01-24T11:10:27.137Z",
+      "verifiedAt": "2026-01-24T11:10:27.137Z"
     }
   ],
   "history": [
@@ -205,6 +282,22 @@
       "type": "JOINED",
       "description": "Tenant verified and joined the property.",
       "date": "2026-01-24T09:00:30.933Z",
+      "createdBy": "cYMGn50Zv3iB6KR_v8R7y"
+    },
+    {
+      "id": "d288ab32-a937-4f25-9c8d-d1404f97cec6",
+      "tenantId": "NyejtA5hpFcWtMEjVREpk",
+      "type": "JOINED",
+      "description": "Tenant verified and joined the property.",
+      "date": "2026-01-24T11:10:27.141Z",
+      "createdBy": "cYMGn50Zv3iB6KR_v8R7y"
+    },
+    {
+      "id": "vs4bqnz95",
+      "tenantId": "NyejtA5hpFcWtMEjVREpk",
+      "type": "MOVE_OUT",
+      "description": "Resident moved out from Harsh Tambatkar. Stay finalized.",
+      "date": "2026-01-24T11:13:47.687Z",
       "createdBy": "cYMGn50Zv3iB6KR_v8R7y"
     }
   ],
@@ -338,6 +431,36 @@
       "role": "tenant",
       "createdAt": "2026-01-24T09:01:16.685Z",
       "isRead": false
+    },
+    {
+      "id": "fed474b1-062f-478b-b55e-2a1bfbe92882",
+      "userId": "NyejtA5hpFcWtMEjVREpk",
+      "role": "tenant",
+      "title": "Application Approved!",
+      "message": "Your verification request has been approved by the landlord. Welcome home!",
+      "type": "REMARK_ADDED",
+      "isRead": false,
+      "createdAt": "2026-01-24T11:10:27.156Z"
+    },
+    {
+      "id": "2thlnp25r",
+      "userId": "NyejtA5hpFcWtMEjVREpk",
+      "role": "tenant",
+      "title": "Stay Terminated",
+      "message": "Your stay has been finalized by the landlord. Thank you for using our platform.",
+      "type": "REMARK_ADDED",
+      "isRead": false,
+      "createdAt": "2026-01-24T11:13:47.682Z"
+    },
+    {
+      "id": "71d4f4bb-d2db-4d58-ab2c-cc20dfd1b702",
+      "userId": "vppxjiwORaZU2JmpCZV86",
+      "role": "tenant",
+      "title": "New Bill Received",
+      "message": "You have a new bill for WATER ($1000) due on 1/24/2026.",
+      "type": "NEW_BILL_CYCLE",
+      "isRead": false,
+      "createdAt": "2026-01-24T11:14:57.812Z"
     }
   ],
   "bills": [
@@ -352,6 +475,17 @@
       "dueDate": "2026-01-24",
       "status": "PAID",
       "paidAt": "2026-01-24T07:07:35.234Z"
+    },
+    {
+      "id": "5e484964-8875-433f-9737-95a939095e6a",
+      "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
+      "tenantId": "vppxjiwORaZU2JmpCZV86",
+      "stayId": "b80179ab-f493-4e5d-ad00-5e80e3383a88",
+      "amount": 1000,
+      "type": "WATER",
+      "month": "Jan",
+      "dueDate": "2026-01-24",
+      "status": "PENDING"
     }
   ],
   "documents": [
@@ -442,6 +576,15 @@
       "propertyId": "clomzuo8y",
       "joinDate": "2026-01-24T09:00:30.937Z",
       "status": "ACTIVE"
+    },
+    {
+      "id": "40770bda-66c5-460f-a891-0eccd0c0f2d8",
+      "tenantId": "NyejtA5hpFcWtMEjVREpk",
+      "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
+      "propertyId": "clomzuo8y",
+      "joinDate": "2026-01-24T11:10:27.145Z",
+      "status": "MOVED_OUT",
+      "moveOutDate": "2026-01-24T11:13:47.676Z"
     }
   ]
 }
