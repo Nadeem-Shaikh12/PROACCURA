@@ -1,9 +1,7 @@
-'use client';
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Star, MessageSquare, User, CheckCircle2, Quote } from 'lucide-react';
 import { Rating } from 'react-simple-star-rating';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 
 interface Review {
@@ -14,6 +12,8 @@ interface Review {
     date: string;
     role?: string; // e.g., "Tenant" or "Landlord"
     userId?: string;
+    reviewerId?: string; // Add this to match DB
+    createdAt?: string; // Add this to match DB
 }
 
 export default function ReviewsSection() {
@@ -25,31 +25,6 @@ export default function ReviewsSection() {
     const [showForm, setShowForm] = useState(false);
     const [hasReviewed, setHasReviewed] = useState(false);
 
-    // Fetch reviews on mount
-    useEffect(() => {
-        fetchReviews();
-    }, [user]); // Re-check when user changes
-
-    const fetchReviews = async () => {
-        try {
-            const res = await fetch('/api/reviews');
-            if (res.ok) {
-                const data = await res.json();
-                setReviews(data);
-                calculateAverage(data);
-
-                // Check if current user has reviewed
-                if (user && data.some((r: any) => r.userId === user.id)) {
-                    setHasReviewed(true);
-                } else {
-                    setHasReviewed(false);
-                }
-            }
-        } catch (error) {
-            console.error('Failed to fetch reviews', error);
-        }
-    };
-
     const calculateAverage = (data: Review[]) => {
         if (data.length === 0) {
             setAverageRating(0);
@@ -58,6 +33,41 @@ export default function ReviewsSection() {
         const total = data.reduce((acc, curr) => acc + curr.rating, 0);
         setAverageRating(Number((total / data.length).toFixed(1)));
     };
+
+    const fetchReviews = useCallback(async () => {
+        try {
+            const res = await fetch('/api/reviews');
+            if (res.ok) {
+                const data = await res.json();
+                // Map DB fields to UI fields if necessary
+                const mappedReviews = data.map((r: any) => ({
+                    id: r.id,
+                    name: r.name || r.reviewerId || 'Anonymous', // Fallback for name
+                    rating: r.rating,
+                    comment: r.comment,
+                    date: r.createdAt || r.date || new Date().toISOString(),
+                    userId: r.reviewerId
+                }));
+
+                setReviews(mappedReviews);
+                calculateAverage(mappedReviews);
+
+                // Check if current user has reviewed
+                if (user && mappedReviews.some((r: Review) => r.userId === user.id)) {
+                    setHasReviewed(true);
+                } else {
+                    setHasReviewed(false);
+                }
+            }
+        } catch (error) {
+            console.error('Failed to fetch reviews', error);
+        }
+    }, [user]);
+
+    // Fetch reviews on mount
+    useEffect(() => {
+        fetchReviews();
+    }, [fetchReviews]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -163,7 +173,7 @@ export default function ReviewsSection() {
                                         {[...Array(5)].map((_, j) => <Star key={j} size={14} fill="currentColor" />)}
                                     </div>
                                     <p className="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed">
-                                        "This platform has completely transformed how I manage my properties. The automated billing and tenant verification features are absolute lifesavers. Highly recommended!"
+                                        &quot;This platform has completely transformed how I manage my properties. The automated billing and tenant verification features are absolute lifesavers. Highly recommended!&quot;
                                     </p>
                                 </div>
                             ))
@@ -196,7 +206,7 @@ export default function ReviewsSection() {
                                     </div>
 
                                     <p className="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed flex-grow">
-                                        "{review.comment}"
+                                        &quot;{review.comment}&quot;
                                     </p>
 
                                     <div className="pt-4 mt-4 border-t border-zinc-100 dark:border-zinc-800 text-xs text-zinc-400">

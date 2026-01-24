@@ -20,25 +20,6 @@ export default function NotificationDropdown() {
 
     const unreadCount = notifications.filter(n => !n.isRead).length;
 
-    useEffect(() => {
-        fetchNotifications();
-
-        // Polling every 2 minutes or just on mount for now
-        const interval = setInterval(fetchNotifications, 120000);
-        return () => clearInterval(interval);
-    }, []);
-
-    // Close on outside click
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setIsOpen(false);
-            }
-        }
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
-
     const fetchNotifications = async () => {
         try {
             const res = await fetch('/api/notifications');
@@ -50,6 +31,14 @@ export default function NotificationDropdown() {
             console.error('Failed to fetch notifications');
         }
     };
+
+    useEffect(() => {
+        fetchNotifications();
+
+        // Polling every 2 minutes or just on mount for now
+        const interval = setInterval(fetchNotifications, 120000);
+        return () => clearInterval(interval);
+    }, []);
 
     const markAsRead = async (id: string) => {
         try {

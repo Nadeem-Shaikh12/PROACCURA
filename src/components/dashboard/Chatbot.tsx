@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, User, Bot, Sparkles } from 'lucide-react';
+import { nanoid } from 'nanoid';
 
 interface Message {
     id: string;
@@ -33,7 +34,7 @@ export default function Chatbot() {
 
     const handleSendAction = (queryText: string) => {
         const userMsg: Message = {
-            id: Date.now().toString(),
+            id: nanoid(),
             text: queryText,
             sender: 'user',
             timestamp: new Date()
@@ -80,7 +81,7 @@ export default function Chatbot() {
             }
 
             const botMsg: Message = {
-                id: (Date.now() + 1).toString(),
+                id: nanoid(),
                 text: botResponse,
                 sender: 'bot',
                 timestamp: new Date()

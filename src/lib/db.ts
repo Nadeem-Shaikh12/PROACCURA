@@ -72,8 +72,9 @@ class DBAdapter {
         this.inMemoryCache = data; // Always update memory
         try {
             await fs.writeFile(DB_PATH, JSON.stringify(data, null, 2), 'utf-8');
-        } catch (error: any) {
-            if (error.code === 'EROFS') {
+        } catch (error) {
+            const err = error as { code?: string };
+            if (err.code === 'EROFS') {
                 console.warn("Read-only file system detected. Data saved to memory only.");
             } else {
                 console.error("Failed to write to DB file:", error);
@@ -228,7 +229,7 @@ class DBAdapter {
     async updateRequestStatus(id: string, status: 'approved' | 'rejected' | 'moved_out', remarks?: string, extraData?: { joiningDate?: string, rentNotes?: string, utilityDetails?: string }) {
         await this.init();
         if (this.useMongo) {
-            const updates: any = { status, updatedAt: new Date().toISOString() };
+            const updates: Partial<VerificationRequest> & { updatedAt: string } = { status, updatedAt: new Date().toISOString() };
             if (remarks !== undefined) updates.remarks = remarks;
             if (extraData) {
                 if (extraData.joiningDate !== undefined) updates.joiningDate = extraData.joiningDate;
@@ -237,7 +238,7 @@ class DBAdapter {
             }
             // For MongoDB we need to handle verifiedAt carefully or just overwrite it
             // Simplified logic matching JSON:
-            let request = await Models.VerificationRequest.findOne({ id });
+            const request = await Models.VerificationRequest.findOne({ id });
             if (!request) return null;
 
             request.status = status;
@@ -728,7 +729,7 @@ class DBAdapter {
                 { $group: { _id: '$senderId', count: { $sum: 1 } } }
             ]);
             const counts: Record<string, number> = {};
-            results.forEach((r: any) => {
+            results.forEach((r: { _id: string; count: number }) => {
                 counts[r._id] = r.count;
             });
             return counts;
@@ -768,6 +769,17 @@ class DBAdapter {
         } else {
             const db = await this.readJSON();
             return db.reviews.filter(r => r.revieweeId === userId).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        }
+    }
+
+    async getAllReviews() {
+        await this.init();
+        if (this.useMongo) {
+            const res = await Models.Review.find({}).sort({ createdAt: -1 }).lean();
+            return res as unknown as Review[];
+        } else {
+            const db = await this.readJSON();
+            return db.reviews.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         }
     }
 }
