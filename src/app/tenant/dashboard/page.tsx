@@ -7,16 +7,13 @@ import {
     Home,
     BadgeCheck,
     User,
-    CreditCard,
     ArrowUpRight,
     MessageSquare,
     Wrench,
     FileText,
-    Wallet,
     Bell,
     MapPin,
     Calendar,
-    ChevronRight,
     Sparkles,
     Settings,
     X
@@ -29,7 +26,6 @@ export default function TenantDashboard() {
     const { user, isLoading } = useAuth();
     const [stay, setStay] = useState<any>(null);
     const [loading, setLoading] = useState(true);
-    const [bills, setBills] = useState<any[]>([]);
     const [notifications, setNotifications] = useState<any[]>([]);
     const [pendingRequest, setPendingRequest] = useState<any>(null);
 
@@ -43,19 +39,16 @@ export default function TenantDashboard() {
     const fetchDashboardState = async () => {
         if (!user) return;
         try {
-            const [stayRes, billsRes, notifRes, verifyRes] = await Promise.all([
+            const [stayRes, notifRes, verifyRes] = await Promise.all([
                 fetch('/api/tenant/stay'),
-                fetch('/api/tenant/bills'),
                 fetch('/api/notifications'),
                 fetch('/api/tenant/verify')
             ]);
             const stayData = await stayRes.json();
-            const billsData = await billsRes.json();
             const notifData = await notifRes.json();
             const verifyData = await verifyRes.json();
 
             setStay(stayData.stay);
-            if (billsData.bills) setBills(billsData.bills);
             if (notifData.notifications) setNotifications(notifData.notifications.filter((n: any) => !n.isRead));
 
             if (verifyData.request) {
@@ -79,24 +72,6 @@ export default function TenantDashboard() {
         }, 3000);
         return () => clearInterval(interval);
     }, [user, stay]);
-
-    const handlePayBill = async (billId: string) => {
-        try {
-            const res = await fetch('/api/tenant/bills', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ billId })
-            });
-            if (res.ok) {
-                const billsRes = await fetch('/api/tenant/bills');
-                const billsData = await billsRes.json();
-                if (billsData.bills) setBills(billsData.bills);
-                alert('Payment Successful!');
-            }
-        } catch (error) {
-            console.error('Payment failed', error);
-        }
-    };
 
     const getGreeting = () => {
         const hour = new Date().getHours();
@@ -192,9 +167,6 @@ export default function TenantDashboard() {
         );
     }
 
-    const pendingBills = bills.filter(b => b.status === 'PENDING');
-    const totalDue = pendingBills.reduce((acc, b) => acc + b.amount, 0);
-
     return (
         <div className="min-h-screen pb-20">
             {/* Mesh Gradient Background */}
@@ -239,10 +211,10 @@ export default function TenantDashboard() {
                     {/* Left & Middle Column (Grid spanning 3 columns on XL) */}
                     <div className="md:col-span-2 xl:col-span-3 space-y-8">
                         {/* Main Interaction Cards */}
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 gap-6">
 
                             {/* Property Showcase Card */}
-                            <div className="lg:col-span-2 relative group overflow-hidden bg-white rounded-[3rem] p-4 border border-slate-200 shadow-xl shadow-slate-200/60 hover:shadow-2xl transition-all duration-500">
+                            <div className="w-full relative group overflow-hidden bg-white rounded-[3rem] p-4 border border-slate-200 shadow-xl shadow-slate-200/60 hover:shadow-2xl transition-all duration-500">
                                 <div className="relative h-64 w-full rounded-[2.5rem] overflow-hidden">
                                     <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/80 via-zinc-900/20 to-transparent z-10"></div>
                                     <img
@@ -284,51 +256,16 @@ export default function TenantDashboard() {
                                     </Link>
                                 </div>
                             </div>
-
-                            {/* Wallet / Quick Balance Card */}
-                            <div className="bg-gradient-to-br from-blue-700 via-blue-600 to-emerald-600 rounded-[3rem] p-8 text-white shadow-2xl shadow-blue-500/30 flex flex-col justify-between relative overflow-hidden group">
-                                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-125 transition-transform duration-700">
-                                    <Wallet size={160} strokeWidth={1} />
-                                </div>
-                                <div className="relative z-10">
-                                    <div className="flex justify-between items-start mb-10">
-                                        <div className="h-12 w-12 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/30 shadow-xl">
-                                            <CreditCard size={24} />
-                                        </div>
-                                        <div className="text-right">
-                                            <p className="text-blue-100 font-black text-[10px] uppercase tracking-[0.2em] mb-1 text-shadow-sm">Pending Amount</p>
-                                            <h4 className="text-4xl font-black tracking-tighter">₹{totalDue.toLocaleString()}</h4>
-                                        </div>
-                                    </div>
-                                    <div className="space-y-4">
-                                        <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
-                                            <div className="flex justify-between items-center text-sm font-medium">
-                                                <span className="text-blue-200">Payment Status</span>
-                                                <span className={`font-bold ${totalDue > 0 ? 'text-amber-300' : 'text-emerald-400'}`}>
-                                                    {totalDue > 0 ? 'Unsettled' : 'Clear'}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button
-                                    onClick={() => alert('Opening Secure Payment Portal...')}
-                                    disabled={totalDue === 0}
-                                    className="w-full py-4 bg-white text-blue-600 rounded-[1.5rem] font-black text-xs uppercase tracking-widest transition-all hover:bg-slate-50 active:scale-95 disabled:opacity-50 shadow-xl relative z-10"
-                                >
-                                    Settle All Dues
-                                </button>
-                            </div>
                         </div>
 
-                        {/* Middle Section: Action Center & Billing */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-                            {/* Action Center */}
+                        {/* Middle Section: Action Center */}
+                        <div className="grid grid-cols-1 gap-6 lg:gap-8">
+                            {/* Action Center - Full Width */}
                             <div className="bg-white rounded-[2.5rem] lg:rounded-[3rem] p-6 lg:p-8 border border-slate-200 shadow-xl shadow-slate-200/60 flex flex-col h-full">
                                 <h3 className="text-lg lg:text-xl font-black text-slate-900 mb-6 lg:mb-8 flex items-center gap-2">
                                     <Sparkles size={20} className="text-blue-500" /> Core Services
                                 </h3>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                     <Link href="/tenant/messages" className="p-6 bg-slate-50 rounded-3xl hover:bg-slate-900 hover:text-white transition-all group shadow-sm border border-slate-100">
                                         <div className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center mb-4 group-hover:bg-white/10 shadow-sm border border-slate-100 transition-colors">
                                             <MessageSquare size={24} className="text-blue-500" />
@@ -357,47 +294,6 @@ export default function TenantDashboard() {
                                         <div className="font-bold text-sm mb-1 uppercase tracking-wider">Vault</div>
                                         <p className="text-[10px] font-medium opacity-50 uppercase tracking-widest leading-none">Personal Docs</p>
                                     </Link>
-                                </div>
-                            </div>
-
-                            {/* Detailed Billing Ledger */}
-                            <div className="bg-white rounded-[2.5rem] lg:rounded-[3rem] p-6 lg:p-8 border border-slate-200 shadow-xl shadow-slate-200/60 flex flex-col h-full">
-                                <div className="flex items-center justify-between mb-6 lg:mb-8">
-                                    <h3 className="text-lg lg:text-xl font-black text-slate-900">Ledger Insights</h3>
-                                    <Link href="/tenant/dashboard/history" className="text-[10px] font-black uppercase text-blue-600 tracking-widest hover:underline flex items-center gap-1">
-                                        Full Log <ChevronRight size={14} />
-                                    </Link>
-                                </div>
-                                <div className="space-y-3 flex-1">
-                                    {bills.length === 0 ? (
-                                        <div className="h-full flex flex-col items-center justify-center pb-8 opacity-40">
-                                            <Sparkles size={48} className="text-slate-200 mb-4" />
-                                            <p className="text-[10px] font-black tracking-widest uppercase text-slate-400">Ledger Clear</p>
-                                        </div>
-                                    ) : (
-                                        bills.slice(0, 4).map(bill => (
-                                            <div key={bill.id} className="group p-4 bg-slate-50 rounded-[1.75rem] border border-transparent hover:border-slate-200 hover:bg-white transition-all duration-300 flex items-center justify-between">
-                                                <div className="flex items-center gap-4">
-                                                    <div className={`h-12 w-12 rounded-2xl flex items-center justify-center font-black transition-transform group-hover:scale-110 ${bill.type === 'RENT' ? 'bg-blue-100 text-blue-600' : 'bg-slate-200 text-slate-600'}`}>
-                                                        {bill.type.charAt(0)}
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-sm font-bold text-slate-900">{bill.type}</p>
-                                                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Cycle: {bill.month.split(' ')[0]}</p>
-                                                    </div>
-                                                </div>
-                                                <div className="text-right">
-                                                    <p className="text-sm font-black text-slate-900">₹{bill.amount.toLocaleString()}</p>
-                                                    <button
-                                                        onClick={() => bill.status === 'PENDING' && handlePayBill(bill.id)}
-                                                        className={`text-[9px] font-black uppercase tracking-widest mt-1 underline transition-colors ${bill.status === 'PENDING' ? 'text-blue-600 hover:text-black' : 'text-emerald-500 opacity-60'}`}
-                                                    >
-                                                        {bill.status === 'PENDING' ? 'Settle' : 'Completed'}
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        ))
-                                    )}
                                 </div>
                             </div>
                         </div>
