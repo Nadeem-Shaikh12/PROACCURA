@@ -11,6 +11,31 @@ export interface User {
     email: string;
     role: Role;
     avatar?: string;
+    profilePhoto?: string;
+    mobile?: string;
+    language?: string;
+    timezone?: string;
+    notificationPreferences?: {
+        rentReminders: boolean;
+        maintenanceUpdates: boolean;
+        leaseRenewal: boolean;
+        messages: boolean;
+        documents: boolean;
+    };
+    portalPreferences?: {
+        theme: 'light' | 'dark' | 'system';
+        landingPage: 'dashboard' | 'payments' | 'messages';
+        emailFormat: 'html' | 'text';
+    };
+    securitySettings?: {
+        twoFactorEnabled: boolean;
+        lastLogin?: string;
+        loginHistory?: { date: string; device: string; ip: string }[];
+    };
+    privacySettings?: {
+        dataSharing: boolean;
+        marketing: boolean;
+    };
     tenantProfile?: {
         mobile?: string;
         [key: string]: any;
@@ -19,6 +44,7 @@ export interface User {
 
 interface AuthContextType {
     user: User | null;
+    setUser: React.Dispatch<React.SetStateAction<User | null>>;
     login: (data: any) => Promise<void>;
     register: (data: any) => Promise<void>;
     logout: () => Promise<void>;
@@ -69,7 +95,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             }
 
             setUser(data.user);
-            router.push(`/${data.user.role}/dashboard`);
+
+            const landingPage = data.user.portalPreferences?.landingPage || 'dashboard';
+            if (data.user.role === 'tenant') {
+                if (landingPage === 'payments') router.push('/tenant/dashboard/bills');
+                else if (landingPage === 'messages') router.push('/tenant/messages');
+                else router.push('/tenant/dashboard');
+            } else {
+                router.push(`/${data.user.role}/dashboard`);
+            }
         } catch (error: any) {
             console.error('Login error', error);
             throw error;
@@ -109,7 +143,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, register, logout, refreshUser: checkAuth, isLoading }}>
+        <AuthContext.Provider value={{ user, setUser, login, register, logout, refreshUser: checkAuth, isLoading }}>
             {children}
         </AuthContext.Provider>
     );

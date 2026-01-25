@@ -11,7 +11,12 @@ export function useRedirectIfAuthenticated() {
     useEffect(() => {
         if (!isLoading && user) {
             if (user.role === 'tenant') {
-                router.push('/tenant/dashboard');
+                const landingPage = user.portalPreferences?.landingPage || 'dashboard';
+                if (landingPage !== 'dashboard') {
+                    router.push(`/tenant/${landingPage}`);
+                } else {
+                    router.push('/tenant/dashboard');
+                }
             } else if (user.role === 'landlord') {
                 router.push('/landlord/dashboard');
             }

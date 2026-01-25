@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { en } from '@/locales/en';
 import { hi } from '@/locales/hi';
 import { mr } from '@/locales/mr';
+import { useAuth } from './AuthContext';
 
 type Language = 'en' | 'hi' | 'mr';
 export type TranslationKey = string; // In a stricter version, we could use keyof typeof en
@@ -25,14 +26,20 @@ const translations = {
 export function LanguageProvider({ children }: { children: ReactNode }) {
     // Default to English, but could check localStorage or navigator.language in the future
     const [language, setLanguage] = useState<Language>('en');
+    const { user } = useAuth();
 
-    // Optional: Persist to localStorage
+    // Sync with User Profile or LocalStorage
     useEffect(() => {
-        const saved = localStorage.getItem('app-language');
-        if (saved && (saved === 'en' || saved === 'hi' || saved === 'mr')) {
-            setLanguage(saved as Language);
+        if (user?.language && ['en', 'hi', 'mr'].includes(user.language)) {
+            setLanguage(user.language as Language);
+            localStorage.setItem('app-language', user.language);
+        } else {
+            const saved = localStorage.getItem('app-language');
+            if (saved && (saved === 'en' || saved === 'hi' || saved === 'mr')) {
+                setLanguage(saved as Language);
+            }
         }
-    }, []);
+    }, [user]);
 
     const handleSetLanguage = (lang: Language) => {
         setLanguage(lang);

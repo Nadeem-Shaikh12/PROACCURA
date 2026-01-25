@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { MOCK_MAINTENANCE_REQUESTS, MaintenanceRequest } from '@/lib/store';
 import { db } from '@/lib/db';
-// nanoid removed
+import { sendNotification } from '@/lib/notifications';
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -34,16 +34,13 @@ export async function POST(request: Request) {
         MOCK_MAINTENANCE_REQUESTS.push(newRequest);
 
         // Notify Landlord
-        await db.addNotification({
-            id: crypto.randomUUID(),
-            userId: newRequest.landlordId,
-            role: 'landlord',
-            title: 'New Maintenance Request',
-            message: `${newRequest.tenantName} reported: ${newRequest.title}`,
-            type: 'MAINTENANCE_LOGGED' as any,
-            isRead: false,
-            createdAt: new Date().toISOString()
-        });
+        await sendNotification(
+            newRequest.landlordId,
+            'landlord',
+            'MAINTENANCE_LOGGED',
+            'New Maintenance Request',
+            `${newRequest.tenantName} reported: ${newRequest.title}`
+        );
 
         return NextResponse.json({ success: true, request: newRequest });
     } catch (e) {
@@ -64,16 +61,13 @@ export async function PATCH(request: Request) {
         const req = MOCK_MAINTENANCE_REQUESTS[reqIndex];
 
         // Notify Tenant
-        await db.addNotification({
-            id: crypto.randomUUID(),
-            userId: req.tenantId,
-            role: 'tenant',
-            title: 'Maintenance Update',
-            message: `Your request "${req.title}" is now ${status}.`,
-            type: 'MAINTENANCE_UPDATED' as any,
-            isRead: false,
-            createdAt: new Date().toISOString()
-        });
+        await sendNotification(
+            req.tenantId,
+            'tenant',
+            'MAINTENANCE_UPDATE',
+            'Maintenance Update',
+            `Your request "${req.title}" is now ${status}.`
+        );
 
         return NextResponse.json({ success: true });
     } catch (e) {

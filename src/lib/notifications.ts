@@ -36,7 +36,7 @@ async function checkAlerts(userId: string, role: 'landlord' | 'tenant') {
         if (diffDays <= 30 && diffDays > 0) {
             const title = 'Lease Expiring Soon';
             const message = `The lease for ${lease.propertyName} expires in ${diffDays} days.`;
-            await triggerNotification(userId, role, 'LEASE_EXPIRY', title, message);
+            await sendNotification(userId, role, 'LEASE_EXPIRY', title, message);
         }
     }
 
@@ -52,13 +52,39 @@ async function checkAlerts(userId: string, role: 'landlord' | 'tenant') {
             if (diffDays <= 3 && diffDays >= 0) {
                 const title = 'Rent Due Soon';
                 const message = `Rent of ₹${sched.amount} is due in ${diffDays === 0 ? 'today' : diffDays + ' days'}. Payment is required.`;
-                await triggerNotification(userId, role, 'PAYMENT_PENDING', title, message);
+                await sendNotification(userId, role, 'PAYMENT_PENDING', title, message);
             }
         }
     }
 }
 
-async function triggerNotification(userId: string, role: string, type: string, title: string, message: string) {
+// Helper to map notification type to preference key
+function getPreferenceKey(type: string): string | null {
+    switch (type) {
+        case 'LEASE_EXPIRY': return 'leaseRenewal';
+        case 'PAYMENT_PENDING':
+        case 'NEW_BILL_CYCLE':
+            return 'rentReminders';
+        case 'MAINTENANCE_UPDATE': return 'maintenanceUpdates';
+        case 'NEW_MESSAGE': return 'messages';
+        case 'DOCUMENT_SHARED': return 'documents';
+        default: return null; // Always send system notifications or unclassified ones
+    }
+}
+
+export async function sendNotification(userId: string, role: string, type: string, title: string, message: string) {
+    // 1. Check Preferences
+    if (role === 'tenant') {
+        const user = await db.findUserById(userId);
+        if (user && user.notificationPreferences) {
+            const prefKey = getPreferenceKey(type);
+            if (prefKey && (user.notificationPreferences as any)[prefKey] === false) {
+                console.log(`Notification skipped for user ${userId} due to preference: ${prefKey}`);
+                return; // Skip
+            }
+        }
+    }
+
     const existingNotifications = await db.getNotifications(userId);
     // Avoid spamming the same notification repeatedly (basic check)
     const alreadyExists = existingNotifications.find(n => n.title === title && n.message === message && !n.isRead);
@@ -100,30 +126,24 @@ async function processMonthlyLogic(tenantId: string, joiningDateStr: string, rol
                 ? `Tenant ${tenantName} has completed month ${cycleNumber} of their stay.`
                 : `Congratulations! You have completed month ${cycleNumber} of your stay.`;
 
-            await db.addNotification({
-                id: crypto.randomUUID(),
-                userId: role === 'landlord' ? landlordId! : tenantId,
-                role: role,
+            await sendNotification(
+                role === 'landlord' ? landlordId! : tenantId,
+                role,
+                'MONTH_COMPLETED',
                 title,
-                message,
-                type: 'MONTH_COMPLETED',
-                isRead: false,
-                createdAt: new Date().toISOString()
-            });
+                message
+            );
 
             // Also trigger "New Billing Cycle" notification
-            await db.addNotification({
-                id: crypto.randomUUID(),
-                userId: role === 'landlord' ? landlordId! : tenantId,
-                role: role,
-                title: 'New Billing Cycle',
-                message: role === 'landlord'
+            await sendNotification(
+                role === 'landlord' ? landlordId! : tenantId,
+                role,
+                'NEW_BILL_CYCLE',
+                'New Billing Cycle',
+                role === 'landlord'
                     ? `A new billing cycle has started for ${tenantName}.`
-                    : `Your new monthly billing cycle has started.`,
-                type: 'NEW_BILL_CYCLE',
-                isRead: false,
-                createdAt: new Date().toISOString()
-            });
+                    : `Your new monthly billing cycle has started.`
+            );
         }
     }
 }

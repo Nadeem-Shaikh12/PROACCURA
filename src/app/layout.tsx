@@ -4,6 +4,7 @@ import "./globals.css";
 import NavbarWrapper from "@/components/NavbarWrapper";
 import { Providers } from "@/components/Providers";
 import BottomNav from "@/components/dashboard/BottomNav";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,18 +44,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        suppressHydrationWarning={true}
-        className={`${geistSans.variable} ${geistMono.variable} antialiased text-slate-900 bg-[var(--background)]`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased text-slate-900 bg-[var(--background)] transition-colors duration-300`}
       >
-        <Providers>
-          <NavbarWrapper />
-          <main className="pb-20 lg:pb-0">
-            {children}
-          </main>
-          <BottomNav />
-        </Providers>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Providers>
+            <NavbarWrapper />
+            <main className="pb-20 lg:pb-0">
+              {children}
+            </main>
+            <BottomNav />
+          </Providers>
+        </ThemeProvider>
       </body>
     </html>
   );

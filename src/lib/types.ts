@@ -5,7 +5,30 @@ export interface User {
     passwordHash: string;
     role: 'landlord' | 'tenant';
     mobile?: string;
-    aadhaar?: string;
+    profilePhoto?: string;
+    language?: string;
+    timezone?: string;
+    notificationPreferences?: {
+        rentReminders: boolean;
+        maintenanceUpdates: boolean;
+        leaseRenewal: boolean;
+        messages: boolean;
+        documents: boolean;
+    };
+    portalPreferences?: {
+        theme: 'light' | 'dark' | 'system';
+        landingPage: 'dashboard' | 'payments' | 'messages';
+        emailFormat: 'html' | 'text';
+    };
+    securitySettings?: {
+        twoFactorEnabled: boolean;
+        lastLogin?: string;
+        loginHistory?: { date: string; device: string; ip: string }[];
+    };
+    privacySettings?: {
+        dataSharing: boolean;
+        marketing: boolean;
+    };
     tenantProfile?: {
         mobile: string;
         city: string;

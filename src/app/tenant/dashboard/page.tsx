@@ -16,11 +16,13 @@ import {
     Calendar,
     Sparkles,
     Settings,
-    X
+    X,
+    CreditCard
 } from 'lucide-react';
 import Link from 'next/link';
 import Chatbot from '@/components/dashboard/Chatbot';
 import { useAuth } from '@/context/AuthContext';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function TenantDashboard() {
     const { user, isLoading } = useAuth();
@@ -73,11 +75,13 @@ export default function TenantDashboard() {
         return () => clearInterval(interval);
     }, [user, stay]);
 
+    const { t } = useLanguage();
+
     const getGreeting = () => {
         const hour = new Date().getHours();
-        if (hour < 12) return 'Good Morning';
-        if (hour < 18) return 'Good Afternoon';
-        return 'Good Evening';
+        if (hour < 12) return t('greeting.morning');
+        if (hour < 18) return t('greeting.afternoon');
+        return t('greeting.evening');
     };
 
     if (isLoading || loading) return (
@@ -193,10 +197,10 @@ export default function TenantDashboard() {
 
                     <div className="flex items-center gap-4">
                         <div className="flex bg-white p-1 rounded-2xl border border-zinc-200 shadow-sm">
-                            <button className="p-3 text-zinc-400 hover:text-zinc-900 transition relative">
+                            <Link href="/tenant/dashboard/notifications" className="p-3 text-zinc-400 hover:text-zinc-900 transition relative">
                                 <Bell size={24} />
                                 {notifications.length > 0 && <span className="absolute top-3 right-3 h-2 w-2 bg-rose-500 rounded-full border-2 border-white"></span>}
-                            </button>
+                            </Link>
                             <Link href="/tenant/dashboard/settings" className="p-3 text-zinc-400 hover:text-zinc-900 transition">
                                 <Settings size={24} />
                             </Link>
@@ -265,7 +269,14 @@ export default function TenantDashboard() {
                                 <h3 className="text-lg lg:text-xl font-black text-slate-900 mb-6 lg:mb-8 flex items-center gap-2">
                                     <Sparkles size={20} className="text-blue-500" /> Core Services
                                 </h3>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                                    <Link href="/tenant/dashboard/bills" className="p-6 bg-slate-50 rounded-3xl hover:bg-slate-900 hover:text-white transition-all group shadow-sm border border-slate-100">
+                                        <div className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center mb-4 group-hover:bg-white/10 shadow-sm border border-slate-100 transition-colors">
+                                            <CreditCard size={24} className="text-violet-500" />
+                                        </div>
+                                        <div className="font-bold text-sm mb-1 uppercase tracking-wider">Payments</div>
+                                        <p className="text-[10px] font-medium opacity-50 uppercase tracking-widest leading-none">Pay Rent</p>
+                                    </Link>
                                     <Link href="/tenant/messages" className="p-6 bg-slate-50 rounded-3xl hover:bg-slate-900 hover:text-white transition-all group shadow-sm border border-slate-100">
                                         <div className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center mb-4 group-hover:bg-white/10 shadow-sm border border-slate-100 transition-colors">
                                             <MessageSquare size={24} className="text-blue-500" />

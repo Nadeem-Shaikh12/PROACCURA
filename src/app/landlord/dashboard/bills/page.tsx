@@ -256,7 +256,7 @@ export default function BillsPage() {
                                         <span className="text-[10px] font-bold text-zinc-300 uppercase tracking-wider">• {bill.month}</span>
                                     </div>
                                     <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs font-medium text-zinc-400">
-                                        <span className="flex items-center gap-1"><UserIcon size={12} className="text-indigo-400" /> Resident ID: {bill.tenantId.substring(0, 8)}</span>
+                                        <span className="flex items-center gap-1"><UserIcon size={12} className="text-indigo-400" /> Resident: {tenants.find(t => t.tenantId === bill.tenantId)?.tenantName || bill.tenantId.substring(0, 8)}</span>
                                         <span className="hidden sm:inline opacity-30">|</span>
                                         <span className="flex items-center gap-1 font-bold"><Building2 size={12} className="text-amber-400" /> Invoiced by SmartRent Ledger</span>
                                     </div>

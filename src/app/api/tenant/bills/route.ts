@@ -3,6 +3,7 @@ import { db } from '@/lib/db';
 import { jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import { nanoid } from 'nanoid';
+import { sendNotification } from '@/lib/notifications';
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key-change-in-production');
 
@@ -17,6 +18,7 @@ export async function GET() {
         if (payload.role !== 'tenant') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
         const bills = await db.getBillsByTenant(payload.userId as string);
+        console.log(`[API] Fetching bills for tenant: ${payload.userId}. Found: ${bills.length}`);
         return NextResponse.json({ bills });
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -51,16 +53,13 @@ export async function POST(req: Request) {
             });
 
             // Notify Landlord
-            await db.addNotification({
-                id: nanoid(),
-                userId: paidBill.landlordId,
-                role: 'landlord',
-                title: 'Payment Received',
-                message: `Tenant has paid ${paidBill.type} bill of $${paidBill.amount}.`,
-                type: 'PAYMENT_RECEIVED',
-                isRead: false,
-                createdAt: new Date().toISOString()
-            });
+            await sendNotification(
+                paidBill.landlordId,
+                'landlord',
+                'PAYMENT_RECEIVED',
+                'Payment Received',
+                `Tenant has paid ${paidBill.type} bill of $${paidBill.amount}.`
+            );
 
             return NextResponse.json({ success: true, bill: paidBill });
         } else {

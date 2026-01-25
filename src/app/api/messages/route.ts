@@ -3,6 +3,7 @@ import { db } from '@/lib/db';
 import { jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import crypto from 'crypto';
+import { sendNotification } from '@/lib/notifications';
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key-change-in-production');
 
@@ -59,16 +60,13 @@ export async function POST(request: Request) {
         });
 
         // Create a notification for the receiver
-        await db.addNotification({
-            id: crypto.randomUUID(),
-            userId: receiverId,
-            type: 'REMARK_ADDED', // Valid type for general alerts
-            title: 'New Message',
-            message: `You received a new message from ${payload.name}`,
-            role: payload.role === 'landlord' ? 'tenant' : 'landlord', // Receiver's role
-            createdAt: new Date().toISOString(),
-            isRead: false
-        });
+        await sendNotification(
+            receiverId,
+            payload.role === 'landlord' ? 'tenant' : 'landlord',
+            'NEW_MESSAGE',
+            'New Message',
+            `You received a new message from ${payload.name}`
+        );
 
         return NextResponse.json({ message: newMessage });
     } catch (error) {

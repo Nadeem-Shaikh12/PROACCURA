@@ -48,7 +48,7 @@ class DBAdapter {
 
     // HELPER: Read JSON
     private async readJSON(): Promise<JSONSchema> {
-        if (this.inMemoryCache) return this.inMemoryCache;
+        // if (this.inMemoryCache) return this.inMemoryCache; // DISABLE CACHE FOR DATA CONSISTENCY
 
         try {
             const data = await fs.readFile(DB_PATH, 'utf-8');
@@ -689,6 +689,24 @@ class DBAdapter {
             return db.messages.filter(m =>
                 (m.senderId === userId1 && m.receiverId === userId2) ||
                 (m.senderId === userId2 && m.receiverId === userId1)
+            ).sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+        }
+    }
+
+    async getAllMessagesForUser(userId: string) {
+        await this.init();
+        if (this.useMongo) {
+            const res = await Models.Message.find({
+                $or: [
+                    { senderId: userId },
+                    { receiverId: userId }
+                ]
+            }).sort({ timestamp: 1 }).lean();
+            return res as unknown as Message[];
+        } else {
+            const db = await this.readJSON();
+            return db.messages.filter(m =>
+                m.senderId === userId || m.receiverId === userId
             ).sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
         }
     }

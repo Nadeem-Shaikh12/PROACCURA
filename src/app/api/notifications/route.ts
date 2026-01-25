@@ -20,8 +20,28 @@ export async function GET() {
         // Proactively check for monthly milestones
         await checkAndTriggerMonthlyNotifications(payload.userId as string, payload.role as 'landlord' | 'tenant');
 
+        const user = await db.findUserById(payload.userId as string);
+        const prefs = user?.notificationPreferences || {
+            rentReminders: true,
+            maintenanceUpdates: true,
+            leaseRenewal: true,
+            messages: true,
+            documents: true
+        };
+
         const notifications = await db.getNotifications(payload.userId as string);
-        return NextResponse.json({ notifications });
+
+        // Soft-filter based on preferences
+        const filteredNotifications = notifications.filter((n: any) => {
+            if (n.type === 'RENT_DUE' || n.type === 'PAYMENT_RECEIVED') return prefs.rentReminders;
+            if (n.type === 'MAINTENANCE_LOGGED' || n.type === 'MAINTENANCE_UPDATE' || n.type === 'MAINTENANCE_UPDATED') return prefs.maintenanceUpdates;
+            if (n.type === 'LEASE_RENEWAL') return prefs.leaseRenewal;
+            if (n.type === 'NEW_MESSAGE') return prefs.messages;
+            if (n.type === 'DOCUMENT_SHARED') return prefs.documents;
+            return true; // Default keep if type unknown or generic
+        });
+
+        return NextResponse.json({ notifications: filteredNotifications });
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }

@@ -33,7 +33,30 @@ export async function POST(req: Request) {
             .setExpirationTime('30d')
             .sign(JWT_SECRET);
 
-        const response = NextResponse.json({ success: true, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
+        // Update Login History
+        const ip = req.headers.get('x-forwarded-for') || '127.0.0.1';
+        const userAgent = req.headers.get('user-agent') || 'Unknown';
+        const newLogin = {
+            date: new Date().toISOString(),
+            device: userAgent,
+            ip: ip
+        };
+
+        const currentHistory = user.securitySettings?.loginHistory || [];
+        const updatedHistory = [newLogin, ...currentHistory].slice(0, 10); // Keep last 10
+
+        const updatedSecuritySettings = {
+            ...(user.securitySettings || { twoFactorEnabled: false }),
+            lastLogin: new Date().toISOString(),
+            loginHistory: updatedHistory
+        };
+
+        await db.updateUser(user.id, { securitySettings: updatedSecuritySettings });
+
+        // refresh user object for response
+        const userWithHistory = { ...user, securitySettings: updatedSecuritySettings };
+
+        const response = NextResponse.json({ success: true, user: userWithHistory });
 
         response.cookies.set({
             name: 'token',

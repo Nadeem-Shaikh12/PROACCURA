@@ -39,8 +39,7 @@ export async function POST(req: Request) {
             email,
             passwordHash,
             role,
-            mobile: '',
-            aadhaar: ''
+            mobile: ''
         });
 
         // Create JWT

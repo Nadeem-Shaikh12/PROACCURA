@@ -80,19 +80,40 @@
     },
     {
       "id": "9JOKiD-1EATH05WO-feHb",
-      "name": "test tenant ",
-      "email": "kshitij@gmail.com",
-      "passwordHash": "$2b$10$1p4l0BkkhM6N43k0tUHCrOcANZltAjVvN1BpeSmgt/5AcKXDX2pwu",
+      "name": "Shaikh Nadeem",
+      "email": "nadimshaikh74161@gmail.com",
+      "passwordHash": "$2b$10$h9.hwi.EfnAPPsWGVa6o6e0WfHwgL6cvtnoSxPf6b7y8EY35O8kfe",
       "role": "tenant",
-      "mobile": "",
+      "mobile": "8767683071",
       "aadhaar": "",
       "tenantProfile": {
-        "mobile": "08767683071",
+        "mobile": "8767683071",
         "city": "Aurangabad",
         "state": "Maharashtra",
-        "aadhaarNumber": "123456789",
+        "aadhaarNumber": "12345678901",
         "isProfileComplete": true,
         "paymentStatus": "PENDING"
+      },
+      "language": "English",
+      "timezone": "UTC",
+      "notificationPreferences": {
+        "rentReminders": true,
+        "maintenanceUpdates": true,
+        "leaseRenewal": true,
+        "messages": true,
+        "documents": true
+      },
+      "portalPreferences": {
+        "theme": "light",
+        "landingPage": "dashboard",
+        "emailFormat": "html"
+      },
+      "securitySettings": {
+        "twoFactorEnabled": false
+      },
+      "privacySettings": {
+        "dataSharing": true,
+        "marketing": false
       }
     },
     {
@@ -103,6 +124,23 @@
       "role": "landlord",
       "mobile": "",
       "aadhaar": ""
+    },
+    {
+      "id": "4QZTgsHgm1UAvtROgzyfg",
+      "name": "Shaikh Nadeem",
+      "email": "nadimshaikh34@gmail.com",
+      "passwordHash": "$2b$10$CrCaWPSWTGf52tDnknPAEuGUDdFsQ2QRhSmM9BfDO2oks4tr9mMfu",
+      "role": "tenant",
+      "mobile": "",
+      "aadhaar": "",
+      "tenantProfile": {
+        "mobile": "9876543210",
+        "city": "Aurangabad",
+        "state": "Maharashtra",
+        "aadhaarNumber": "1234567890",
+        "isProfileComplete": true,
+        "paymentStatus": "PENDING"
+      }
     }
   ],
   "properties": [
@@ -112,7 +150,7 @@
       "name": "Harsh Tambatkar",
       "address": "Aurangabad",
       "units": 20,
-      "occupiedUnits": 4,
+      "occupiedUnits": 5,
       "type": "Apartment",
       "monthlyRent": 1500,
       "createdAt": "2026-01-24T07:00:41.611Z"
@@ -145,10 +183,54 @@
       "name": "moon delight penthouse ",
       "address": "pune, railway road",
       "units": 3,
-      "occupiedUnits": 0,
+      "occupiedUnits": 1,
       "type": "Apartment",
       "monthlyRent": 6000,
       "createdAt": "2026-01-24T11:31:48.916Z"
+    },
+    {
+      "id": "uv670g9mg",
+      "landlordId": "wtTo9PmsS_KIPU5wJaQJw",
+      "name": "new colony",
+      "address": "Aurangabad, near SBI bank",
+      "units": 3,
+      "occupiedUnits": 0,
+      "type": "Apartment",
+      "monthlyRent": 5000,
+      "createdAt": "2026-01-24T11:59:03.129Z"
+    },
+    {
+      "id": "xh0rmqh9a",
+      "landlordId": "wtTo9PmsS_KIPU5wJaQJw",
+      "name": "Future fun city",
+      "address": "Mumbai, near international airport",
+      "units": 3,
+      "occupiedUnits": 0,
+      "type": "Apartment",
+      "monthlyRent": 12000,
+      "createdAt": "2026-01-24T12:00:36.869Z"
+    },
+    {
+      "id": "sbdvgm6it",
+      "landlordId": "wtTo9PmsS_KIPU5wJaQJw",
+      "name": "MGM skyline",
+      "address": "Nager, Railway Station",
+      "units": 3,
+      "occupiedUnits": 0,
+      "type": "Apartment",
+      "monthlyRent": 5000,
+      "createdAt": "2026-01-24T12:02:20.558Z"
+    },
+    {
+      "id": "tgrocjwhw",
+      "landlordId": "wtTo9PmsS_KIPU5wJaQJw",
+      "name": "Green house appeartment",
+      "address": "Pune, n-2 metro Station back road",
+      "units": 2,
+      "occupiedUnits": 0,
+      "type": "Apartment",
+      "monthlyRent": 4330,
+      "createdAt": "2026-01-24T12:04:22.520Z"
     }
   ],
   "verificationRequests": [
@@ -223,6 +305,42 @@
       "submittedAt": "2026-01-24T11:10:07.557Z",
       "updatedAt": "2026-01-24T11:10:27.137Z",
       "verifiedAt": "2026-01-24T11:10:27.137Z"
+    },
+    {
+      "id": "12293fc2-528c-4087-bfaa-457dc8d7e871",
+      "tenantId": "9JOKiD-1EATH05WO-feHb",
+      "fullName": "test tenant ",
+      "mobile": "08767683071",
+      "idProofType": "Aadhaar",
+      "idProofNumber": "12345678901",
+      "city": "Aurangabad",
+      "landlordId": "wtTo9PmsS_KIPU5wJaQJw",
+      "propertyId": "1rsy4bade",
+      "status": "approved",
+      "paymentStatus": "paid",
+      "paymentAmount": 116.82,
+      "transactionId": "TXN_DX7IJXHB7",
+      "submittedAt": "2026-01-24T12:13:24.698Z",
+      "updatedAt": "2026-01-24T12:13:47.695Z",
+      "verifiedAt": "2026-01-24T12:13:47.695Z"
+    },
+    {
+      "id": "d4c2b42f-c168-442e-a4a2-47e8cc78ec37",
+      "tenantId": "4QZTgsHgm1UAvtROgzyfg",
+      "fullName": "Shaikh Nadeem",
+      "mobile": "9876543210",
+      "idProofType": "Aadhaar",
+      "idProofNumber": "1234567890",
+      "city": "Aurangabad",
+      "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
+      "propertyId": "clomzuo8y",
+      "status": "approved",
+      "paymentStatus": "paid",
+      "paymentAmount": 116.82,
+      "transactionId": "TXN_H91FWMVDF",
+      "submittedAt": "2026-01-24T14:40:06.251Z",
+      "updatedAt": "2026-01-24T14:40:50.854Z",
+      "verifiedAt": "2026-01-24T14:40:50.854Z"
     }
   ],
   "history": [
@@ -299,6 +417,58 @@
       "description": "Resident moved out from Harsh Tambatkar. Stay finalized.",
       "date": "2026-01-24T11:13:47.687Z",
       "createdBy": "cYMGn50Zv3iB6KR_v8R7y"
+    },
+    {
+      "id": "331e6fb3-d54b-4a6e-993e-2af9b55bce29",
+      "tenantId": "9JOKiD-1EATH05WO-feHb",
+      "type": "JOINED",
+      "description": "Tenant verified and joined the property.",
+      "date": "2026-01-24T12:13:47.699Z",
+      "createdBy": "wtTo9PmsS_KIPU5wJaQJw"
+    },
+    {
+      "id": "c6f13d17-5752-4224-b6cd-0b3ef3d8c636",
+      "tenantId": "4QZTgsHgm1UAvtROgzyfg",
+      "type": "JOINED",
+      "description": "Tenant verified and joined the property.",
+      "date": "2026-01-24T14:40:50.861Z",
+      "createdBy": "cYMGn50Zv3iB6KR_v8R7y"
+    },
+    {
+      "id": "tv24frf9k",
+      "tenantId": "9JOKiD-1EATH05WO-feHb",
+      "type": "PAYMENT",
+      "date": "2026-01-25T13:47:59.233Z",
+      "description": "Paid RENT bill",
+      "amount": 1000,
+      "createdBy": "9JOKiD-1EATH05WO-feHb"
+    },
+    {
+      "id": "j-6_mKmwShMYTF3BANG0H",
+      "tenantId": "9JOKiD-1EATH05WO-feHb",
+      "type": "PAYMENT",
+      "description": "Paid RENT bill of 1000",
+      "amount": 1000,
+      "date": "2026-01-25T13:47:59.239Z",
+      "createdBy": "9JOKiD-1EATH05WO-feHb"
+    },
+    {
+      "id": "fcuqhvqrz",
+      "tenantId": "9JOKiD-1EATH05WO-feHb",
+      "type": "PAYMENT",
+      "date": "2026-01-25T13:51:36.718Z",
+      "description": "Paid WATER bill",
+      "amount": 1000,
+      "createdBy": "9JOKiD-1EATH05WO-feHb"
+    },
+    {
+      "id": "ZCtY8An9pXC4SKxyvSapl",
+      "tenantId": "9JOKiD-1EATH05WO-feHb",
+      "type": "PAYMENT",
+      "description": "Paid WATER bill of 1000",
+      "amount": 1000,
+      "date": "2026-01-25T13:51:36.726Z",
+      "createdBy": "9JOKiD-1EATH05WO-feHb"
     }
   ],
   "notifications": [
@@ -461,31 +631,224 @@
       "type": "NEW_BILL_CYCLE",
       "isRead": false,
       "createdAt": "2026-01-24T11:14:57.812Z"
+    },
+    {
+      "id": "7b717ce7-d131-4be9-9e2a-4ad8dd59b160",
+      "userId": "9JOKiD-1EATH05WO-feHb",
+      "role": "tenant",
+      "title": "Application Approved!",
+      "message": "Your verification request has been approved by the landlord. Welcome home!",
+      "type": "REMARK_ADDED",
+      "isRead": false,
+      "createdAt": "2026-01-24T12:13:47.713Z"
+    },
+    {
+      "id": "05326d31-4f05-4ab8-ad3c-1309e839ee24",
+      "userId": "wtTo9PmsS_KIPU5wJaQJw",
+      "type": "REMARK_ADDED",
+      "title": "New Message",
+      "message": "You received a new message from test tenant ",
+      "role": "landlord",
+      "createdAt": "2026-01-24T12:14:18.829Z",
+      "isRead": false
+    },
+    {
+      "id": "62941300-d813-4444-826d-85fef32832c9",
+      "userId": "4QZTgsHgm1UAvtROgzyfg",
+      "role": "tenant",
+      "title": "Application Approved!",
+      "message": "Your verification request has been approved by the landlord. Welcome home!",
+      "type": "REMARK_ADDED",
+      "isRead": false,
+      "createdAt": "2026-01-24T14:40:50.910Z"
+    },
+    {
+      "id": "b6396b91-b86d-453a-ada5-7f5bbcd5f592",
+      "userId": "4QZTgsHgm1UAvtROgzyfg",
+      "role": "tenant",
+      "title": "New Bill Received",
+      "message": "You have a new bill for ELECTRICITY ($200) due on 1/24/2026.",
+      "type": "NEW_BILL_CYCLE",
+      "isRead": false,
+      "createdAt": "2026-01-24T14:43:20.701Z"
+    },
+    {
+      "id": "15ee4fb9-c792-4573-b702-5654fad541c2",
+      "userId": "landlord-1",
+      "role": "landlord",
+      "title": "New Maintenance Request",
+      "message": "Shaikh Nadeem reported: Celling Lik",
+      "type": "MAINTENANCE_LOGGED",
+      "isRead": false,
+      "createdAt": "2026-01-24T14:46:04.311Z"
+    },
+    {
+      "id": "6712337c-2340-41a0-adb3-148cff6aebdc",
+      "userId": "4QZTgsHgm1UAvtROgzyfg",
+      "role": "tenant",
+      "title": "New Bill Received",
+      "message": "You have a new bill for WATER ($100) due on 1/25/2026.",
+      "type": "NEW_BILL_CYCLE",
+      "isRead": false,
+      "createdAt": "2026-01-25T13:32:05.961Z"
+    },
+    {
+      "id": "43737fe3-d184-439f-a081-ac9b07f6e895",
+      "userId": "4QZTgsHgm1UAvtROgzyfg",
+      "role": "tenant",
+      "title": "New Bill Received",
+      "message": "You have a new bill for WATER ($1000) due on 1/25/2026.",
+      "type": "NEW_BILL_CYCLE",
+      "isRead": false,
+      "createdAt": "2026-01-25T13:37:02.567Z"
+    },
+    {
+      "id": "9815d9f6-453e-460e-b303-732b9bbe1283",
+      "userId": "vppxjiwORaZU2JmpCZV86",
+      "role": "tenant",
+      "title": "New Bill Received",
+      "message": "You have a new bill for WATER ($1000) due on 1/25/2026.",
+      "type": "NEW_BILL_CYCLE",
+      "isRead": false,
+      "createdAt": "2026-01-25T13:37:53.185Z"
+    },
+    {
+      "id": "5b18ab22-664c-4a65-9a4b-eef67e0a0552",
+      "userId": "vppxjiwORaZU2JmpCZV86",
+      "role": "tenant",
+      "title": "New Bill Received",
+      "message": "You have a new bill for WATER ($1000) due on 1/25/2026.",
+      "type": "NEW_BILL_CYCLE",
+      "isRead": false,
+      "createdAt": "2026-01-25T13:43:00.567Z"
+    },
+    {
+      "id": "f915f995-c6a6-4b7e-8b42-453528056143",
+      "userId": "vppxjiwORaZU2JmpCZV86",
+      "role": "tenant",
+      "title": "New Bill Received",
+      "message": "You have a new bill for WATER ($1000) due on 1/25/2026.",
+      "type": "NEW_BILL_CYCLE",
+      "isRead": false,
+      "createdAt": "2026-01-25T13:43:00.589Z"
+    },
+    {
+      "id": "414739f8-b4b1-40a4-b8b7-4c65f2c3e181",
+      "userId": "4QZTgsHgm1UAvtROgzyfg",
+      "role": "tenant",
+      "title": "New Bill Received",
+      "message": "You have a new bill for ELECTRICITY ($100) due on 1/25/2026.",
+      "type": "NEW_BILL_CYCLE",
+      "isRead": false,
+      "createdAt": "2026-01-25T13:46:26.508Z"
+    },
+    {
+      "id": "711477d5-661c-407f-9d8d-c3eedf3d7a9f",
+      "userId": "vppxjiwORaZU2JmpCZV86",
+      "role": "tenant",
+      "title": "New Bill Received",
+      "message": "You have a new bill for ELECTRICITY ($1000) due on 1/25/2026.",
+      "type": "NEW_BILL_CYCLE",
+      "isRead": false,
+      "createdAt": "2026-01-25T13:46:57.507Z"
+    },
+    {
+      "id": "f0adf049-3522-44c8-a93d-c467bc61bbc6",
+      "userId": "9JOKiD-1EATH05WO-feHb",
+      "role": "tenant",
+      "title": "New Bill Received",
+      "message": "You have a new bill for RENT ($1000) due on 1/25/2026.",
+      "type": "NEW_BILL_CYCLE",
+      "isRead": false,
+      "createdAt": "2026-01-25T13:47:43.922Z"
+    },
+    {
+      "id": "61o5uz_pzVbxMXEG7MXjO",
+      "userId": "wtTo9PmsS_KIPU5wJaQJw",
+      "role": "landlord",
+      "title": "Payment Received",
+      "message": "Tenant has paid RENT bill of $1000.",
+      "type": "PAYMENT_RECEIVED",
+      "isRead": false,
+      "createdAt": "2026-01-25T13:47:59.249Z"
+    },
+    {
+      "id": "4d446a63-35d1-4093-9212-4a33b88f8a80",
+      "userId": "9JOKiD-1EATH05WO-feHb",
+      "role": "tenant",
+      "title": "New Bill Received",
+      "message": "You have a new bill for WATER ($1000) due on 1/25/2026.",
+      "type": "NEW_BILL_CYCLE",
+      "isRead": false,
+      "createdAt": "2026-01-25T13:50:24.784Z"
+    },
+    {
+      "id": "XHPdNvFLcCrHw6NqNTTcr",
+      "userId": "wtTo9PmsS_KIPU5wJaQJw",
+      "role": "landlord",
+      "title": "Payment Received",
+      "message": "Tenant has paid WATER bill of $1000.",
+      "type": "PAYMENT_RECEIVED",
+      "isRead": false,
+      "createdAt": "2026-01-25T13:51:36.768Z"
+    },
+    {
+      "id": "fd194493-f754-44f1-ab46-5eb1c4d0f730",
+      "userId": "wtTo9PmsS_KIPU5wJaQJw",
+      "type": "REMARK_ADDED",
+      "title": "New Message",
+      "message": "You received a new message from test tenant ",
+      "role": "landlord",
+      "createdAt": "2026-01-25T14:10:35.153Z",
+      "isRead": false
     }
   ],
   "bills": [
     {
-      "id": "57138636-58b5-4013-864e-502ec1bd569a",
+      "id": "655c59f9-d5ff-4dc8-a39f-31f40f4b2ab9",
       "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
-      "tenantId": "NyejtA5hpFcWtMEjVREpk",
-      "stayId": "d65a82b9-0b0f-4b49-bd3d-27562d85722a",
-      "amount": 6000,
-      "type": "OTHER",
+      "tenantId": "4QZTgsHgm1UAvtROgzyfg",
+      "stayId": "5e16dfe0-8a21-4140-a0cf-87a404a70b82",
+      "amount": 100,
+      "type": "ELECTRICITY",
       "month": "Jan",
-      "dueDate": "2026-01-24",
-      "status": "PAID",
-      "paidAt": "2026-01-24T07:07:35.234Z"
+      "dueDate": "2026-01-25",
+      "status": "PENDING"
     },
     {
-      "id": "5e484964-8875-433f-9737-95a939095e6a",
+      "id": "993b56b2-2fb9-4b2c-85fc-56ea1a285899",
       "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
       "tenantId": "vppxjiwORaZU2JmpCZV86",
       "stayId": "b80179ab-f493-4e5d-ad00-5e80e3383a88",
       "amount": 1000,
+      "type": "ELECTRICITY",
+      "month": "Jan",
+      "dueDate": "2026-01-25",
+      "status": "PENDING"
+    },
+    {
+      "id": "cd7581f7-12fe-43a6-abbc-09f783bbbba7",
+      "landlordId": "wtTo9PmsS_KIPU5wJaQJw",
+      "tenantId": "9JOKiD-1EATH05WO-feHb",
+      "stayId": "fc3bbee7-0370-418b-8673-3c5a0c637eff",
+      "amount": 1000,
+      "type": "RENT",
+      "month": "Jan",
+      "dueDate": "2026-01-25",
+      "status": "PAID",
+      "paidAt": "2026-01-25T13:47:59.233Z"
+    },
+    {
+      "id": "1eda1f5a-632b-4012-8679-78bde054e559",
+      "landlordId": "wtTo9PmsS_KIPU5wJaQJw",
+      "tenantId": "9JOKiD-1EATH05WO-feHb",
+      "stayId": "fc3bbee7-0370-418b-8673-3c5a0c637eff",
+      "amount": 1000,
       "type": "WATER",
       "month": "Jan",
-      "dueDate": "2026-01-24",
-      "status": "PENDING"
+      "dueDate": "2026-01-25",
+      "status": "PAID",
+      "paidAt": "2026-01-25T13:51:36.718Z"
     }
   ],
   "documents": [
@@ -537,6 +900,24 @@
       "timestamp": "2026-01-24T09:01:16.655Z",
       "isRead": false,
       "type": "text"
+    },
+    {
+      "id": "a0bc2e78-907d-4f8b-b34e-8d3abd086834",
+      "senderId": "9JOKiD-1EATH05WO-feHb",
+      "receiverId": "wtTo9PmsS_KIPU5wJaQJw",
+      "content": "I completed with my payment",
+      "timestamp": "2026-01-24T12:14:18.823Z",
+      "isRead": true,
+      "type": "text"
+    },
+    {
+      "id": "19d546c1-b79f-45e0-89ee-ebccf3f40108",
+      "senderId": "9JOKiD-1EATH05WO-feHb",
+      "receiverId": "wtTo9PmsS_KIPU5wJaQJw",
+      "content": "Sir I want to left the room",
+      "timestamp": "2026-01-25T14:10:35.135Z",
+      "isRead": true,
+      "type": "text"
     }
   ],
   "reviews": [
@@ -585,6 +966,22 @@
       "joinDate": "2026-01-24T11:10:27.145Z",
       "status": "MOVED_OUT",
       "moveOutDate": "2026-01-24T11:13:47.676Z"
+    },
+    {
+      "id": "fc3bbee7-0370-418b-8673-3c5a0c637eff",
+      "tenantId": "9JOKiD-1EATH05WO-feHb",
+      "landlordId": "wtTo9PmsS_KIPU5wJaQJw",
+      "propertyId": "1rsy4bade",
+      "joinDate": "2026-01-24T12:13:47.704Z",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "5e16dfe0-8a21-4140-a0cf-87a404a70b82",
+      "tenantId": "4QZTgsHgm1UAvtROgzyfg",
+      "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
+      "propertyId": "clomzuo8y",
+      "joinDate": "2026-01-24T14:40:50.880Z",
+      "status": "ACTIVE"
     }
   ]
 }
