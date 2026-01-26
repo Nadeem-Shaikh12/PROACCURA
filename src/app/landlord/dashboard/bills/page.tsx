@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import {
-    DollarSign,
+    IndianRupee,
     Plus,
     Calendar,
     User as UserIcon,
@@ -248,7 +248,7 @@ export default function BillsPage() {
                                     ? 'bg-emerald-50 text-emerald-600 border-emerald-100'
                                     : 'bg-amber-50 text-amber-600 border-amber-100'
                                     }`}>
-                                    <DollarSign size={24} />
+                                    <IndianRupee size={24} />
                                 </div>
                                 <div className="flex-1 text-center md:text-left">
                                     <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-1">

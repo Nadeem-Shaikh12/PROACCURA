@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { User, Property, VerificationRequest, TenantHistory, Notification, Bill, Message, Review, TenantStay } from '@/lib/types';
+import { User, Property, VerificationRequest, TenantHistory, Notification, Bill, Message, Review, TenantStay, MaintenanceRequest, Announcement } from '@/lib/types';
 import { StoredDocument } from './store';
 import * as Models from '@/models';
 import dbConnect from './mongoose';
@@ -22,6 +22,8 @@ interface JSONSchema {
     messages: Message[];
     reviews: Review[];
     tenantStays: TenantStay[];
+    maintenanceRequests: MaintenanceRequest[];
+    announcements: Announcement[];
 }
 
 // --- HYBRID ADAPTER ---
@@ -60,10 +62,10 @@ class DBAdapter {
             if (!this.inMemoryCache) {
                 this.inMemoryCache = {
                     users: [], properties: [], verificationRequests: [], history: [],
-                    notifications: [], bills: [], documents: [], messages: [], reviews: [], tenantStays: []
+                    notifications: [], bills: [], documents: [], messages: [], reviews: [], tenantStays: [], maintenanceRequests: [], announcements: []
                 };
             }
-            return this.inMemoryCache;
+            return this.inMemoryCache!;
         }
     }
 
@@ -658,6 +660,31 @@ class DBAdapter {
         }
     }
 
+    async getDocumentById(id: string) {
+        await this.init();
+        if (this.useMongo) {
+            const res = await Models.Document.findOne({ id }).lean();
+            return res as unknown as StoredDocument | null;
+        } else {
+            const db = await this.readJSON();
+            return db.documents.find(d => d.id === id) || null;
+        }
+    }
+
+    async deleteDocument(id: string) {
+        await this.init();
+        if (this.useMongo) {
+            await Models.Document.deleteOne({ id });
+            return true;
+        } else {
+            const db = await this.readJSON();
+            const initialLen = db.documents.length;
+            db.documents = db.documents.filter(d => d.id !== id);
+            await this.writeJSON(db);
+            return db.documents.length < initialLen;
+        }
+    }
+
     // =========================================================================
     // MESSAGE METHODS
     // =========================================================================
@@ -798,6 +825,106 @@ class DBAdapter {
         } else {
             const db = await this.readJSON();
             return db.reviews.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        }
+    }
+
+    // =========================================================================
+    // MAINTENANCE METHODS
+    // =========================================================================
+    async addMaintenanceRequest(request: MaintenanceRequest) {
+        await this.init();
+        if (this.useMongo) {
+            return request;
+        } else {
+            const db = await this.readJSON();
+            if (!db.maintenanceRequests) db.maintenanceRequests = [];
+            db.maintenanceRequests.push(request);
+            await this.writeJSON(db);
+            return request;
+        }
+    }
+
+    async getMaintenanceRequestsByTenant(tenantId: string) {
+        await this.init();
+        if (this.useMongo) {
+            return [] as MaintenanceRequest[];
+        } else {
+            const db = await this.readJSON();
+            if (!db.maintenanceRequests) db.maintenanceRequests = [];
+            return db.maintenanceRequests
+                .filter(r => r.tenantId === tenantId)
+                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        }
+    }
+
+    async getMaintenanceRequestsByLandlord(landlordId: string) {
+        await this.init();
+        if (this.useMongo) {
+            return [] as MaintenanceRequest[];
+        } else {
+            const db = await this.readJSON();
+            if (!db.maintenanceRequests) db.maintenanceRequests = [];
+            return db.maintenanceRequests
+                .filter(r => r.landlordId === landlordId)
+                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        }
+    }
+
+    async getMaintenanceRequestById(id: string) {
+        await this.init();
+        if (this.useMongo) {
+            return null;
+        } else {
+            const db = await this.readJSON();
+            if (!db.maintenanceRequests) db.maintenanceRequests = [];
+            return db.maintenanceRequests.find(r => r.id === id) || null;
+        }
+    }
+
+    async updateMaintenanceRequest(id: string, updates: Partial<MaintenanceRequest>) {
+        await this.init();
+        if (this.useMongo) {
+            return null;
+        } else {
+            const db = await this.readJSON();
+            if (!db.maintenanceRequests) db.maintenanceRequests = [];
+            const index = db.maintenanceRequests.findIndex(r => r.id === id);
+            if (index === -1) return null;
+
+            db.maintenanceRequests[index] = {
+                ...db.maintenanceRequests[index],
+                ...updates,
+                updatedAt: new Date().toISOString()
+            };
+            await this.writeJSON(db);
+            return db.maintenanceRequests[index];
+        }
+    }
+
+    // =========================================================================
+    // ANNOUNCEMENT METHODS
+    // =========================================================================
+    async getAnnouncements() {
+        await this.init();
+        if (this.useMongo) {
+            return [] as Announcement[];
+        } else {
+            const db = await this.readJSON();
+            if (!db.announcements) db.announcements = [];
+            return db.announcements.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        }
+    }
+
+    async addAnnouncement(announcement: Announcement) {
+        await this.init();
+        if (this.useMongo) {
+            return announcement;
+        } else {
+            const db = await this.readJSON();
+            if (!db.announcements) db.announcements = [];
+            db.announcements.push(announcement);
+            await this.writeJSON(db);
+            return announcement;
         }
     }
 }

@@ -6,7 +6,7 @@ import {
     Home,
     Plus,
     MapPin,
-    DollarSign,
+    IndianRupee,
     Loader2,
     Building2,
     ChevronRight,
@@ -269,7 +269,7 @@ function PropertiesContent() {
                                 </div>
                                 <div className="bg-emerald-50 p-4 rounded-2xl border border-emerald-100/50">
                                     <div className="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-1 flex items-center gap-1">
-                                        <DollarSign size={10} /> Monthly
+                                        <IndianRupee size={10} /> Monthly
                                     </div>
                                     <div className="text-base font-bold text-emerald-700 tracking-tight">₹{prop.monthlyRent}</div>
                                 </div>

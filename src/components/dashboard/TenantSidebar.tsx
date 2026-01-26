@@ -1,6 +1,6 @@
 'use client';
 
-import { LayoutDashboard, Home, FileText, Settings, HelpCircle, BadgeCheck, Clock, X, Wrench, MessageCircle, CreditCard, Sparkles } from 'lucide-react';
+import { LayoutDashboard, Home, FileText, Settings, HelpCircle, BadgeCheck, Clock, X, Wrench, MessageCircle, CreditCard, Sparkles, Megaphone, FileSignature } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSidebar } from '@/context/SidebarContext';
@@ -13,10 +13,11 @@ export default function TenantSidebar() {
         { icon: LayoutDashboard, label: 'Dashboard', href: '/tenant/dashboard' },
         { icon: MessageCircle, label: 'Messages', href: '/tenant/messages' },
         { icon: CreditCard, label: 'Billing', href: '/tenant/dashboard/bills' },
-        { icon: FileText, label: 'Documents', href: '/tenant/dashboard/documents' },
+        { icon: FileSignature, label: 'Lease Info', href: '/tenant/dashboard/lease' },
         { icon: Wrench, label: 'Maintenance', href: '/tenant/dashboard/maintenance' },
-        { icon: Sparkles, label: 'Verification', href: '/tenant/onboarding' },
-        { icon: Clock, label: 'Stay History', href: '/tenant/dashboard/history' },
+        { icon: Megaphone, label: 'Community', href: '/tenant/dashboard/community' },
+        { icon: FileText, label: 'Documents', href: '/tenant/dashboard/documents' },
+        { icon: Clock, label: 'History', href: '/tenant/dashboard/history' },
         { icon: Settings, label: 'Settings', href: '/tenant/dashboard/settings' },
     ];
 

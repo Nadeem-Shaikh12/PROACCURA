@@ -2,14 +2,16 @@
 
 import { useEffect, useState } from 'react';
 import {
-    DollarSign,
+    IndianRupee,
     Loader2,
     CheckCircle,
     AlertCircle,
     ReceiptText,
     ArrowLeft,
     Calendar,
-    CreditCard
+    CreditCard,
+    Download,
+    Zap
 } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
@@ -19,6 +21,7 @@ export default function TenantBillsPage() {
     const [bills, setBills] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [payingId, setPayingId] = useState<string | null>(null);
+    const [autopayEnabled, setAutopayEnabled] = useState(false);
 
     useEffect(() => {
         if (!isLoading && !user) {
@@ -81,13 +84,32 @@ export default function TenantBillsPage() {
                 <Link href="/tenant/dashboard" className="text-zinc-500 hover:text-zinc-900 flex items-center gap-2 mb-4 transition">
                     <ArrowLeft size={16} /> Back to Dashboard
                 </Link>
-                <h1 className="text-2xl font-bold tracking-tight text-zinc-900 flex items-center gap-4">
-                    <div className="bg-indigo-50 text-indigo-600 p-2 rounded-xl">
-                        <DollarSign size={20} />
+                <div className="flex justify-between items-start">
+                    <div>
+                        <h1 className="text-2xl font-bold tracking-tight text-zinc-900 flex items-center gap-4">
+                            <div className="bg-indigo-50 text-indigo-600 p-2 rounded-xl">
+                                <IndianRupee size={20} />
+                            </div>
+                            My Bills & Payments
+                        </h1>
+                        <p className="text-zinc-500 mt-2 font-medium">View pending invoices and payment history.</p>
                     </div>
-                    My Bills & Payments
-                </h1>
-                <p className="text-zinc-500 mt-2 font-medium">View pending invoices and payment history.</p>
+                    <button
+                        onClick={() => setAutopayEnabled(!autopayEnabled)}
+                        className={`flex items-center gap-3 px-5 py-3 rounded-2xl border transition-all ${autopayEnabled
+                            ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                            : 'bg-white border-zinc-200 text-zinc-500 hover:border-zinc-300'
+                            }`}
+                    >
+                        <div className={`w-10 h-6 rounded-full p-1 transition-colors ${autopayEnabled ? 'bg-emerald-500' : 'bg-zinc-300'}`}>
+                            <div className={`h-4 w-4 bg-white rounded-full shadow-sm transition-transform ${autopayEnabled ? 'translate-x-4' : ''}`} />
+                        </div>
+                        <span className="text-sm font-bold flex items-center gap-2">
+                            <Zap size={16} className={autopayEnabled ? 'fill-emerald-500' : ''} />
+                            Autopay {autopayEnabled ? 'On' : 'Off'}
+                        </span>
+                    </button>
+                </div>
             </header>
 
             <div className="grid grid-cols-1 gap-4">
@@ -149,6 +171,14 @@ export default function TenantBillsPage() {
                                             )}
                                         </button>
                                     )}
+                                    <a
+                                        href={`/api/tenant/bills/${bill.id}/pdf`}
+                                        target="_blank"
+                                        className="mt-3 w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-white text-zinc-600 text-[10px] font-bold rounded-xl border border-zinc-200 hover:bg-zinc-50 transition uppercase tracking-widest"
+                                    >
+                                        <Download size={14} /> Download
+                                    </a>
+
                                 </div>
                             </div>
                         ))}

@@ -801,6 +801,36 @@
       "role": "landlord",
       "createdAt": "2026-01-25T14:10:35.153Z",
       "isRead": false
+    },
+    {
+      "id": "6fc33431-a85e-4425-ade1-9ec97de6576d",
+      "userId": "9JOKiD-1EATH05WO-feHb",
+      "role": "landlord",
+      "title": "New Document Added",
+      "message": "Tenant added a new document: Poster of Ethical Hacking",
+      "type": "DOCUMENT_SHARED",
+      "isRead": false,
+      "createdAt": "2026-01-26T13:31:00.852Z"
+    },
+    {
+      "id": "5db831a9-d62b-4577-a289-afbbe441dfc7",
+      "userId": "9JOKiD-1EATH05WO-feHb",
+      "role": "landlord",
+      "title": "New Document Added",
+      "message": "Tenant added a new document: Tenant_Data_Export",
+      "type": "DOCUMENT_SHARED",
+      "isRead": false,
+      "createdAt": "2026-01-26T13:36:14.461Z"
+    },
+    {
+      "id": "74e36b31-2a9e-4e53-b029-4d01ccfeec6d",
+      "userId": "9JOKiD-1EATH05WO-feHb",
+      "role": "landlord",
+      "title": "New Document Added",
+      "message": "Tenant added a new document: —Pngtree—cyber security theme_1002455",
+      "type": "DOCUMENT_SHARED",
+      "isRead": false,
+      "createdAt": "2026-01-26T13:46:35.013Z"
     }
   ],
   "bills": [
@@ -851,19 +881,7 @@
       "paidAt": "2026-01-25T13:51:36.718Z"
     }
   ],
-  "documents": [
-    {
-      "id": "e0045e0a-af94-4c59-94d8-89647380c2f7",
-      "tenantId": "tenant-1",
-      "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
-      "category": "ID_PROOF",
-      "name": "Kshitij",
-      "url": "#",
-      "version": 1,
-      "createdAt": "2026-01-24T07:08:56.681Z",
-      "description": ""
-    }
-  ],
+  "documents": [],
   "messages": [
     {
       "id": "0b7aec0b-04ad-4668-8bf8-499b97f54178",

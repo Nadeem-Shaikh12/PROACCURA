@@ -95,7 +95,7 @@ export interface Notification {
     role: 'landlord' | 'tenant';
     title: string;
     message: string;
-    type: 'MONTH_COMPLETED' | 'NEW_BILL_CYCLE' | 'PAYMENT_PENDING' | 'PAYMENT_RECEIVED' | 'REMARK_ADDED';
+    type: 'MONTH_COMPLETED' | 'NEW_BILL_CYCLE' | 'PAYMENT_PENDING' | 'PAYMENT_RECEIVED' | 'REMARK_ADDED' | 'MAINTENANCE_UPDATE';
     isRead: boolean;
     createdAt: string;
 }
@@ -142,4 +142,43 @@ export interface TenantStay {
     joinDate: string;
     moveOutDate?: string;
     status: 'ACTIVE' | 'MOVED_OUT';
+}
+
+export interface MaintenanceComment {
+    id: string;
+    userId: string;
+    userName: string;
+    role: 'landlord' | 'tenant';
+    content: string;
+    createdAt: string;
+}
+
+export interface MaintenanceRequest {
+    id: string;
+    landlordId: string;
+    tenantId: string;
+    tenantName: string;
+    propertyName: string;
+    title: string;
+    description: string;
+    category: 'PLUMBING' | 'ELECTRICAL' | 'APPLIANCE' | 'STRUCTURAL' | 'OTHER';
+    priority: 'LOW' | 'NORMAL' | 'HIGH' | 'EMERGENCY';
+    status: 'OPEN' | 'IN_PROGRESS' | 'SCHEDULED' | 'RESOLVED' | 'CANCELLED';
+    images: string[];
+    comments: MaintenanceComment[];
+    scheduledDate?: string;
+    rating?: number;
+    feedback?: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface Announcement {
+    id: string;
+    title: string;
+    content: string;
+    date: string;
+    type: 'EVENT' | 'NOTICE' | 'NEWS' | 'ALERT';
+    authorId: string;
+    authorName: string;
 }

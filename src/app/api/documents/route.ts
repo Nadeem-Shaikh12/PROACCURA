@@ -40,7 +40,7 @@ export async function POST(req: Request) {
         const { payload } = await jwtVerify(token, JWT_SECRET);
 
         const body = await req.json();
-        const { tenantId, landlordId, category, name, url, description } = body;
+        const { tenantId, landlordId, category, name, url, description, tags, expiryDate, size, mimeType } = body;
 
         // Auto-fill landlordId if creator is landlord
         const finalLandlordId = payload.role === 'landlord' ? payload.userId as string : landlordId;
@@ -59,7 +59,10 @@ export async function POST(req: Request) {
             url: url || '#', // Mock URL
             version: 1,
             createdAt: new Date().toISOString(),
-            description
+            expiryDate,
+            size,
+            mimeType,
+            uploadedBy: payload.userId as string
         });
 
         // Notify the other party

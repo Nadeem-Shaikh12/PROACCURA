@@ -1,7 +1,7 @@
 'use client';
 
 import { Property } from '@/lib/store';
-import { MapPin, CheckCircle2, DollarSign } from 'lucide-react';
+import { MapPin, CheckCircle2, IndianRupee } from 'lucide-react';
 import Image from 'next/image';
 
 interface PropertyCardProps {
@@ -32,7 +32,7 @@ export default function PropertyCard({ property, onApply, isLandlordView = false
                 <div className="flex justify-between items-start mb-2">
                     <h3 className="font-bold text-lg text-zinc-900 dark:text-white line-clamp-1">{property.title}</h3>
                     <p className="flex items-center text-indigo-600 font-bold">
-                        <DollarSign size={16} className="mr-0.5" />
+                        <IndianRupee size={16} className="mr-0.5" />
                         {property.price.toLocaleString()}
                         <span className="text-zinc-500 text-sm font-normal ml-1">/mo</span>
                     </p>

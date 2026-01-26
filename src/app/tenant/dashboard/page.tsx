@@ -2,34 +2,37 @@
 
 import { useEffect, useState } from 'react';
 import {
-    Shield,
-    Clock,
-    Home,
-    BadgeCheck,
-    User,
-    ArrowUpRight,
-    MessageSquare,
-    Wrench,
-    FileText,
-    Bell,
     MapPin,
     Calendar,
+    BadgeCheck,
     Sparkles,
+    Bell,
     Settings,
+    User,
+    ArrowUpRight,
+    Clock,
     X,
-    CreditCard
+    Home
 } from 'lucide-react';
 import Link from 'next/link';
 import Chatbot from '@/components/dashboard/Chatbot';
+import CommunityBoardWidget from '@/components/dashboard/CommunityBoardWidget';
+import RentSnapshotWidget from '@/components/dashboard/widgets/RentSnapshotWidget';
+import MaintenancePreviewWidget from '@/components/dashboard/widgets/MaintenancePreviewWidget';
+import QuickLinksWidget from '@/components/dashboard/widgets/QuickLinksWidget';
+import ActivityFeedWidget from '@/components/dashboard/widgets/ActivityFeedWidget';
+import DocumentsWidget from '@/components/dashboard/widgets/DocumentsWidget';
 import { useAuth } from '@/context/AuthContext';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function TenantDashboard() {
     const { user, isLoading } = useAuth();
     const [stay, setStay] = useState<any>(null);
-    const [loading, setLoading] = useState(true);
     const [notifications, setNotifications] = useState<any[]>([]);
     const [pendingRequest, setPendingRequest] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+
+    const { t } = useLanguage();
 
     useEffect(() => {
         if (!isLoading && !user) {
@@ -67,16 +70,6 @@ export default function TenantDashboard() {
         if (user) fetchDashboardState();
     }, [user]);
 
-    useEffect(() => {
-        if (!user || stay) return;
-        const interval = setInterval(() => {
-            fetchDashboardState();
-        }, 3000);
-        return () => clearInterval(interval);
-    }, [user, stay]);
-
-    const { t } = useLanguage();
-
     const getGreeting = () => {
         const hour = new Date().getHours();
         if (hour < 12) return t('greeting.morning');
@@ -93,10 +86,11 @@ export default function TenantDashboard() {
                     <Sparkles className="text-blue-500 animate-pulse" size={32} />
                 </div>
             </div>
-            <p className="mt-8 text-slate-400 font-black uppercase tracking-[0.3em] text-[10px] animate-pulse">Syncing Portal</p>
+            <p className="mt-8 text-slate-400 font-black uppercase tracking-[0.3em] text-[10px] animate-pulse">Syncing Control Center</p>
         </div>
     );
 
+    // Handle Non-Active States (Pending/Rejected)
     if (!stay) {
         if (pendingRequest && pendingRequest.status === 'pending') {
             return (
@@ -152,7 +146,7 @@ export default function TenantDashboard() {
             <div className="min-h-screen p-6 flex flex-col items-center justify-center text-center">
                 <div className="mb-12 relative">
                     <div className="h-32 w-32 bg-blue-600 rounded-[2.5rem] rotate-12 flex items-center justify-center shadow-2xl shadow-blue-200">
-                        <Home size={64} className="text-white -rotate-12" />
+                        <Home size={64} className="text-white" style={{ transform: 'rotate(-12deg)' }} />
                     </div>
                     <div className="absolute -bottom-4 -right-4 h-16 w-16 bg-white rounded-2xl shadow-lg flex items-center justify-center border border-slate-100">
                         <BadgeCheck size={32} className="text-emerald-500" />
@@ -172,220 +166,100 @@ export default function TenantDashboard() {
     }
 
     return (
-        <div className="min-h-screen pb-20">
-            {/* Mesh Gradient Background */}
-            <div className="fixed inset-0 -z-10 pointer-events-none">
-                <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-100/50 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
-                <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-violet-100/30 blur-[120px] rounded-full -translate-x-1/2 translate-y-1/2"></div>
-            </div>
-
-            <div className="p-6 md:p-12 max-w-[1600px] mx-auto space-y-10">
-                {/* Dynamic Header */}
-                <header className="flex flex-col xl:flex-row xl:items-center justify-between gap-8">
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-3">
-                            <div className="px-3 py-1 bg-white border border-slate-200 rounded-full flex items-center gap-2 shadow-sm">
-                                <span className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                                <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Live System Active</span>
-                            </div>
-                        </div>
-                        <h1 className="text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-none">
-                            {getGreeting()}, <span className="text-blue-600">{user?.name.split(' ')[0]}</span>
-                        </h1>
-                        <p className="text-slate-400 font-bold text-lg italic">Your smart residence management at a glance.</p>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        <div className="flex bg-white p-1 rounded-2xl border border-zinc-200 shadow-sm">
-                            <Link href="/tenant/dashboard/notifications" className="p-3 text-zinc-400 hover:text-zinc-900 transition relative">
-                                <Bell size={24} />
-                                {notifications.length > 0 && <span className="absolute top-3 right-3 h-2 w-2 bg-rose-500 rounded-full border-2 border-white"></span>}
-                            </Link>
-                            <Link href="/tenant/dashboard/settings" className="p-3 text-zinc-400 hover:text-zinc-900 transition">
-                                <Settings size={24} />
-                            </Link>
-                        </div>
-                        <div className="h-14 w-14 bg-zinc-900 rounded-[1.25rem] flex items-center justify-center shadow-xl shadow-zinc-200">
-                            <User className="text-white" size={28} />
+        <div className="min-h-screen pb-20 p-6 md:p-12 max-w-[1600px] mx-auto space-y-8">
+            {/* Header */}
+            <header className="flex flex-col xl:flex-row xl:items-center justify-between gap-8">
+                <div className="space-y-2">
+                    <div className="flex items-center gap-3">
+                        <div className="px-3 py-1 bg-white border border-slate-200 rounded-full flex items-center gap-2 shadow-sm">
+                            <span className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                            <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Control Center</span>
                         </div>
                     </div>
-                </header>
+                    <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-zinc-900 leading-none">
+                        {getGreeting()}, <span className="text-blue-600">{user?.name.split(' ')[0]}</span>
+                    </h1>
+                    <p className="text-slate-400 font-bold text-lg italic flex items-center gap-2">
+                        <MapPin size={16} /> {stay.propertyName}
+                    </p>
+                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8">
-                    {/* Left & Middle Column (Grid spanning 3 columns on XL) */}
-                    <div className="md:col-span-2 xl:col-span-3 space-y-8">
-                        {/* Main Interaction Cards */}
-                        <div className="grid grid-cols-1 gap-6">
-
-                            {/* Property Showcase Card */}
-                            <div className="w-full relative group overflow-hidden bg-white rounded-[3rem] p-4 border border-slate-200 shadow-xl shadow-slate-200/60 hover:shadow-2xl transition-all duration-500">
-                                <div className="relative h-64 w-full rounded-[2.5rem] overflow-hidden">
-                                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/80 via-zinc-900/20 to-transparent z-10"></div>
-                                    <img
-                                        src={`https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200`}
-                                        className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-1000"
-                                        alt="Home"
-                                    />
-                                    <div className="absolute top-6 left-6 z-20 px-4 py-2 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
-                                        <div className="flex items-center gap-2 text-white">
-                                            <MapPin size={14} className="text-blue-400" />
-                                            <span className="text-xs font-black uppercase tracking-widest">{stay.propertyName}</span>
-                                        </div>
-                                    </div>
-                                    <div className="absolute bottom-6 left-6 right-6 z-20">
-                                        <h3 className="text-2xl font-black text-white mb-1">{stay.propertyName}</h3>
-                                        <p className="text-zinc-300 text-sm font-medium flex items-center gap-2">
-                                            <MapPin size={14} /> {stay.propertyAddress || 'Lux Residency, Building A'}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="mt-6 flex items-center justify-between px-4 pb-4">
-                                    <div className="flex gap-8">
-                                        <div>
-                                            <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-1">Stay Started</p>
-                                            <div className="text-sm font-bold text-zinc-900 flex items-center gap-2">
-                                                <Calendar size={14} className="text-blue-500" />
-                                                {new Date(stay.joinDate).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-1">Status</p>
-                                            <div className="text-sm font-bold text-zinc-900 flex items-center gap-2">
-                                                <BadgeCheck size={14} className="text-emerald-500" /> Verified
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <Link href="/tenant/dashboard/history" className="h-12 w-12 bg-zinc-50 rounded-2xl flex items-center justify-center text-zinc-400 hover:bg-zinc-900 hover:text-white transition-all shadow-inner">
-                                        <ArrowUpRight size={24} />
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Middle Section: Action Center */}
-                        <div className="grid grid-cols-1 gap-6 lg:gap-8">
-                            {/* Action Center - Full Width */}
-                            <div className="bg-white rounded-[2.5rem] lg:rounded-[3rem] p-6 lg:p-8 border border-slate-200 shadow-xl shadow-slate-200/60 flex flex-col h-full">
-                                <h3 className="text-lg lg:text-xl font-black text-slate-900 mb-6 lg:mb-8 flex items-center gap-2">
-                                    <Sparkles size={20} className="text-blue-500" /> Core Services
-                                </h3>
-                                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                                    <Link href="/tenant/dashboard/bills" className="p-6 bg-slate-50 rounded-3xl hover:bg-slate-900 hover:text-white transition-all group shadow-sm border border-slate-100">
-                                        <div className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center mb-4 group-hover:bg-white/10 shadow-sm border border-slate-100 transition-colors">
-                                            <CreditCard size={24} className="text-violet-500" />
-                                        </div>
-                                        <div className="font-bold text-sm mb-1 uppercase tracking-wider">Payments</div>
-                                        <p className="text-[10px] font-medium opacity-50 uppercase tracking-widest leading-none">Pay Rent</p>
-                                    </Link>
-                                    <Link href="/tenant/messages" className="p-6 bg-slate-50 rounded-3xl hover:bg-slate-900 hover:text-white transition-all group shadow-sm border border-slate-100">
-                                        <div className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center mb-4 group-hover:bg-white/10 shadow-sm border border-slate-100 transition-colors">
-                                            <MessageSquare size={24} className="text-blue-500" />
-                                        </div>
-                                        <div className="font-bold text-sm mb-1 uppercase tracking-wider">Messages</div>
-                                        <p className="text-[10px] font-medium opacity-50 uppercase tracking-widest leading-none">Contact Landlord</p>
-                                    </Link>
-                                    <Link href="/tenant/dashboard/maintenance" className="p-6 bg-slate-50 rounded-3xl hover:bg-slate-900 hover:text-white transition-all group shadow-sm border border-slate-100">
-                                        <div className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center mb-4 group-hover:bg-white/10 shadow-sm border border-slate-100 transition-colors">
-                                            <Wrench size={24} className="text-orange-500" />
-                                        </div>
-                                        <div className="font-bold text-sm mb-1 uppercase tracking-wider">Support</div>
-                                        <p className="text-[10px] font-medium opacity-50 uppercase tracking-widest leading-none">Maintenance</p>
-                                    </Link>
-                                    <Link href="/tenant/dashboard/report" className="p-6 bg-slate-50 rounded-3xl hover:bg-slate-900 hover:text-white transition-all group shadow-sm border border-slate-100">
-                                        <div className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center mb-4 group-hover:bg-white/10 shadow-sm border border-slate-100 transition-colors">
-                                            <FileText size={24} className="text-emerald-500" />
-                                        </div>
-                                        <div className="font-bold text-sm mb-1 uppercase tracking-wider">Reports</div>
-                                        <p className="text-[10px] font-medium opacity-50 uppercase tracking-widest leading-none">Agreements</p>
-                                    </Link>
-                                    <Link href="/tenant/dashboard/documents" className="p-6 bg-slate-50 rounded-3xl hover:bg-slate-900 hover:text-white transition-all group shadow-sm border border-slate-100">
-                                        <div className="h-12 w-12 bg-white rounded-2xl flex items-center justify-center mb-4 group-hover:bg-white/10 shadow-sm border border-slate-100 transition-colors">
-                                            <BadgeCheck size={24} className="text-blue-500" />
-                                        </div>
-                                        <div className="font-bold text-sm mb-1 uppercase tracking-wider">Vault</div>
-                                        <p className="text-[10px] font-medium opacity-50 uppercase tracking-widest leading-none">Personal Docs</p>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
+                <div className="flex items-center gap-4">
+                    <div className="flex bg-white p-1 rounded-2xl border border-zinc-200 shadow-sm">
+                        <Link href="/tenant/dashboard/notifications" className="p-3 text-zinc-400 hover:text-zinc-900 transition relative">
+                            <Bell size={24} />
+                            {notifications.length > 0 && <span className="absolute top-3 right-3 h-2 w-2 bg-rose-500 rounded-full border-2 border-white"></span>}
+                        </Link>
+                        <Link href="/tenant/dashboard/settings" className="p-3 text-zinc-400 hover:text-zinc-900 transition">
+                            <Settings size={24} />
+                        </Link>
                     </div>
+                    <div className="h-14 w-14 bg-zinc-900 rounded-[1.25rem] flex items-center justify-center shadow-xl shadow-zinc-200">
+                        <User className="text-white" size={28} />
+                    </div>
+                </div>
+            </header>
 
-                    {/* Right Column: High-End Stats Card */}
-                    <div className="md:col-span-2 xl:col-span-1 space-y-6 lg:gap-8">
-                        {/* Status Sphere Card */}
-                        <div className="bg-white p-8 lg:p-10 rounded-[2.5rem] lg:rounded-[4rem] border border-slate-200 shadow-xl shadow-slate-200/60 text-center relative overflow-hidden group">
-                            <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 to-transparent"></div>
-                            <div className="relative z-10">
-                                <p className="text-[10px] font-black uppercase text-slate-400 tracking-[0.3em] mb-6 lg:mb-10">Verification Tier</p>
+            {/* Main Grid Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8">
 
-                                <div className="relative inline-flex items-center justify-center p-6 lg:p-8 mb-4 lg:mb-8">
-                                    {/* SVG Progress Ring */}
-                                    <svg className="w-40 h-40 lg:w-48 lg:h-48 -rotate-90">
-                                        <circle cx="80" cy="80" r="72" className="stroke-slate-100 fill-none lg:hidden" strokeWidth="10" />
-                                        <circle cx="96" cy="96" r="88" className="stroke-slate-100 fill-none hidden lg:block" strokeWidth="12" />
-                                        <circle
-                                            cx="80" cy="80" r="72"
-                                            className="stroke-blue-600 fill-none transition-all duration-1000 lg:hidden"
-                                            strokeWidth="10"
-                                            strokeDasharray={2 * Math.PI * 72}
-                                            strokeDashoffset={2 * Math.PI * 72 * (1 - (stay.trustScore || 85) / 100)}
-                                            strokeLinecap="round"
-                                        />
-                                        <circle
-                                            cx="96" cy="96" r="88"
-                                            className="stroke-blue-600 fill-none transition-all duration-1000 hidden lg:block"
-                                            strokeWidth="12"
-                                            strokeDasharray={2 * Math.PI * 88}
-                                            strokeDashoffset={2 * Math.PI * 88 * (1 - (stay.trustScore || 85) / 100)}
-                                            strokeLinecap="round"
-                                        />
-                                    </svg>
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                        <span className="text-5xl lg:text-6xl font-black tracking-tighter text-zinc-900">{stay.trustScore || 85}</span>
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mt-1">Trust Score</span>
-                                    </div>
-                                </div>
+                {/* Row 1: Left - Rent Snapshot (4 cols) */}
+                <div className="md:col-span-4 xl:col-span-3">
+                    <RentSnapshotWidget userId={user!.id} />
+                </div>
 
-                                <div className="space-y-6">
-                                    <div className="p-5 bg-slate-900 rounded-[2rem] text-white shadow-xl shadow-slate-300">
-                                        <p className="text-[10px] font-black uppercase tracking-widest opacity-50 mb-1">Current Ranking</p>
-                                        <p className="text-lg font-black flex items-center justify-center gap-2">
-                                            Elite Resident <Shield size={16} className="text-blue-400" />
-                                        </p>
-                                    </div>
-                                    <p className="text-zinc-500 text-xs font-medium px-4 leading-relaxed">
-                                        Your track record is exceptional. Paying rent on time contributes to your global "Smart Score".
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                {/* Row 1: Middle - Lease/Property Overview (5 cols) */}
+                <div className="md:col-span-8 xl:col-span-6">
+                    <div className="w-full h-full relative group overflow-hidden bg-white rounded-[2.5rem] p-4 border border-slate-200 shadow-xl shadow-slate-200/60 hover:shadow-2xl transition-all duration-500">
+                        <div className="relative h-full w-full rounded-[2rem] overflow-hidden min-h-[250px]">
+                            <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/90 via-zinc-900/30 to-transparent z-10"></div>
+                            <img
+                                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200"
+                                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                                alt="Home"
+                            />
 
-                        {/* Profile Minimal Card */}
-                        <div className="bg-slate-900 rounded-[3rem] p-4 text-white shadow-2xl overflow-hidden relative group">
-                            <div className="bg-slate-800 rounded-[2.5rem] p-8 relative z-10">
-                                <div className="flex items-center gap-4 mb-8">
-                                    <div className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-blue-500 to-emerald-500 flex items-center justify-center text-white font-black text-xl shadow-lg">
-                                        {user?.name.charAt(0)}
+                            <div className="absolute bottom-6 left-6 right-6 z-20">
+                                <h3 className="text-3xl font-bold text-white mb-2">{stay.propertyName}</h3>
+                                <div className="flex flex-wrap gap-4">
+                                    <div className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-xs font-bold text-white flex items-center gap-2">
+                                        <Calendar size={14} /> Since {new Date(stay.joinDate).getFullYear()}
                                     </div>
-                                    <div className="overflow-hidden">
-                                        <h4 className="font-black text-lg truncate">{user?.name}</h4>
-                                        <p className="text-slate-400 text-[10px] truncate font-black uppercase tracking-widest">{user?.email}</p>
-                                    </div>
-                                </div>
-                                <div className="space-y-2">
-                                    <div className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Contact</span>
-                                        <span className="text-xs font-black">{user?.tenantProfile?.mobile || 'Not Set'}</span>
-                                    </div>
-                                    <div className="px-1 pt-1">
-                                        <Link href="/tenant/dashboard/settings" className="block text-center py-3 bg-white text-slate-900 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-200 transition">Edit Registry</Link>
+                                    <div className="px-3 py-1 bg-emerald-500/20 backdrop-blur-md rounded-lg text-xs font-bold text-emerald-300 flex items-center gap-2 border border-emerald-500/30">
+                                        <BadgeCheck size={14} /> Verified Resident
                                     </div>
                                 </div>
                             </div>
-                            <div className="absolute top-0 right-0 h-40 w-40 bg-blue-500/20 blur-[80px] -mr-20 -mt-20"></div>
                         </div>
                     </div>
                 </div>
+
+                {/* Row 1: Right - Quick Links (3 cols) */}
+                <div className="md:col-span-12 xl:col-span-3">
+                    <QuickLinksWidget />
+                </div>
+
+
+                {/* Row 2: Left - Maintenance (4) */}
+                <div className="md:col-span-6 xl:col-span-4 h-full">
+                    <MaintenancePreviewWidget userId={user!.id} />
+                </div>
+
+                {/* Row 2: Middle - Documents (4) */}
+                <div className="md:col-span-6 xl:col-span-4 h-full">
+                    <DocumentsWidget userId={user!.id} />
+                </div>
+
+                {/* Row 2: Right - Community (4) */}
+                <div className="md:col-span-12 xl:col-span-4 h-full">
+                    <CommunityBoardWidget />
+                </div>
+
+                {/* Row 3: Full Width - Activity Feed */}
+                <div className="md:col-span-12">
+                    <ActivityFeedWidget userId={user!.id} />
+                </div>
+
             </div>
 
             <Chatbot />

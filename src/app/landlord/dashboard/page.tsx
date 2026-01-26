@@ -10,7 +10,7 @@ import {
     Loader2,
     ArrowRight,
     TrendingUp,
-    DollarSign,
+    IndianRupee,
     Building2,
     Calendar,
     ChevronRight,
@@ -166,7 +166,7 @@ export default function LandlordDashboard() {
                     label="Portfolio Value"
                     value={`₹${(stats.rentCollected + stats.rentPending).toLocaleString()}`}
                     subValue={`${stats.occupancyRate}% Unit Occupancy`}
-                    icon={<DollarSign className="text-emerald-600" />}
+                    icon={<IndianRupee className="text-emerald-600" />}
                     color="emerald"
                 />
                 <StatCard
@@ -320,7 +320,7 @@ export default function LandlordDashboard() {
                             </div>
 
                             <Link href="/landlord/dashboard/bills" className="mt-8 w-full bg-white text-zinc-900 p-4 rounded-2xl flex items-center justify-center gap-2 font-black text-sm hover:bg-blue-600 hover:text-white transition-all active:scale-95">
-                                <DollarSign size={18} /> Manage Finances
+                                <IndianRupee size={18} /> Manage Finances
                             </Link>
                         </div>
                     </div>

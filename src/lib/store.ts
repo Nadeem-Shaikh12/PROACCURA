@@ -19,6 +19,11 @@ export interface StoredDocument {
     version: number;
     createdAt: string;
     description?: string;
+    tags?: string[];
+    expiryDate?: string;
+    size?: number;
+    mimeType?: string;
+    uploadedBy: string;
 }
 
 export interface Property {

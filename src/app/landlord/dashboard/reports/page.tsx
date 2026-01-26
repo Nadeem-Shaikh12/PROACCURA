@@ -6,7 +6,7 @@ import {
     TrendingUp,
     Users,
     AlertCircle,
-    DollarSign,
+    IndianRupee,
     Calendar,
     ArrowUpRight,
     ArrowDownRight

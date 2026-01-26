@@ -1,76 +1,106 @@
 import { NextResponse } from 'next/server';
-import { MOCK_MAINTENANCE_REQUESTS, MaintenanceRequest } from '@/lib/store';
 import { db } from '@/lib/db';
-import { sendNotification } from '@/lib/notifications';
+import { jwtVerify } from 'jose';
+import { cookies } from 'next/headers';
+import { MaintenanceRequest } from '@/lib/types';
+import { v4 as uuidv4 } from 'uuid';
+
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key-change-in-production');
 
 export async function GET(request: Request) {
-    const { searchParams } = new URL(request.url);
-    const landlordId = searchParams.get('landlordId');
-    const tenantId = searchParams.get('tenantId');
+    try {
+        const cookieStore = await cookies();
+        const token = cookieStore.get('token')?.value;
 
-    let requests = MOCK_MAINTENANCE_REQUESTS;
+        if (!token) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
 
-    if (landlordId) {
-        requests = requests.filter(r => r.landlordId === landlordId);
-    } else if (tenantId) {
-        requests = requests.filter(r => r.tenantId === tenantId);
+        const { payload } = await jwtVerify(token, JWT_SECRET);
+        const userId = payload.userId as string;
+        const role = payload.role as string;
+
+        if (role === 'tenant') {
+            const requests = await db.getMaintenanceRequestsByTenant(userId);
+            return NextResponse.json({ requests });
+        } else if (role === 'landlord') {
+            const requests = await db.getMaintenanceRequestsByLandlord(userId);
+            return NextResponse.json({ requests });
+        }
+
+        return NextResponse.json({ requests: [] });
+
+    } catch (error) {
+        console.error("Maintenance GET error:", error);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
-
-    return NextResponse.json({ requests });
 }
 
 export async function POST(request: Request) {
     try {
+        const cookieStore = await cookies();
+        const token = cookieStore.get('token')?.value;
+
+        if (!token) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        const { payload } = await jwtVerify(token, JWT_SECRET);
+        const userId = payload.userId as string;
+        const role = payload.role as string;
+
+        if (role !== 'tenant') {
+            return NextResponse.json({ error: 'Only tenants can create maintenance requests' }, { status: 403 });
+        }
+
         const body = await request.json();
+        const { title, description, category, priority, images } = body;
+
+        // Get tenant info to populate request
+        const tenant = await db.findUserById(userId);
+        const stay = await db.getTenantStay(userId);
+
+        if (!stay) {
+            return NextResponse.json({ error: 'No active stay found. You cannot create maintenance requests.' }, { status: 400 });
+        }
+
+        const property = await db.findPropertyById(stay.propertyId);
+
         const newRequest: MaintenanceRequest = {
-            id: `maint-${crypto.randomUUID().slice(0, 8)}`,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            id: uuidv4(),
+            tenantId: userId,
+            tenantName: tenant?.name || 'Unknown',
+            landlordId: stay.landlordId,
+            propertyName: property?.name || 'Unknown Property',
+            title,
+            description,
+            category,
+            priority,
             status: 'OPEN',
-            images: [], // Mock images or handle upload separately
-            ...body
+            images: images || [],
+            comments: [],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
         };
 
-        MOCK_MAINTENANCE_REQUESTS.push(newRequest);
+        const created = await db.addMaintenanceRequest(newRequest);
 
         // Notify Landlord
-        await sendNotification(
-            newRequest.landlordId,
-            'landlord',
-            'MAINTENANCE_LOGGED',
-            'New Maintenance Request',
-            `${newRequest.tenantName} reported: ${newRequest.title}`
-        );
+        await db.addNotification({
+            id: uuidv4(),
+            userId: stay.landlordId,
+            role: 'landlord',
+            title: 'New Maintenance Request',
+            message: `${tenant?.name} reported: ${title}`,
+            type: 'MAINTENANCE_UPDATE',
+            isRead: false,
+            createdAt: new Date().toISOString()
+        });
 
-        return NextResponse.json({ success: true, request: newRequest });
-    } catch (e) {
-        return NextResponse.json({ error: 'Failed to create request' }, { status: 500 });
-    }
-}
+        return NextResponse.json({ success: true, request: created });
 
-export async function PATCH(request: Request) {
-    try {
-        const { id, status } = await request.json();
-        const reqIndex = MOCK_MAINTENANCE_REQUESTS.findIndex(r => r.id === id);
-
-        if (reqIndex === -1) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-
-        MOCK_MAINTENANCE_REQUESTS[reqIndex].status = status;
-        MOCK_MAINTENANCE_REQUESTS[reqIndex].updatedAt = new Date().toISOString();
-
-        const req = MOCK_MAINTENANCE_REQUESTS[reqIndex];
-
-        // Notify Tenant
-        await sendNotification(
-            req.tenantId,
-            'tenant',
-            'MAINTENANCE_UPDATE',
-            'Maintenance Update',
-            `Your request "${req.title}" is now ${status}.`
-        );
-
-        return NextResponse.json({ success: true });
-    } catch (e) {
-        return NextResponse.json({ error: 'Failed to update' }, { status: 500 });
+    } catch (error) {
+        console.error("Maintenance POST error:", error);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
