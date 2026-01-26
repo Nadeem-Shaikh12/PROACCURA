@@ -204,12 +204,14 @@ export default function TenantDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8">
 
                 {/* Row 1: Left - Rent Snapshot (4 cols) */}
-                <div className="md:col-span-4 xl:col-span-3">
-                    <RentSnapshotWidget userId={user!.id} />
-                </div>
+                {stay.portalSettings?.showPaymentHistory !== false && (
+                    <div className="md:col-span-4 xl:col-span-3">
+                        <RentSnapshotWidget userId={user!.id} />
+                    </div>
+                )}
 
                 {/* Row 1: Middle - Lease/Property Overview (5 cols) */}
-                <div className="md:col-span-8 xl:col-span-6">
+                <div className={`${stay.portalSettings?.showPaymentHistory !== false ? 'md:col-span-8 xl:col-span-6' : 'md:col-span-12 xl:col-span-9'}`}>
                     <div className="w-full h-full relative group overflow-hidden bg-white rounded-[2.5rem] p-4 border border-slate-200 shadow-xl shadow-slate-200/60 hover:shadow-2xl transition-all duration-500">
                         <div className="relative h-full w-full rounded-[2rem] overflow-hidden min-h-[250px]">
                             <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/90 via-zinc-900/30 to-transparent z-10"></div>
@@ -241,17 +243,26 @@ export default function TenantDashboard() {
 
 
                 {/* Row 2: Left - Maintenance (4) */}
-                <div className="md:col-span-6 xl:col-span-4 h-full">
-                    <MaintenancePreviewWidget userId={user!.id} />
-                </div>
+                {stay.portalSettings?.showMaintenanceRequests !== false && (
+                    <div className="md:col-span-6 xl:col-span-4 h-full">
+                        <MaintenancePreviewWidget userId={user!.id} />
+                    </div>
+                )}
 
                 {/* Row 2: Middle - Documents (4) */}
-                <div className="md:col-span-6 xl:col-span-4 h-full">
-                    <DocumentsWidget userId={user!.id} />
-                </div>
+                {stay.portalSettings?.allowDocumentUploads !== false && (
+                    <div className="md:col-span-6 xl:col-span-4 h-full">
+                        <DocumentsWidget userId={user!.id} />
+                    </div>
+                )}
 
                 {/* Row 2: Right - Community (4) */}
-                <div className="md:col-span-12 xl:col-span-4 h-full">
+                <div className={`md:col-span-12 h-full ${(stay.portalSettings?.showMaintenanceRequests === false && stay.portalSettings?.allowDocumentUploads === false)
+                        ? 'xl:col-span-12'
+                        : (stay.portalSettings?.showMaintenanceRequests === false || stay.portalSettings?.allowDocumentUploads === false)
+                            ? 'xl:col-span-8'
+                            : 'xl:col-span-4'
+                    }`}>
                     <CommunityBoardWidget />
                 </div>
 

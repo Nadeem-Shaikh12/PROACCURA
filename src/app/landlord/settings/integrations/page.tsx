@@ -99,7 +99,7 @@ export default function IntegrationsPage() {
         setTimeout(() => {
             const newKey = {
                 name: 'Production Key ' + (settings.developerApi.keys.length + 1),
-                key: 'pk_live_' + Math.random().toString(36).substring(7),
+                key: 'pk_live_' + crypto.randomUUID().replace(/-/g, '').substring(0, 24),
                 role: 'admin' as const,
                 createdAt: new Date().toISOString()
             };

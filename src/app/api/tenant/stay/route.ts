@@ -46,7 +46,14 @@ export async function GET() {
                 landlordId: property?.landlordId,
                 landlordName: landlord?.name,
                 landlordEmail: landlord?.email,
-                trustScore // Include in response
+                trustScore, // Include in response
+                portalSettings: landlord?.tenantPortalSettings || {
+                    allowDocumentUploads: true,
+                    showPaymentHistory: true,
+                    showMaintenanceRequests: true,
+                    requireRentersInsurance: false,
+                    autoInvite: false
+                }
             }
         });
     } catch (error) {

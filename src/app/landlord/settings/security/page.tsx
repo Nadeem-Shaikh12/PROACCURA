@@ -13,18 +13,45 @@ export default function SecuritySettingsPage() {
 
     const handlePasswordChange = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!passwordData.current || !passwordData.new || !passwordData.confirm) {
+            alert("All fields are required");
+            return;
+        }
+
         if (passwordData.new !== passwordData.confirm) {
             alert("New passwords don't match!");
             return;
         }
+
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+        if (!passwordRegex.test(passwordData.new)) {
+            alert("New password does not meet security requirements (min 8 chars, mixed case, number, special char)");
+            return;
+        }
+
         setLoading(true);
         try {
-            // Mock API
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            const res = await fetch('/api/auth/password', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    currentPassword: passwordData.current,
+                    newPassword: passwordData.new
+                })
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || 'Failed to update password');
+            }
+
             alert('Password updated successfully!');
             setPasswordData({ current: '', new: '', confirm: '' });
         } catch (error) {
             console.error(error);
+            alert(error instanceof Error ? error.message : 'Failed to update password');
         } finally {
             setLoading(false);
         }
