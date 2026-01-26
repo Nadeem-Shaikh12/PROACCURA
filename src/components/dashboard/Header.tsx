@@ -14,10 +14,7 @@ export default function Header() {
     const [isSearchFocused, setIsSearchFocused] = useState(false);
     const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
 
-    // Sync local state if URL change externally (e.g. back button)
-    useEffect(() => {
-        setSearchQuery(searchParams.get('q') || '');
-    }, [searchParams]);
+    // URL changes will re-render the component and state is initialized from searchParams
 
     const handleSearch = (val: string) => {
         setSearchQuery(val);

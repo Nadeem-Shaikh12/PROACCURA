@@ -34,7 +34,7 @@ export default function Chatbot() {
 
     const handleSendAction = (queryText: string) => {
         const userMsg: Message = {
-            id: nanoid(),
+            id: crypto.randomUUID(),
             text: queryText,
             sender: 'user',
             timestamp: new Date()
@@ -81,7 +81,7 @@ export default function Chatbot() {
             }
 
             const botMsg: Message = {
-                id: nanoid(),
+                id: crypto.randomUUID(),
                 text: botResponse,
                 sender: 'bot',
                 timestamp: new Date()

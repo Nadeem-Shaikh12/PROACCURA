@@ -1,0 +1,826 @@
+﻿
+> tenant-landlord@0.1.0 lint
+> eslint
+
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\scripts\reset-password.ts
+  17:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\scripts\set-admin-passwords.ts
+  18:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\scripts\setup_env.js
+  1:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  2:14  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\scripts\test-atlas.ts
+  17:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\scripts\test-db.ts
+  4:8  warning  'path' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\scripts\test-export-debug.ts
+  25:13  warning  'tenantStay' is assigned a value but never used           @typescript-eslint/no-unused-vars
+  26:13  warning  'verificationRequest' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  27:13  warning  'history' is assigned a value but never used              @typescript-eslint/no-unused-vars
+  28:13  warning  'payments' is assigned a value but never used             @typescript-eslint/no-unused-vars
+  31:13  warning  'reviews' is assigned a value but never used              @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\admin\layout.tsx
+  114:41  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\admin\page.tsx
+    8:5   warning  'TrendingUp' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+   16:5   warning  'XCircle' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+   19:5   warning  'BarChart' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-unused-vars
+   20:5   warning  'Bar' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+   73:67  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-explicit-any
+  116:18  error    Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\admin\page.tsx:116:18
+  114 |             {/* Stats Grid */}
+  115 |             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+> 116 |                 <StatCard
+      |                  ^^^^^^^^ This component is created during render
+  117 |                     title="Total Platform Revenue"
+  118 |                     value={stats?.totalRevenue}
+  119 |                     icon={CreditCard}
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\admin\page.tsx:73:22
+  71 |     }
+  72 |
+> 73 |     const StatCard = ({ title, value, icon: Icon, trend, color }: any) => (
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 74 |         <div className="bg-white p-6 rounded-[2rem] border border-zinc-100 shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group overflow-hidden relative">
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 75 |             <div className={`absolute top-0 right-0 w-32 h-32 bg-${color}-500/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-${color}-500/10 transition-colors`} />
+     ΓÇª
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 94 |         </div>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 95 |     );
+     | ^^^^^^ The component is created during render here
+  96 |
+  97 |     return (
+  98 |         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700">  react-hooks/static-components
+  123:18  error    Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\admin\page.tsx:123:18
+  121 |                     color="emerald"
+  122 |                 />
+> 123 |                 <StatCard
+      |                  ^^^^^^^^ This component is created during render
+  124 |                     title="Global User Base"
+  125 |                     value={stats?.totalUsers}
+  126 |                     icon={Users}
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\admin\page.tsx:73:22
+  71 |     }
+  72 |
+> 73 |     const StatCard = ({ title, value, icon: Icon, trend, color }: any) => (
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 74 |         <div className="bg-white p-6 rounded-[2rem] border border-zinc-100 shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group overflow-hidden relative">
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 75 |             <div className={`absolute top-0 right-0 w-32 h-32 bg-${color}-500/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-${color}-500/10 transition-colors`} />
+     ΓÇª
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 94 |         </div>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 95 |     );
+     | ^^^^^^ The component is created during render here
+  96 |
+  97 |     return (
+  98 |         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700">                                                                          react-hooks/static-components
+  130:18  error    Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\admin\page.tsx:130:18
+  128 |                     color="indigo"
+  129 |                 />
+> 130 |                 <StatCard
+      |                  ^^^^^^^^ This component is created during render
+  131 |                     title="Active Properties"
+  132 |                     value={stats?.totalProperties}
+  133 |                     icon={Building2}
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\admin\page.tsx:73:22
+  71 |     }
+  72 |
+> 73 |     const StatCard = ({ title, value, icon: Icon, trend, color }: any) => (
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 74 |         <div className="bg-white p-6 rounded-[2rem] border border-zinc-100 shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group overflow-hidden relative">
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 75 |             <div className={`absolute top-0 right-0 w-32 h-32 bg-${color}-500/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-${color}-500/10 transition-colors`} />
+     ΓÇª
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 94 |         </div>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 95 |     );
+     | ^^^^^^ The component is created during render here
+  96 |
+  97 |     return (
+  98 |         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700">                                                                 react-hooks/static-components
+  137:18  error    Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\admin\page.tsx:137:18
+  135 |                     color="zinc"
+  136 |                 />
+> 137 |                 <StatCard
+      |                  ^^^^^^^^ This component is created during render
+  138 |                     title="Unresolved Tickets"
+  139 |                     value={stats?.openTickets}
+  140 |                     icon={MessageSquare}
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\admin\page.tsx:73:22
+  71 |     }
+  72 |
+> 73 |     const StatCard = ({ title, value, icon: Icon, trend, color }: any) => (
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 74 |         <div className="bg-white p-6 rounded-[2rem] border border-zinc-100 shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group overflow-hidden relative">
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 75 |             <div className={`absolute top-0 right-0 w-32 h-32 bg-${color}-500/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-${color}-500/10 transition-colors`} />
+     ΓÇª
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 94 |         </div>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 95 |     );
+     | ^^^^^^ The component is created during render here
+  96 |
+  97 |     return (
+  98 |         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700">                                                                  react-hooks/static-components
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\admin\security\page.tsx
+  73:77  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\admin\support\page.tsx
+   7:5  warning  'ChevronRight' is defined but never used  @typescript-eslint/no-unused-vars
+  12:5  warning  'Filter' is defined but never used        @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\admin\support\tickets\[id]\route.ts
+  20:14  warning  'error' is defined but never used                   @typescript-eslint/no-unused-vars
+  36:13  error    'updates' is never reassigned. Use 'const' instead  prefer-const
+  36:22  error    Unexpected any. Specify a different type            @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\admin\support\tickets\route.ts
+  4:27  warning  'req' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\announcements\route.ts
+  9:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\auth\login\route.ts
+  10:22  error    'password' is never reassigned. Use 'const' instead  prefer-const
+  10:32  error    'role' is never reassigned. Use 'const' instead      prefer-const
+  95:14  warning  'error' is defined but never used                    @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\auth\me\route.ts
+  50:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\auth\profile\route.ts
+  23:13  error  'updates' is never reassigned. Use 'const' instead  prefer-const
+  23:22  error  Unexpected any. Specify a different type            @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\auth\register\route.ts
+  11:15  error  'name' is never reassigned. Use 'const' instead      prefer-const
+  11:28  error  'password' is never reassigned. Use 'const' instead  prefer-const
+  11:38  error  'role' is never reassigned. Use 'const' instead      prefer-const
+  76:21  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\auth\verify-mfa\route.ts
+  24:18  warning  'err' is defined but never used           @typescript-eslint/no-unused-vars
+  71:21  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\contacts\route.ts
+  58:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\documents\route.ts
+  26:14  warning  'error' is defined but never used                 @typescript-eslint/no-unused-vars
+  43:60  warning  'description' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  43:73  warning  'tags' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  82:14  warning  'error' is defined but never used                 @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\documents\sign\route.ts
+  24:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\documents\upload\route.ts
+  32:18  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\landlord\analytics\route.ts
+  15:15  warning  'tenants' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  39:19  warning  'monthStr' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\landlord\bills\route.ts
+   23:19  warning  'tenant' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   33:14  warning  'error' is defined but never used            @typescript-eslint/no-unused-vars
+   76:14  warning  'error' is defined but never used            @typescript-eslint/no-unused-vars
+  110:14  warning  'error' is defined but never used            @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\landlord\documents\route.ts
+  31:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\landlord\history\route.ts
+  54:29  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  80:14  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\landlord\properties\route.ts
+  38:14  warning  'e' is defined but never used                    @typescript-eslint/no-unused-vars
+  46:21  warning  'landlordId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  52:14  warning  'e' is defined but never used                    @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\landlord\requests\route.ts
+  42:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\landlord\schedules\route.ts
+  22:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\landlord\tenants\end\route.ts
+  55:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\landlord\tenants\route.ts
+  21:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\landlord\verify\route.ts
+  141:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\landlords\route.ts
+  17:17  warning  'payload' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  23:14  warning  'error' is defined but never used             @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\maintenance\[id]\route.ts
+  70:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\maintenance\route.ts
+  10:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\messages\broadcast\route.ts
+  41:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\messages\route.ts
+  31:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  78:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\messages\unread\route.ts
+  22:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\notifications\route.ts
+  32:64  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  42:14  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+  70:14  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\payments\route.ts
+   5:13  warning  'searchParams' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  23:14  warning  'e' is defined but never used                      @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\properties\search\route.ts
+   3:10  warning  'jwtVerify' is defined but never used            @typescript-eslint/no-unused-vars
+   6:7   warning  'JWT_SECRET' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  48:14  warning  'error' is defined but never used                @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\reviews\route.ts
+  16:11  warning  'allReviews' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  27:14  warning  'e' is defined but never used                    @typescript-eslint/no-unused-vars
+  40:25  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\support\tickets\[id]\route.ts
+  14:14  warning  'error' is defined but never used                   @typescript-eslint/no-unused-vars
+  30:13  error    'updates' is never reassigned. Use 'const' instead  prefer-const
+  30:22  error    Unexpected any. Specify a different type            @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\support\tickets\route.ts
+  13:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\tenant\bills\[id]\pdf\route.ts
+  100:46  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\tenant\bills\route.ts
+  23:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  69:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\tenant\documents\route.ts
+  2:23  warning  'Lease' is defined but never used    @typescript-eslint/no-unused-vars
+  4:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\tenant\export\route.ts
+  223:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\tenant\history\route.ts
+  40:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\tenant\profile\route.ts
+  22:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\tenant\stay\route.ts
+  47:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\api\tenant\verify\route.ts
+  57:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  86:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\dashboard\bills\page.tsx
+  13:5   warning  'ChevronRight' is defined but never used  @typescript-eslint/no-unused-vars
+  14:5   warning  'ArrowLeft' is defined but never used     @typescript-eslint/no-unused-vars
+  17:5   warning  'Filter' is defined but never used        @typescript-eslint/no-unused-vars
+  22:8   warning  'Link' is defined but never used          @typescript-eslint/no-unused-vars
+  27:40  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  28:44  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\dashboard\documents\page.tsx
+    6:5   warning  'Plus' is defined but never used                                                                                   @typescript-eslint/no-unused-vars
+   10:5   warning  'CheckCircle2' is defined but never used                                                                           @typescript-eslint/no-unused-vars
+   11:5   warning  'Clock' is defined but never used                                                                                  @typescript-eslint/no-unused-vars
+   14:5   warning  'User' is defined but never used                                                                                   @typescript-eslint/no-unused-vars
+   45:8   warning  React Hook useEffect has a missing dependency: 'fetchDocuments'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+   77:18  warning  'e' is defined but never used                                                                                      @typescript-eslint/no-unused-vars
+  142:60  error    Unexpected any. Specify a different type                                                                           @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\dashboard\maintenance\page.tsx
+  11:5   warning  'MoreVertical' is defined but never used                                                                          @typescript-eslint/no-unused-vars
+  29:8   warning  React Hook useEffect has a missing dependency: 'fetchRequests'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  49:18  warning  'e' is defined but never used                                                                                     @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\dashboard\page.tsx
+   10:5   warning  'Loader2' is defined but never used                                                                                    @typescript-eslint/no-unused-vars
+   35:46  error    Unexpected any. Specify a different type                                                                               @typescript-eslint/no-explicit-any
+   36:50  error    Unexpected any. Specify a different type                                                                               @typescript-eslint/no-explicit-any
+   39:11  warning  'router' is assigned a value but never used                                                                            @typescript-eslint/no-unused-vars
+   60:8   warning  React Hook useEffect has a missing dependency: 'fetchDashboardData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+   85:56  error    Unexpected any. Specify a different type                                                                               @typescript-eslint/no-explicit-any
+   89:19  warning  'currentMonthIndex' is assigned a value but never used                                                                 @typescript-eslint/no-unused-vars
+   97:19  warning  'portfolioValue' is assigned a value but never used                                                                    @typescript-eslint/no-unused-vars
+   97:78  error    Unexpected any. Specify a different type                                                                               @typescript-eslint/no-explicit-any
+  352:76  error    Unexpected any. Specify a different type                                                                               @typescript-eslint/no-explicit-any
+  353:25  error    Unexpected any. Specify a different type                                                                               @typescript-eslint/no-explicit-any
+  379:49  error    Unexpected any. Specify a different type                                                                               @typescript-eslint/no-explicit-any
+  394:10  warning  'BadgeCheck' is defined but never used                                                                                 @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\dashboard\reports\page.tsx
+    9:5   warning  'IndianRupee' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+   10:5   warning  'Calendar' is defined but never used                                                                               @typescript-eslint/no-unused-vars
+   12:5   warning  'ArrowDownRight' is defined but never used                                                                         @typescript-eslint/no-unused-vars
+   26:5   warning  'BarChart' is defined but never used                                                                               @typescript-eslint/no-unused-vars
+   27:5   warning  'Bar' is defined but never used                                                                                    @typescript-eslint/no-unused-vars
+   33:38  error    Unexpected any. Specify a different type                                                                           @typescript-eslint/no-explicit-any
+   42:8   warning  React Hook useEffect has a missing dependency: 'fetchAnalytics'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  110:72  error    Unexpected any. Specify a different type                                                                           @typescript-eslint/no-explicit-any
+  121:48  error    Unexpected any. Specify a different type                                                                           @typescript-eslint/no-explicit-any
+  130:52  error    Unexpected any. Specify a different type                                                                           @typescript-eslint/no-explicit-any
+  216:63  error    Unexpected any. Specify a different type                                                                           @typescript-eslint/no-explicit-any
+  232:58  error    Unexpected any. Specify a different type                                                                           @typescript-eslint/no-explicit-any
+  232:66  error    Unexpected any. Specify a different type                                                                           @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\dashboard\requests\page.tsx
+   5:5   warning  'User' is defined but never used           @typescript-eslint/no-unused-vars
+  13:5   warning  'ChevronRight' is defined but never used   @typescript-eslint/no-unused-vars
+  15:5   warning  'MessageSquare' is defined but never used  @typescript-eslint/no-unused-vars
+  57:18  warning  'e' is defined but never used              @typescript-eslint/no-unused-vars
+  79:18  warning  'e' is defined but never used              @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\dashboard\settings\page.tsx
+    9:5   warning  'ChevronRight' is defined but never used  @typescript-eslint/no-unused-vars
+   12:5   warning  'Lock' is defined but never used          @typescript-eslint/no-unused-vars
+  166:47  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  180:65  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  201:56  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\dashboard\tenants\page.tsx
+  12:5   warning  'Mail' is defined but never used          @typescript-eslint/no-unused-vars
+  13:5   warning  'BadgeCheck' is defined but never used    @typescript-eslint/no-unused-vars
+  17:5   warning  'Filter' is defined but never used        @typescript-eslint/no-unused-vars
+  25:44  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  51:40  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  69:18  warning  'e' is defined but never used             @typescript-eslint/no-unused-vars
+  97:18  warning  'e' is defined but never used             @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\layout.tsx
+   3:8   warning  'Link' is defined but never used                          @typescript-eslint/no-unused-vars
+   6:5   warning  'Home' is defined but never used                          @typescript-eslint/no-unused-vars
+   8:5   warning  'ClipboardList' is defined but never used                 @typescript-eslint/no-unused-vars
+   9:5   warning  'LogOut' is defined but never used                        @typescript-eslint/no-unused-vars
+  14:5   warning  'Menu' is defined but never used                          @typescript-eslint/no-unused-vars
+  15:5   warning  'X' is defined but never used                             @typescript-eslint/no-unused-vars
+  29:12  warning  'isMobileMenuOpen' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  29:30  warning  'setIsMobileMenuOpen' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  30:13  warning  'user' is assigned a value but never used                 @typescript-eslint/no-unused-vars
+  30:19  warning  'logout' is assigned a value but never used               @typescript-eslint/no-unused-vars
+  31:11  warning  'pathname' is assigned a value but never used             @typescript-eslint/no-unused-vars
+  33:11  warning  'navItems' is assigned a value but never used             @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\messages\page.tsx
+    5:25  warning  'Clock' is defined but never used         @typescript-eslint/no-unused-vars
+    5:38  warning  'Phone' is defined but never used         @typescript-eslint/no-unused-vars
+    5:45  warning  'Search' is defined but never used        @typescript-eslint/no-unused-vars
+    5:53  warning  'Filter' is defined but never used        @typescript-eslint/no-unused-vars
+    5:78  warning  'StopCircle' is defined but never used    @typescript-eslint/no-unused-vars
+   12:46  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   13:56  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   14:46  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   23:35  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  201:46  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  201:83  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  215:40  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\onboarding\page.tsx
+  6:10  warning  'Building' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\settings\account\page.tsx
+  60:33  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\settings\documents\page.tsx
+  111:75  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\settings\financial\page.tsx
+  5:32  warning  'Receipt' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\settings\integrations\page.tsx
+   7:13  warning  'LinkIcon' is defined but never used      @typescript-eslint/no-unused-vars
+  15:5   warning  'CheckCircle2' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\settings\notifications\page.tsx
+  5:22  warning  'MessageSquare' is defined but never used  @typescript-eslint/no-unused-vars
+  5:37  warning  'AlertCircle' is defined but never used    @typescript-eslint/no-unused-vars
+  5:50  warning  'CheckCircle2' is defined but never used   @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\settings\portal\page.tsx
+    5:58  warning  'Check' is defined but never used         @typescript-eslint/no-unused-vars
+  143:62  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\settings\properties\page.tsx
+   5:10  warning  'Building' is defined but never used                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+   5:42  warning  'Clock' is defined but never used                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+  25:66  error    Unexpected any. Specify a different type                                                                                                                                                                                        @typescript-eslint/no-explicit-any
+  28:8   warning  React Hook useEffect has a missing dependency: 'defaults'. Either include it or remove the dependency array. You can also do a functional update 'setDefaults(d => ...)' if you only need 'defaults' in the 'setDefaults' call  react-hooks/exhaustive-deps
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\settings\security\page.tsx
+  4:35  warning  'AlertTriangle' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\settings\support\page.tsx
+  195:59   error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  195:75   error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  449:107  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  474:115  error  Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\landlord\settings\theme\page.tsx
+   29:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  108:78  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\login\page.tsx
+  37:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  50:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\page.tsx
+    4:57   warning  'TrendingUp' is defined but never used                           @typescript-eslint/no-unused-vars
+    4:69   warning  'Users' is defined but never used                                @typescript-eslint/no-unused-vars
+    4:101  warning  'HelpCircle' is defined but never used                           @typescript-eslint/no-unused-vars
+    4:144  warning  'Linkedin' is defined but never used                             @typescript-eslint/no-unused-vars
+    4:154  warning  'Instagram' is defined but never used                            @typescript-eslint/no-unused-vars
+    4:165  warning  'Twitter' is defined but never used                              @typescript-eslint/no-unused-vars
+  537:75   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  537:83   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\register\page.tsx
+  50:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\tenant\dashboard\apply\page.tsx
+  37:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\tenant\dashboard\bills\page.tsx
+   8:5   warning  'AlertCircle' is defined but never used   @typescript-eslint/no-unused-vars
+  11:5   warning  'Calendar' is defined but never used      @typescript-eslint/no-unused-vars
+  21:40  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\tenant\dashboard\community\page.tsx
+   4:39  warning  'Filter' is defined but never used         @typescript-eslint/no-unused-vars
+  16:13  warning  'user' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\tenant\dashboard\documents\page.tsx
+   12:5   warning  'Filter' is defined but never used                                                                                 @typescript-eslint/no-unused-vars
+   13:5   warning  'ArrowUpDown' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+   16:5   warning  'MoreVertical' is defined but never used                                                                           @typescript-eslint/no-unused-vars
+   17:5   warning  'Clock' is defined but never used                                                                                  @typescript-eslint/no-unused-vars
+   20:5   warning  'Tag' is defined but never used                                                                                    @typescript-eslint/no-unused-vars
+   78:8   warning  React Hook useEffect has a missing dependency: 'fetchDocuments'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  283:67  error    Unexpected any. Specify a different type                                                                           @typescript-eslint/no-explicit-any
+  310:74  error    Unexpected any. Specify a different type                                                                           @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\tenant\dashboard\help\page.tsx
+  71:79  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\tenant\dashboard\history\page.tsx
+   8:42  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  45:41  warning  'index' is defined but never used         @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\tenant\dashboard\lease\page.tsx
+   6:15  warning  'Calendar' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   7:5   warning  'ArrowUpRight' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    @typescript-eslint/no-unused-vars
+   8:18  warning  'Sparkles' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  14:38  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    @typescript-eslint/no-explicit-any
+  35:49  error    Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\tenant\dashboard\lease\page.tsx:35:49
+  33 |     );
+  34 |
+> 35 |     const startDate = new Date(stay.joinDate || Date.now());
+     |                                                 ^^^^^^^^^^ Cannot call impure function
+  36 |     // Default to 11 months if no end date
+  37 |     const endDate = stay.moveOutDate ? new Date(stay.moveOutDate) : new Date(startDate.getTime() + 11 * 30 * 24 * 60 * 60 * 1000);
+  38 |     const now = new Date();  react-hooks/purity
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\tenant\dashboard\maintenance\page.tsx
+    5:30   warning  'MaintenanceComment' is defined but never used                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+    8:5    warning  'CheckCircle2' is defined but never used                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+    8:19   warning  'XCircle' is defined but never used                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+   10:5    warning  'Calendar' is defined but never used                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+   10:15   warning  'MoreVertical' is defined but never used                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+   11:5    warning  'Trash2' is defined but never used                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+   12:5    warning  'Filter' is defined but never used                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+   31:19   warning  'isLoading' is assigned a value but never used                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+   52:8    warning  React Hook useEffect has a missing dependency: 'fetchRequests'. Either include it or remove the dependency array                                                                                                                                                                         react-hooks/exhaustive-deps
+  140:60   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  162:64   error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  228:124  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  257:111  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  357:45   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\tenant\dashboard\notifications\page.tsx
+   4:73  warning  'AlertCircle' is defined but never used   @typescript-eslint/no-unused-vars
+  10:56  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  30:49  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\tenant\dashboard\page.tsx
+   30:38   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   31:56   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   32:58   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   57:94   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   71:8    warning  React Hook useEffect has a missing dependency: 'fetchDashboardState'. Either include it or remove the dependency array                                                                                                                                                                   react-hooks/exhaustive-deps
+  156:144  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  216:29   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\tenant\dashboard\report\page.tsx
+    9:12  warning  'history' is assigned a value but never used  @typescript-eslint/no-unused-vars
+    9:44  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+   10:40  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+   11:38  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+   47:50  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  177:55  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\tenant\dashboard\settings\page.tsx
+    4:16   warning  'Mail' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+    4:22   warning  'Phone' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+    4:99   warning  'Wrench' is defined but never used                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+    4:115  warning  'BadgeCheck' is defined but never used                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+    4:127  warning  'Moon' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+    4:133  warning  'Sun' is defined but never used                                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+    4:150  warning  'LogOut' is defined but never used                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+    4:170  warning  'MessageCircle' is defined but never used                                                                                                                                                                                                                                                @typescript-eslint/no-unused-vars
+   44:48   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   93:74   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   96:13   error    Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free                                                                                                                                                                      @typescript-eslint/ban-ts-comment
+   98:17   error    Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free                                                                                                                                                                      @typescript-eslint/ban-ts-comment
+  107:74   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  182:41   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  424:49   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  455:80   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  502:92   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\tenant\layout.tsx
+  3:8   warning  'Link' is defined but never used        @typescript-eslint/no-unused-vars
+  4:10  warning  'useAuth' is defined but never used     @typescript-eslint/no-unused-vars
+  6:27  warning  'useSidebar' is defined but never used  @typescript-eslint/no-unused-vars
+  7:10  warning  'Menu' is defined but never used        @typescript-eslint/no-unused-vars
+  7:16  warning  'Home' is defined but never used        @typescript-eslint/no-unused-vars
+  7:22  warning  'X' is defined but never used           @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\tenant\messages\page.tsx
+    5:70  warning  'StopCircle' is defined but never used           @typescript-eslint/no-unused-vars
+   12:46  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+   13:56  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+   14:46  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+   23:35  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  200:46  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  200:83  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  214:40  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  217:17  warning  'userScript' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\app\tenant\onboarding\page.tsx
+   5:10  warning  'User' is defined but never used                                                                                    @typescript-eslint/no-unused-vars
+  10:19  warning  'refreshUser' is assigned a value but never used                                                                    @typescript-eslint/no-unused-vars
+  54:50  error    Unexpected any. Specify a different type                                                                            @typescript-eslint/no-explicit-any
+  55:62  error    Unexpected any. Specify a different type                                                                            @typescript-eslint/no-explicit-any
+  90:8   warning  React Hook useEffect has a missing dependency: 'fetchProperties'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\Chatbot.tsx
+  4:39  warning  'User' is defined but never used  @typescript-eslint/no-unused-vars
+  4:64  warning  'Info' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\Footer.tsx
+  4:21  warning  'Github' is defined but never used    @typescript-eslint/no-unused-vars
+  4:59  warning  'Facebook' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\LanguageSwitcher.tsx
+  5:10  warning  'Globe' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\Navbar.tsx
+    6:57  warning  'Settings' is defined but never used      @typescript-eslint/no-unused-vars
+    6:67  warning  'Bell' is defined but never used          @typescript-eslint/no-unused-vars
+    6:73  warning  'Search' is defined but never used        @typescript-eslint/no-unused-vars
+    7:19  warning  'Role' is defined but never used          @typescript-eslint/no-unused-vars
+  130:51  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  230:55  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\ReviewsSection.tsx
+  43:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\dashboard\BottomNav.tsx
+  21:11  warning  'role' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\dashboard\Chatbot.tsx
+  5:10  warning  'nanoid' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\dashboard\CommunityBoardWidget.tsx
+   3:10  warning  'Bell' is defined but never used          @typescript-eslint/no-unused-vars
+   3:16  warning  'Calendar' is defined but never used      @typescript-eslint/no-unused-vars
+  13:56  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\dashboard\Header.tsx
+  3:20  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\dashboard\NotificationDropdown.tsx
+   4:23  warning  'Clock' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+  18:12  warning  'loading' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  18:21  warning  'setLoading' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+  30:18  warning  'e' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  36:9   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\dashboard\NotificationDropdown.tsx:36:9
+  34 |
+  35 |     useEffect(() => {
+> 36 |         fetchNotifications();
+     |         ^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  37 |
+  38 |         // Polling every 2 minutes or just on mount for now
+  39 |         const interval = setInterval(fetchNotifications, 120000);  react-hooks/set-state-in-effect
+  51:18  warning  'e' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  64:18  warning  'e' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\dashboard\Sidebar.tsx
+  1:50  warning  'LogOut' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\dashboard\TenantDetailsModal.tsx
+  3:13  warning  'MapPin' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\dashboard\TenantHeader.tsx
+  3:44  warning  'X' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\dashboard\TenantSidebar.tsx
+  3:65   warning  'BadgeCheck' is defined but never used  @typescript-eslint/no-unused-vars
+  3:122  warning  'Sparkles' is defined but never used    @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\dashboard\widgets\ActivityFeedWidget.tsx
+  2:47  warning  'CheckCircle' is defined but never used  @typescript-eslint/no-unused-vars
+  3:10  warning  'useEffect' is defined but never used    @typescript-eslint/no-unused-vars
+  3:21  warning  'useState' is defined but never used     @typescript-eslint/no-unused-vars
+  5:46  warning  'userId' is defined but never used       @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\dashboard\widgets\DocumentsWidget.tsx
+  2:30  warning  'ArrowUpRight' is defined but never used  @typescript-eslint/no-unused-vars
+  5:43  warning  'userId' is defined but never used        @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\dashboard\widgets\MaintenancePreviewWidget.tsx
+  7:46  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  8:12  warning  'loading' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\dashboard\widgets\RentSnapshotWidget.tsx
+   2:23  warning  'CreditCard' is defined but never used        @typescript-eslint/no-unused-vars
+   7:40  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+   8:12  warning  'loading' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  16:58  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  16:66  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  18:71  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\messaging\AudioMessageBubble.tsx
+   5:51  warning  'duration' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+  39:62  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\messaging\AudioMessageBubble.tsx:39:62
+  37 |                             key={i}
+  38 |                             className={`w-1 rounded-full ${i < 10 ? 'bg-zinc-800' : 'bg-zinc-300'}`}
+> 39 |                             style={{ height: `${Math.max(20, Math.random() * 100)}%` }}
+     |                                                              ^^^^^^^^^^^^^ Cannot call impure function
+  40 |                         ></div>
+  41 |                     ))}
+  42 |                 </div>  react-hooks/purity
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\messaging\AudioRecorder.tsx
+    4:10   warning  'Mic' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+    4:50   warning  'Loader2' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+  110:8    warning  React Hook useEffect has a missing dependency: 'startRecording'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                react-hooks/exhaustive-deps
+  125:121  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\messaging\AudioRecorder.tsx:125:121
+  123 |                         <div className="flex gap-1 h-4 items-end">
+  124 |                             {[1, 2, 3, 4, 5].map(i => (
+> 125 |                                 <div key={i} className="w-1 bg-rose-500 rounded-full animate-pulse" style={{ height: `${Math.random() * 100}%`, animationDuration: '0.4s' }}></div>
+      |                                                                                                                         ^^^^^^^^^^^^^ Cannot call impure function
+  126 |                             ))}
+  127 |                         </div>
+  128 |                     </div>  react-hooks/purity
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\components\messaging\FileAttachmentBubble.tsx
+   3:10  warning  'FileIcon' is defined but never used                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+   3:30  warning  'Variable' is defined but never used                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+   3:59  warning  'ImageIcon' is defined but never used                                                                                                                                                                                                                                                    @typescript-eslint/no-unused-vars
+   3:70  warning  'PlayCircle' is defined but never used                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+   3:82  warning  'Film' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   4:8   warning  'Image' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  29:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\context\AuthContext.tsx
+   13:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   13:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   14:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   49:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   80:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   86:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  103:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  126:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\context\CustomThemeContext.tsx
+  36:27  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\context\CustomThemeContext.tsx:36:27
+  34 |         // 1. Initial Load from local storage
+  35 |         const storedAccent = localStorage.getItem('accentColor') as AccentColor;
+> 36 |         if (storedAccent) setAccentColor(storedAccent);
+     |                           ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  37 |         const storedDensity = localStorage.getItem('layoutDensity') as LayoutDensity;
+  38 |         if (storedDensity) setLayoutDensity(storedDensity);
+  39 |         const storedWidgets = localStorage.getItem('dashboardWidgets');  react-hooks/set-state-in-effect
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\context\LanguageContext.tsx
+  15:33  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-explicit-any
+  34:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\context\LanguageContext.tsx:34:13
+  32 |     useEffect(() => {
+  33 |         if (user?.language && ['en', 'hi', 'mr'].includes(user.language)) {
+> 34 |             setLanguage(user.language as Language);
+     |             ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  35 |             localStorage.setItem('app-language', user.language);
+  36 |         } else {
+  37 |             const saved = localStorage.getItem('app-language');  react-hooks/set-state-in-effect
+  51:20  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-explicit-any
+  58:31  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\lib\db.ts
+  65:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\lib\intelligence.ts
+  42:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  42:67  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  42:75  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  43:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\lib\mongoose.ts
+  10:11  warning  'MongooseCache' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+  15:1   error    Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+  19:5   error    Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+
+C:\Users\Shaikh Nadeem\OneDrive\Desktop\tenant-landlord\src\lib\notifications.ts
+   81:61  error    Unexpected any. Specify a different type               @typescript-eslint/no-explicit-any
+   96:27  error    Unexpected any. Specify a different type               @typescript-eslint/no-explicit-any
+   99:27  error    Unexpected any. Specify a different type               @typescript-eslint/no-explicit-any
+  117:15  warning  'notificationType' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Γ£û 386 problems (147 errors, 239 warnings)
+  3 errors and 0 warnings potentially fixable with the `--fix` option.
+

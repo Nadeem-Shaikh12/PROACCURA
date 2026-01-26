@@ -23,11 +23,8 @@ export default function SettingsPage() {
         language: 'English',
         timezone: 'UTC',
         notificationPreferences: {
-            rentReminders: true,
-            maintenanceUpdates: true,
-            leaseRenewal: true,
-            messages: true,
-            documents: true
+            email: { maintenance: true, payments: true, documents: true, marketing: false },
+            push: { messages: true, requests: true, reminders: true }
         },
         portalPreferences: {
             theme: 'light',
@@ -57,11 +54,8 @@ export default function SettingsPage() {
                 language: user.language || 'English',
                 timezone: user.timezone || 'UTC',
                 notificationPreferences: user.notificationPreferences || {
-                    rentReminders: true,
-                    maintenanceUpdates: true,
-                    leaseRenewal: true,
-                    messages: true,
-                    documents: true
+                    email: { maintenance: true, payments: true, documents: true, marketing: false },
+                    push: { messages: true, requests: true, reminders: true }
                 },
                 portalPreferences: user.portalPreferences || {
                     theme: 'light',
@@ -108,8 +102,20 @@ export default function SettingsPage() {
         }));
     };
 
-    const handleToggle = (key: string) => {
-        handlePreferenceChange('notificationPreferences', key, !formData.notificationPreferences[key as keyof typeof formData.notificationPreferences]);
+    const handleToggle = (category: 'email' | 'push', key: string) => {
+        setFormData(prev => {
+            const currentCat = prev.notificationPreferences[category] as any;
+            return {
+                ...prev,
+                notificationPreferences: {
+                    ...prev.notificationPreferences,
+                    [category]: {
+                        ...currentCat,
+                        [key]: !currentCat[key]
+                    }
+                }
+            };
+        });
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -285,21 +291,43 @@ export default function SettingsPage() {
                                 </div>
                                 Notifications
                             </h3>
-                            <div className="space-y-4">
-                                {[
-                                    { key: 'rentReminders', label: 'Rent Reminders' },
-                                    { key: 'maintenanceUpdates', label: 'Maintenance Updates' },
-                                    { key: 'messages', label: 'Direct Messages' },
-                                    { key: 'documents', label: 'New Documents' },
-                                ].map((item) => (
-                                    <div key={item.key} className="flex items-center justify-between p-3 hover:bg-zinc-50 rounded-xl transition">
-                                        <span className="text-sm font-medium text-zinc-700">{item.label}</span>
-                                        <label className="relative inline-flex items-center cursor-pointer">
-                                            <input type="checkbox" checked={formData.notificationPreferences[item.key as keyof typeof formData.notificationPreferences]} onChange={() => handleToggle(item.key)} className="sr-only peer" />
-                                            <div className="w-9 h-5 bg-zinc-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
-                                        </label>
+                            <div className="space-y-6">
+                                <div>
+                                    <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-3">Email Alerts</p>
+                                    <div className="space-y-3">
+                                        {[
+                                            { key: 'payments', label: 'Rent Payments' },
+                                            { key: 'maintenance', label: 'Maintenance' },
+                                            { key: 'documents', label: 'Documents' },
+                                        ].map((item) => (
+                                            <div key={item.key} className="flex items-center justify-between p-2 hover:bg-zinc-50 rounded-xl transition">
+                                                <span className="text-sm font-medium text-zinc-700">{item.label}</span>
+                                                <label className="relative inline-flex items-center cursor-pointer">
+                                                    <input type="checkbox" checked={formData.notificationPreferences.email[item.key as keyof typeof formData.notificationPreferences.email]} onChange={() => handleToggle('email', item.key)} className="sr-only peer" />
+                                                    <div className="w-9 h-5 bg-zinc-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+                                                </label>
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-3">Push Notifications</p>
+                                    <div className="space-y-3">
+                                        {[
+                                            { key: 'messages', label: 'Messages' },
+                                            { key: 'requests', label: 'Activity' },
+                                            { key: 'reminders', label: 'Reminders' },
+                                        ].map((item) => (
+                                            <div key={item.key} className="flex items-center justify-between p-2 hover:bg-zinc-50 rounded-xl transition">
+                                                <span className="text-sm font-medium text-zinc-700">{item.label}</span>
+                                                <label className="relative inline-flex items-center cursor-pointer">
+                                                    <input type="checkbox" checked={formData.notificationPreferences.push[item.key as keyof typeof formData.notificationPreferences.push]} onChange={() => handleToggle('push', item.key)} className="sr-only peer" />
+                                                    <div className="w-9 h-5 bg-zinc-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-500"></div>
+                                                </label>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
                         </section>
 

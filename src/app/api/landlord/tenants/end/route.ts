@@ -27,7 +27,11 @@ export async function POST(req: Request) {
         if (!stay) return NextResponse.json({ error: 'Stay not found' }, { status: 404 });
 
         // End the stay in DB
+        // End the stay in DB
         await db.endTenantStay(stay.tenantId);
+
+        // Revoke Access
+        await db.updateUser(stay.tenantId, { status: 'removed' });
 
         // Notify tenant
         await db.addNotification({

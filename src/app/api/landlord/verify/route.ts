@@ -69,6 +69,9 @@ export async function POST(req: Request) {
                 status: 'ACTIVE'
             });
 
+            // ACTIVATE USER ACCOUNT
+            await db.updateUser(updatedRequest.tenantId, { status: 'active' });
+
             // UPDATE PROPERTY OCCUPANCY
             if (existingRequest.propertyId) {
                 const property = await db.findPropertyById(existingRequest.propertyId);

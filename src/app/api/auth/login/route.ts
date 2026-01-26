@@ -8,24 +8,57 @@ const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secr
 export async function POST(req: Request) {
     try {
         const { email, password, role } = await req.json();
+        const normalizedEmail = email?.toLowerCase().trim();
 
-        if (!email || !password || !role) {
+        if (!normalizedEmail || !password || !role) {
             return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
         }
 
-        const user = await db.findUserByEmail(email);
+        const user = await db.findUserByEmail(normalizedEmail);
         if (!user) {
             return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
         }
 
-        // Role check - strictly enforce role selection on login to prevent confusion
-        if (user.role !== role) {
+        // Role check - strictly enforce role selection on login for tenants/landlords
+        // However, allow Admins to login through any role entry point for security anonymity
+        if (user.role !== role && user.role !== 'admin') {
             return NextResponse.json({ error: `Account exists but is registered as a ${user.role}` }, { status: 403 });
+        }
+
+        // Access Revocation Check
+        // Access Revocation Check
+        if (user.status === 'removed') {
+            return NextResponse.json({
+                error: 'Your access has been revoked. Please contact support.',
+                isRevoked: true
+            }, { status: 403 });
         }
 
         const isValid = await bcrypt.compare(password, user.passwordHash);
         if (!isValid) {
             return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+        }
+
+        // Check for 2FA requirement
+        if (user.securitySettings?.twoFactorEnabled) {
+            // Generate a temporary MFA token valid for 5 minutes
+            const mfaToken = await new SignJWT({
+                userId: user.id,
+                purpose: 'mfa_verification'
+            })
+                .setProtectedHeader({ alg: 'HS256' })
+                .setExpirationTime('5m')
+                .sign(JWT_SECRET);
+
+            // In a real system, we'd send an SMS/Email here.
+            // For this demo, we'll simulate sending by logging to console or just using a mock code
+            console.log(`[SECURITY] 2FA Code for ${user.email}: 123456`);
+
+            return NextResponse.json({
+                mfaRequired: true,
+                mfaToken,
+                email: user.email
+            });
         }
 
         const token = await new SignJWT({ userId: user.id, role: user.role, name: user.name, email: user.email })

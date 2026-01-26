@@ -3,27 +3,83 @@ export interface User {
     name: string;
     email: string;
     passwordHash: string;
-    role: 'landlord' | 'tenant';
+    role: 'landlord' | 'tenant' | 'admin';
+    status?: 'active' | 'inactive' | 'removed';
     mobile?: string;
+    company?: string;
     profilePhoto?: string;
     language?: string;
     timezone?: string;
+    dateFormat?: string;
     notificationPreferences?: {
-        rentReminders: boolean;
-        maintenanceUpdates: boolean;
-        leaseRenewal: boolean;
-        messages: boolean;
-        documents: boolean;
+        email: {
+            maintenance: boolean;
+            payments: boolean;
+            documents: boolean;
+            marketing: boolean;
+        };
+        push: {
+            messages: boolean;
+            requests: boolean;
+            reminders: boolean;
+        };
     };
     portalPreferences?: {
         theme: 'light' | 'dark' | 'system';
         landingPage: 'dashboard' | 'payments' | 'messages';
         emailFormat: 'html' | 'text';
+        accentColor?: 'blue' | 'violet' | 'emerald' | 'rose' | 'amber' | 'slate';
+        layoutDensity?: 'compact' | 'comfortable' | 'spacious';
+        dashboardWidgets?: Record<string, boolean>;
     };
     securitySettings?: {
         twoFactorEnabled: boolean;
+        twoFactorSecret?: string;
         lastLogin?: string;
         loginHistory?: { date: string; device: string; ip: string }[];
+    };
+    propertyDefaults?: {
+        rentDueDay: number;
+        gracePeriodDays: number;
+        lateFeePercentage: number;
+        defaultLeaseMonths: number;
+        requireSecurityDeposit: boolean;
+    };
+    tenantPortalSettings?: {
+        allowDocumentUploads: boolean;
+        showPaymentHistory: boolean;
+        showMaintenanceRequests: boolean;
+        requireRentersInsurance: boolean;
+        autoInvite: boolean;
+    };
+    documentSettings?: {
+        allowedFileTypes: { pdf: boolean; jpg: boolean; png: boolean; doc: boolean };
+        maxFileSizeMB: number;
+        autoArchiveAfterDays: number;
+        defaultFolders: string[];
+    };
+    financialSettings?: {
+        currency: string;
+        taxRate: number;
+        bankDetails?: {
+            accountName: string;
+            accountNumber: string;
+            bankName: string;
+            ifsc: string;
+        };
+    };
+    integrationSettings?: {
+        paymentGateway?: { provider: 'stripe' | 'razorpay' | 'paypal', apiKey: string, secretKey: string, enabled: boolean };
+        accounting?: { provider: 'quickbooks' | 'xero', connected: boolean, lastSync?: string };
+        communication?: {
+            twilio?: { sid: string, token: string, fromNumber: string, enabled: boolean };
+            sendgrid?: { apiKey: string, fromEmail: string, enabled: boolean };
+        };
+        crm?: { provider: 'salesforce' | 'hubspot', connected: boolean };
+        developerApi?: {
+            keys: { name: string, key: string, role: 'admin' | 'read-only', createdAt: string }[];
+            webhooks: { id: string, url: string, events: string[], enabled: boolean }[];
+        };
     };
     privacySettings?: {
         dataSharing: boolean;
@@ -121,7 +177,13 @@ export interface Message {
     content: string;
     timestamp: string;
     isRead: boolean;
-    type: 'text' | 'template' | 'system';
+    type: 'text' | 'template' | 'system' | 'audio' | 'file';
+    audioUrl?: string;
+    duration?: number;
+    fileUrl?: string;
+    fileName?: string;
+    fileType?: string;
+    fileSize?: number;
 }
 
 export interface Review {
@@ -181,4 +243,38 @@ export interface Announcement {
     type: 'EVENT' | 'NOTICE' | 'NEWS' | 'ALERT';
     authorId: string;
     authorName: string;
+}
+
+export interface SupportArticle {
+    id: string;
+    title: string;
+    content: string;
+    category: 'ACCOUNT' | 'PAYMENTS' | 'PROPERTIES' | 'TENANTS' | 'TECHNICAL';
+    tags: string[];
+    helpfulCount: number;
+    updatedAt: string;
+}
+
+export interface SupportTicketReply {
+    id: string;
+    authorId: string;
+    authorName: string;
+    authorRole: 'landlord' | 'support';
+    content: string;
+    attachments?: string[];
+    createdAt: string;
+}
+
+export interface SupportTicket {
+    id: string;
+    landlordId: string;
+    subject: string;
+    category: 'BILLING' | 'TECHNICAL' | 'ACCOUNT' | 'FEATURE_REQUEST' | 'OTHER';
+    description: string;
+    status: 'OPEN' | 'IN_PROGRESS' | 'AWAITING_REPLY' | 'RESOLVED' | 'CLOSED';
+    priority: 'LOW' | 'NORMAL' | 'HIGH';
+    attachments: string[];
+    replies: SupportTicketReply[];
+    createdAt: string;
+    updatedAt: string;
 }

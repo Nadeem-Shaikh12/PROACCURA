@@ -16,7 +16,7 @@ export default function BottomNav() {
     const pathname = usePathname();
     const { user } = useAuth();
 
-    if (!user) return null;
+    if (!user || pathname.startsWith('/admin')) return null;
 
     const role = user.role === 'landlord' ? 'landlord' : 'tenant';
 

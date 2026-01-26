@@ -534,7 +534,7 @@ function TestimonialCard({ quote, author, role }: { quote: string, author: strin
       <div className="flex gap-1 mb-4">
         {[1, 2, 3, 4, 5].map(i => <Star key={i} className="h-4 w-4 fill-current text-yellow-400 text-yellow-500" />)}
       </div>
-      <p className="text-lg text-zinc-700 dark:text-zinc-300 italic mb-6">"{quote}"</p>
+      <p className="text-lg text-zinc-700 dark:text-zinc-300 italic mb-6">&quot;{quote}&quot;</p>
       <div>
         <p className="font-bold text-zinc-900 dark:text-white">{author}</p>
         <p className="text-sm text-zinc-500">{role}</p>

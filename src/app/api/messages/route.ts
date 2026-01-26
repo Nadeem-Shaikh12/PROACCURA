@@ -16,6 +16,11 @@ export async function GET(request: Request) {
 
     try {
         const { payload } = await jwtVerify(token, JWT_SECRET);
+
+        const { validateUserStatus } = await import('@/lib/auth-guard');
+        const { authorized, response } = await validateUserStatus(payload.userId as string);
+        if (!authorized) return response;
+
         const { searchParams } = new URL(request.url);
         const chatWith = searchParams.get('chatWith');
 
@@ -43,9 +48,9 @@ export async function POST(request: Request) {
     try {
         const { payload } = await jwtVerify(token, JWT_SECRET);
         const body = await request.json();
-        const { receiverId, content, type = 'text' } = body;
+        const { receiverId, content, type = 'text', audioUrl, duration, fileUrl, fileName, fileType, fileSize } = body;
 
-        if (!receiverId || !content) {
+        if (!receiverId || (!content && type !== 'audio' && type !== 'file')) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
@@ -53,10 +58,16 @@ export async function POST(request: Request) {
             id: crypto.randomUUID(),
             senderId: payload.userId as string,
             receiverId,
-            content,
+            content: content || (type === 'audio' ? '🎤 Voice Message' : (type === 'file' ? '📎 Attachment' : '')),
             timestamp: new Date().toISOString(),
             isRead: false,
-            type
+            type,
+            audioUrl,
+            duration,
+            fileUrl,
+            fileName,
+            fileType,
+            fileSize
         });
 
         // Create a notification for the receiver

@@ -9,14 +9,22 @@ const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secr
 export async function POST(req: Request) {
     try {
         const { name, email, password, role } = await req.json();
+        const normalizedEmail = email?.toLowerCase().trim();
 
         if (!name || !email || !password || !role) {
             return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
         }
 
+        if (role === 'admin') {
+            return NextResponse.json({ error: 'Unauthorized role assignment' }, { status: 403 });
+        }
+
         // Backend Validation
+        if (!normalizedEmail) {
+            return NextResponse.json({ error: 'Email is required' }, { status: 400 });
+        }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
+        if (!emailRegex.test(normalizedEmail)) {
             return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
         }
 
@@ -25,7 +33,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Password does not meet security requirements' }, { status: 400 });
         }
 
-        const existingUser = await db.findUserByEmail(email);
+        const existingUser = await db.findUserByEmail(normalizedEmail);
         if (existingUser) {
             return NextResponse.json({ error: 'User already exists' }, { status: 409 });
         }
@@ -36,9 +44,10 @@ export async function POST(req: Request) {
         const newUser = await db.addUser({
             id: userId,
             name,
-            email,
+            email: normalizedEmail,
             passwordHash,
             role,
+            status: role === 'tenant' ? 'inactive' : 'active',
             mobile: ''
         });
 

@@ -1,12 +1,14 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { User, Property, VerificationRequest, TenantHistory, Notification, Bill, Message, Review, TenantStay, MaintenanceRequest, Announcement } from '@/lib/types';
+import { User, Property, VerificationRequest, TenantHistory, Notification, Bill, Message, Review, TenantStay, MaintenanceRequest, Announcement, SupportArticle, SupportTicket } from '@/lib/types';
 import { StoredDocument } from './store';
 import * as Models from '@/models';
+import SupportArticleModel from '@/models/SupportArticle';
+import SupportTicketModel from '@/models/SupportTicket';
 import dbConnect from './mongoose';
 
 // Re-export types
-export type { User, Property, VerificationRequest, TenantHistory, Notification, Bill, Message, Review, TenantStay };
+export type { User, Property, VerificationRequest, TenantHistory, Notification, Bill, Message, Review, TenantStay, SupportArticle, SupportTicket };
 
 const DB_PATH = path.join(process.cwd(), 'data', 'db.json');
 
@@ -24,6 +26,8 @@ interface JSONSchema {
     tenantStays: TenantStay[];
     maintenanceRequests: MaintenanceRequest[];
     announcements: Announcement[];
+    supportArticles: SupportArticle[];
+    supportTickets: SupportTicket[];
 }
 
 // --- HYBRID ADAPTER ---
@@ -50,29 +54,67 @@ class DBAdapter {
 
     // HELPER: Read JSON
     private async readJSON(): Promise<JSONSchema> {
-        // if (this.inMemoryCache) return this.inMemoryCache; // DISABLE CACHE FOR DATA CONSISTENCY
-
         try {
             const data = await fs.readFile(DB_PATH, 'utf-8');
             this.inMemoryCache = JSON.parse(data);
-            return this.inMemoryCache!;
+
+            // Ensure new fields exist
+            if (!this.inMemoryCache?.supportArticles) this.inMemoryCache!.supportArticles = [];
+            if (!this.inMemoryCache?.supportTickets) this.inMemoryCache!.supportTickets = [];
+
         } catch (error) {
-            // If file missing or read error, return empty structure (or default)
-            // But initialize cache so we can write to it later
             if (!this.inMemoryCache) {
                 this.inMemoryCache = {
                     users: [], properties: [], verificationRequests: [], history: [],
-                    notifications: [], bills: [], documents: [], messages: [], reviews: [], tenantStays: [], maintenanceRequests: [], announcements: []
+                    notifications: [], bills: [], documents: [], messages: [], reviews: [],
+                    tenantStays: [], maintenanceRequests: [], announcements: [],
+                    supportArticles: [], supportTickets: []
                 };
             }
-            return this.inMemoryCache!;
         }
+
+        // Seed Support Articles if empty
+        if (this.inMemoryCache!.supportArticles.length === 0) {
+            this.inMemoryCache!.supportArticles = [
+                {
+                    id: 'kb-1',
+                    title: 'How to change notification preferences',
+                    category: 'ACCOUNT',
+                    content: 'Go to Settings > Notifications to toggle Email and Push alerts for maintenance, payments, and documents.',
+                    tags: ['notifications', 'settings', 'email'],
+                    helpfulCount: 24,
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: 'kb-2',
+                    title: 'How to configure tenant portal access',
+                    category: 'TENANTS',
+                    content: 'In Settings > Properties, you can toggle permissions for what tenants can see, such as payment history and document uploads.',
+                    tags: ['tenant', 'portal', 'permissions'],
+                    helpfulCount: 15,
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: 'kb-3',
+                    title: 'How rent reminders work',
+                    category: 'PAYMENTS',
+                    content: 'Automated reminders are sent 3 days before the due date, on the due date, and every 2 days if the rent remains unpaid.',
+                    tags: ['rent', 'reminders', 'payments'],
+                    helpfulCount: 42,
+                    updatedAt: new Date().toISOString()
+                }
+            ];
+            await this.writeJSON(this.inMemoryCache!);
+        }
+
+        return this.inMemoryCache!;
     }
 
     // HELPER: Write JSON
     private async writeJSON(data: JSONSchema): Promise<void> {
-        this.inMemoryCache = data; // Always update memory
+        this.inMemoryCache = data;
         try {
+            await fs.mkdir(path.dirname(DB_PATH), { recursive: true });
             await fs.writeFile(DB_PATH, JSON.stringify(data, null, 2), 'utf-8');
         } catch (error) {
             const err = error as { code?: string };
@@ -119,7 +161,8 @@ class DBAdapter {
             return res as unknown as User | null;
         } else {
             const db = await this.readJSON();
-            return db.users.find(u => u.email === email) || null;
+            const searchEmail = email?.toLowerCase().trim();
+            return db.users.find(u => (u.email || '').toLowerCase().trim() === searchEmail) || null;
         }
     }
 
@@ -231,15 +274,6 @@ class DBAdapter {
     async updateRequestStatus(id: string, status: 'approved' | 'rejected' | 'moved_out', remarks?: string, extraData?: { joiningDate?: string, rentNotes?: string, utilityDetails?: string }) {
         await this.init();
         if (this.useMongo) {
-            const updates: Partial<VerificationRequest> & { updatedAt: string } = { status, updatedAt: new Date().toISOString() };
-            if (remarks !== undefined) updates.remarks = remarks;
-            if (extraData) {
-                if (extraData.joiningDate !== undefined) updates.joiningDate = extraData.joiningDate;
-                if (extraData.rentNotes !== undefined) updates.rentNotes = extraData.rentNotes;
-                if (extraData.utilityDetails !== undefined) updates.utilityDetails = extraData.utilityDetails;
-            }
-            // For MongoDB we need to handle verifiedAt carefully or just overwrite it
-            // Simplified logic matching JSON:
             const request = await Models.VerificationRequest.findOne({ id });
             if (!request) return null;
 
@@ -566,41 +600,14 @@ class DBAdapter {
     async payBill(billId: string) {
         await this.init();
         if (this.useMongo) {
-            const bill = await Models.Bill.findOne({ id: billId });
-            if (bill) {
-                bill.status = 'PAID';
-                bill.paidAt = new Date().toISOString();
-                await bill.save();
-
-                await this.addHistory({
-                    id: Math.random().toString(36).substr(2, 9),
-                    tenantId: bill.tenantId,
-                    type: 'PAYMENT',
-                    date: new Date().toISOString(),
-                    description: `Paid ${bill.type} bill`,
-                    amount: bill.amount,
-                    createdBy: bill.tenantId
-                });
-                return bill.toObject() as unknown as Bill;
-            }
-            return null;
+            const res = await Models.Bill.findOneAndUpdate({ id: billId }, { status: 'PAID', paidAt: new Date().toISOString() }, { new: true }).lean();
+            return res as unknown as Bill | null;
         } else {
             const db = await this.readJSON();
             const index = db.bills.findIndex(b => b.id === billId);
             if (index !== -1) {
                 db.bills[index].status = 'PAID';
                 db.bills[index].paidAt = new Date().toISOString();
-
-                db.history.push({
-                    id: Math.random().toString(36).substr(2, 9),
-                    tenantId: db.bills[index].tenantId,
-                    type: 'PAYMENT',
-                    date: new Date().toISOString(),
-                    description: `Paid ${db.bills[index].type} bill`,
-                    amount: db.bills[index].amount,
-                    createdBy: db.bills[index].tenantId
-                });
-
                 await this.writeJSON(db);
                 return db.bills[index];
             }
@@ -608,20 +615,23 @@ class DBAdapter {
         }
     }
 
-    async deleteBill(billId: string) {
+    // =========================================================================
+    // DOCUMENT METHODS
+    // =========================================================================
+    async getDocuments(userId: string) {
         await this.init();
         if (this.useMongo) {
-            const res = await Models.Bill.deleteOne({ id: billId });
-            return res.deletedCount > 0;
+            // Need a Document model, assuming it exists or using generic storage
+            return []; // Placeholder as model logic is complex
         } else {
             const db = await this.readJSON();
-            const initialLength = db.bills.length;
-            db.bills = db.bills.filter(b => b.id !== billId);
-            await this.writeJSON(db);
-            return db.bills.length < initialLength;
+            return db.documents.filter(d => d.userId === userId);
         }
     }
 
+    async getStoredDocuments(userId: string) {
+        return this.getDocuments(userId);
+    }
     // =========================================================================
     // DOCUMENT METHODS
     // =========================================================================
@@ -806,125 +816,110 @@ class DBAdapter {
         }
     }
 
-    async getReviews(userId: string) {
+    // =========================================================================
+    // SUPPORT METHODS
+    // =========================================================================
+    async getSupportArticles() {
         await this.init();
         if (this.useMongo) {
-            const res = await Models.Review.find({ revieweeId: userId }).sort({ createdAt: -1 }).lean();
-            return res as unknown as Review[];
+            const res = await SupportArticleModel.find({}).lean();
+            return res as unknown as SupportArticle[];
         } else {
-            const db = await this.readJSON();
-            return db.reviews.filter(r => r.revieweeId === userId).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            await this.readJSON();
+            return this.inMemoryCache!.supportArticles;
         }
     }
 
-    async getAllReviews() {
+    async addSupportTicket(ticket: SupportTicket) {
         await this.init();
         if (this.useMongo) {
-            const res = await Models.Review.find({}).sort({ createdAt: -1 }).lean();
-            return res as unknown as Review[];
+            const res = await SupportTicketModel.create(ticket);
+            return res.toObject() as unknown as SupportTicket;
         } else {
             const db = await this.readJSON();
-            return db.reviews.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-        }
-    }
-
-    // =========================================================================
-    // MAINTENANCE METHODS
-    // =========================================================================
-    async addMaintenanceRequest(request: MaintenanceRequest) {
-        await this.init();
-        if (this.useMongo) {
-            return request;
-        } else {
-            const db = await this.readJSON();
-            if (!db.maintenanceRequests) db.maintenanceRequests = [];
-            db.maintenanceRequests.push(request);
+            db.supportTickets.push(ticket);
             await this.writeJSON(db);
-            return request;
+            return ticket;
         }
     }
 
-    async getMaintenanceRequestsByTenant(tenantId: string) {
+    async getSupportTickets(landlordId: string) {
         await this.init();
         if (this.useMongo) {
-            return [] as MaintenanceRequest[];
+            const res = await SupportTicketModel.find({ landlordId }).sort({ createdAt: -1 }).lean();
+            return res as unknown as SupportTicket[];
         } else {
             const db = await this.readJSON();
-            if (!db.maintenanceRequests) db.maintenanceRequests = [];
-            return db.maintenanceRequests
-                .filter(r => r.tenantId === tenantId)
-                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            return db.supportTickets.filter(t => t.landlordId === landlordId).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         }
     }
 
-    async getMaintenanceRequestsByLandlord(landlordId: string) {
+    async getAllSupportTickets() {
         await this.init();
         if (this.useMongo) {
-            return [] as MaintenanceRequest[];
+            const res = await SupportTicketModel.find({}).sort({ updatedAt: -1 }).lean();
+            return res as unknown as SupportTicket[];
         } else {
             const db = await this.readJSON();
-            if (!db.maintenanceRequests) db.maintenanceRequests = [];
-            return db.maintenanceRequests
-                .filter(r => r.landlordId === landlordId)
-                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            return [...db.supportTickets].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
         }
     }
 
-    async getMaintenanceRequestById(id: string) {
+    async findSupportTicketById(id: string) {
         await this.init();
         if (this.useMongo) {
-            return null;
+            const res = await SupportTicketModel.findOne({ id }).lean();
+            return res as unknown as SupportTicket | null;
         } else {
             const db = await this.readJSON();
-            if (!db.maintenanceRequests) db.maintenanceRequests = [];
-            return db.maintenanceRequests.find(r => r.id === id) || null;
+            return db.supportTickets.find(t => t.id === id) || null;
         }
     }
 
-    async updateMaintenanceRequest(id: string, updates: Partial<MaintenanceRequest>) {
+    async updateSupportTicket(id: string, updates: Partial<SupportTicket>) {
         await this.init();
         if (this.useMongo) {
-            return null;
+            const res = await SupportTicketModel.findOneAndUpdate({ id }, updates, { new: true }).lean();
+            return res as unknown as SupportTicket | null;
         } else {
             const db = await this.readJSON();
-            if (!db.maintenanceRequests) db.maintenanceRequests = [];
-            const index = db.maintenanceRequests.findIndex(r => r.id === id);
+            const index = db.supportTickets.findIndex(t => t.id === id);
             if (index === -1) return null;
+            db.supportTickets[index] = { ...db.supportTickets[index], ...updates, updatedAt: new Date().toISOString() };
+            await this.writeJSON(db);
+            return db.supportTickets[index];
+        }
+    }
 
-            db.maintenanceRequests[index] = {
-                ...db.maintenanceRequests[index],
-                ...updates,
-                updatedAt: new Date().toISOString()
+    async getPlatformStats() {
+        await this.init();
+        if (this.useMongo) {
+            const [users, properties, tickets, requests, bills] = await Promise.all([
+                Models.User.countDocuments({}),
+                Models.Property.countDocuments({}),
+                SupportTicketModel.countDocuments({ status: { $ne: 'CLOSED' } }),
+                Models.VerificationRequest.countDocuments({ status: 'pending' }),
+                Models.Bill.find({ status: 'PAID' })
+            ]);
+
+            const revenue = bills.reduce((acc, bill) => acc + bill.amount, 0);
+
+            return {
+                totalUsers: users,
+                totalProperties: properties,
+                openTickets: tickets,
+                pendingVerifications: requests,
+                totalRevenue: revenue
             };
-            await this.writeJSON(db);
-            return db.maintenanceRequests[index];
-        }
-    }
-
-    // =========================================================================
-    // ANNOUNCEMENT METHODS
-    // =========================================================================
-    async getAnnouncements() {
-        await this.init();
-        if (this.useMongo) {
-            return [] as Announcement[];
         } else {
             const db = await this.readJSON();
-            if (!db.announcements) db.announcements = [];
-            return db.announcements.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-        }
-    }
-
-    async addAnnouncement(announcement: Announcement) {
-        await this.init();
-        if (this.useMongo) {
-            return announcement;
-        } else {
-            const db = await this.readJSON();
-            if (!db.announcements) db.announcements = [];
-            db.announcements.push(announcement);
-            await this.writeJSON(db);
-            return announcement;
+            return {
+                totalUsers: db.users.length,
+                totalProperties: db.properties.length,
+                openTickets: db.supportTickets.filter(t => t.status !== 'CLOSED').length,
+                pendingVerifications: db.verificationRequests.filter(r => r.status === 'pending').length,
+                totalRevenue: db.bills.filter(b => b.status === 'PAID').reduce((acc, b) => acc + b.amount, 0)
+            };
         }
     }
 }

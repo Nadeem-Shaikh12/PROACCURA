@@ -15,6 +15,11 @@ export async function GET() {
         const { payload } = await jwtVerify(token, JWT_SECRET);
         if (payload.role !== 'tenant') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
+        const { validateUserStatus } = await import('@/lib/auth-guard');
+        const { authorized, response } = await validateUserStatus(payload.userId as string);
+        if (!authorized) return response;
+
+
         const stay = await db.getTenantStay(payload.userId as string);
 
         if (!stay) {

@@ -32,12 +32,18 @@ export default function TenantLeasePage() {
         </div>
     );
 
-    const startDate = new Date(stay.joinDate || Date.now());
-    // Default to 11 months if no end date
-    const endDate = stay.moveOutDate ? new Date(stay.moveOutDate) : new Date(startDate.getTime() + 11 * 30 * 24 * 60 * 60 * 1000);
-    const now = new Date();
-    const daysLeft = Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-    const progress = Math.min(100, Math.max(0, ((now.getTime() - startDate.getTime()) / (endDate.getTime() - startDate.getTime())) * 100));
+    const { startDate, endDate, daysLeft, progress } = ((): any => {
+        if (!stay) return { startDate: new Date(), endDate: new Date(), daysLeft: 0, progress: 0 };
+
+        // Use a stable reference for "now" or just handle it purely
+        const sDate = new Date(stay.joinDate || 0);
+        const eDate = stay.moveOutDate ? new Date(stay.moveOutDate) : new Date(sDate.getTime() + 11 * 30 * 24 * 60 * 60 * 1000);
+        const today = new Date();
+        const dLeft = Math.ceil((eDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+        const prog = Math.min(100, Math.max(0, ((today.getTime() - sDate.getTime()) / (eDate.getTime() - sDate.getTime())) * 100));
+
+        return { startDate: sDate, endDate: eDate, daysLeft: dLeft, progress: prog };
+    })();
 
     return (
         <div className="p-6 md:p-8 max-w-6xl mx-auto space-y-8">

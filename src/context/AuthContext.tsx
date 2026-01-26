@@ -3,52 +3,18 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-export type Role = 'landlord' | 'tenant';
+export type Role = 'landlord' | 'tenant' | 'admin';
 
-export interface User {
-    id: string;
-    name: string;
-    email: string;
-    role: Role;
-    avatar?: string;
-    profilePhoto?: string;
-    mobile?: string;
-    language?: string;
-    timezone?: string;
-    notificationPreferences?: {
-        rentReminders: boolean;
-        maintenanceUpdates: boolean;
-        leaseRenewal: boolean;
-        messages: boolean;
-        documents: boolean;
-    };
-    portalPreferences?: {
-        theme: 'light' | 'dark' | 'system';
-        landingPage: 'dashboard' | 'payments' | 'messages';
-        emailFormat: 'html' | 'text';
-    };
-    securitySettings?: {
-        twoFactorEnabled: boolean;
-        lastLogin?: string;
-        loginHistory?: { date: string; device: string; ip: string }[];
-    };
-    privacySettings?: {
-        dataSharing: boolean;
-        marketing: boolean;
-    };
-    tenantProfile?: {
-        mobile?: string;
-        [key: string]: any;
-    };
-}
+import { User } from '@/lib/types';
 
 interface AuthContextType {
     user: User | null;
     setUser: React.Dispatch<React.SetStateAction<User | null>>;
-    login: (data: any) => Promise<void>;
+    login: (data: any) => Promise<any>;
     register: (data: any) => Promise<void>;
     logout: () => Promise<void>;
     refreshUser: () => Promise<void>;
+    verifyMfa: (code: string, mfaToken: string) => Promise<void>;
     isLoading: boolean;
 }
 
@@ -61,10 +27,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         checkAuth();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const checkAuth = async () => {
         try {
+            // First check status to ensure not revoked
+            const statusRes = await fetch('/api/auth/check-status');
+            const statusData = await statusRes.json();
+
+            if (statusRes.status === 403 && statusData.revoked) {
+                router.push('/access-revoked');
+                setUser(null);
+                return;
+            }
+
+            if (statusRes.ok && statusData.status === 'inactive') {
+                router.push('/tenant/pending');
+                // We still set the user so they are "logged in" but stuck on pending page
+                const res = await fetch('/api/auth/me');
+                if (res.ok) {
+                    const data = await res.json();
+                    setUser(data.user);
+                }
+                return;
+            }
+
             const res = await fetch('/api/auth/me');
             if (res.ok) {
                 const data = await res.json();
@@ -94,6 +82,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 throw new Error(data.error || 'Login failed');
             }
 
+            if (data.mfaRequired) {
+                return data;
+            }
+
             setUser(data.user);
 
             const landingPage = data.user.portalPreferences?.landingPage || 'dashboard';
@@ -101,9 +93,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 if (landingPage === 'payments') router.push('/tenant/dashboard/bills');
                 else if (landingPage === 'messages') router.push('/tenant/messages');
                 else router.push('/tenant/dashboard');
+            } else if (data.user.role === 'admin') {
+                router.push('/admin');
             } else {
                 router.push(`/${data.user.role}/dashboard`);
             }
+            return data;
         } catch (error: any) {
             console.error('Login error', error);
             throw error;
@@ -125,9 +120,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             }
 
             setUser(data.user);
-            router.push(`/${data.user.role}/dashboard`);
+            if (data.user.role === 'admin') router.push('/admin');
+            else router.push(`/${data.user.role}/dashboard`);
         } catch (error: any) {
             console.error('Registration error', error);
+            throw error;
+        }
+    };
+
+    const verifyMfa = async (code: string, mfaToken: string) => {
+        try {
+            const res = await fetch('/api/auth/verify-mfa', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code, mfaToken }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || 'MFA Verification failed');
+            }
+
+            setUser(data.user);
+            if (data.user.role === 'admin') router.push('/admin');
+            else router.push(`/${data.user.role}/dashboard`);
+        } catch (error: any) {
+            console.error('MFA Verification error', error);
             throw error;
         }
     };
@@ -143,7 +162,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, setUser, login, register, logout, refreshUser: checkAuth, isLoading }}>
+        <AuthContext.Provider value={{ user, setUser, login, register, logout, refreshUser: checkAuth, verifyMfa, isLoading }}>
             {children}
         </AuthContext.Provider>
     );

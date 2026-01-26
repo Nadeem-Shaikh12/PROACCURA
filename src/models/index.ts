@@ -8,6 +8,8 @@ import Document from './Document';
 import Message from './Message';
 import Review from './Review';
 import VerificationRequest from './VerificationRequest';
+import SupportArticle from './SupportArticle';
+import SupportTicket from './SupportTicket';
 
 export {
     User,
@@ -20,4 +22,6 @@ export {
     Message,
     Review,
     VerificationRequest,
+    SupportArticle,
+    SupportTicket,
 };

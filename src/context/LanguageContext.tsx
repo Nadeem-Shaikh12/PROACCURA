@@ -25,19 +25,28 @@ const translations = {
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
     // Default to English, but could check localStorage or navigator.language in the future
-    const [language, setLanguage] = useState<Language>('en');
-    const { user } = useAuth();
-
-    // Sync with User Profile or LocalStorage
-    useEffect(() => {
-        if (user?.language && ['en', 'hi', 'mr'].includes(user.language)) {
-            setLanguage(user.language as Language);
-            localStorage.setItem('app-language', user.language);
-        } else {
+    const [language, setLanguage] = useState<Language>(() => {
+        if (typeof window !== 'undefined') {
             const saved = localStorage.getItem('app-language');
             if (saved && (saved === 'en' || saved === 'hi' || saved === 'mr')) {
-                setLanguage(saved as Language);
+                return saved as Language;
             }
+        }
+        return 'en';
+    });
+    const { user } = useAuth();
+
+    // Sync with User Profile
+    useEffect(() => {
+        if (user?.language && ['en', 'hi', 'mr'].includes(user.language)) {
+            setLanguage(prev => {
+                const newLang = user.language as Language;
+                if (prev !== newLang) {
+                    localStorage.setItem('app-language', newLang);
+                    return newLang;
+                }
+                return prev;
+            });
         }
     }, [user]);
 

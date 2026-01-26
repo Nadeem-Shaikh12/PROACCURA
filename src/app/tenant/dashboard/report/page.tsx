@@ -44,7 +44,7 @@ export default function TenantReportPage() {
     // Calculations
     const totalPaid = bills.filter(b => b.status === 'PAID').reduce((acc, b) => acc + (b.amount || 0), 0);
     const totalPending = bills.filter(b => b.status === 'PENDING').reduce((acc, b) => acc + (b.amount || 0), 0);
-    const tenantProfile = user?.tenantProfile || {};
+    const tenantProfile = user?.tenantProfile as any || {};
 
     return (
         <div className="bg-white min-h-screen text-zinc-900 font-sans p-8 print:p-0">

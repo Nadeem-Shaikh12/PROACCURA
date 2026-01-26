@@ -1,10 +1,26 @@
 import { NextResponse } from 'next/server';
-import { MOCK_LEASES, Lease } from '@/lib/store';
+import { db } from '@/lib/db';
+import { jwtVerify } from 'jose';
+import { cookies } from 'next/headers';
+import { validateUserStatus } from '@/lib/auth-guard';
+
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key-change-in-production');
 
 export async function GET(request: Request) {
-    // In real app, get tenant from session
-    // For now, return all leases for tenant-1
-    const leases = MOCK_LEASES.filter(l => l.tenantId === 'tenant-1');
+    const cookieStore = await cookies();
+    const token = cookieStore.get('token')?.value;
 
-    return NextResponse.json({ leases });
+    if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    try {
+        const { payload } = await jwtVerify(token, JWT_SECRET);
+
+        const { authorized, response } = await validateUserStatus(payload.userId as string);
+        if (!authorized) return response;
+
+        const docs = await db.getStoredDocuments(payload.userId as string);
+        return NextResponse.json({ leases: docs });
+    } catch (e) {
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
 }

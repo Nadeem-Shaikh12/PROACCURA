@@ -8,6 +8,8 @@ const UserSchema = new Schema<User>({
     passwordHash: { type: String, required: true },
     role: { type: String, enum: ['landlord', 'tenant'], required: true },
     mobile: { type: String },
+    company: { type: String },
+    address: { type: String },
     profilePhoto: { type: String },
     language: { type: String },
     timezone: { type: String },
@@ -27,6 +29,47 @@ const UserSchema = new Schema<User>({
         twoFactorEnabled: { type: Boolean, default: false },
         lastLogin: { type: String },
         loginHistory: [{ date: String, device: String, ip: String }]
+    },
+    propertyDefaults: {
+        rentDueDay: { type: Number, default: 1 },
+        gracePeriodDays: { type: Number, default: 5 },
+        lateFeePercentage: { type: Number, default: 5 },
+        defaultLeaseMonths: { type: Number, default: 12 },
+        requireSecurityDeposit: { type: Boolean, default: true },
+    },
+    tenantPortalSettings: {
+        allowDocumentUploads: { type: Boolean, default: true },
+        showPaymentHistory: { type: Boolean, default: true },
+        showMaintenanceRequests: { type: Boolean, default: true },
+        requireRentersInsurance: { type: Boolean, default: false },
+        autoInvite: { type: Boolean, default: false },
+    },
+    documentSettings: {
+        allowedFileTypes: { type: [String], default: ['pdf', 'jpg', 'png'] },
+        maxFileSizeMB: { type: Number, default: 10 },
+        autoArchiveAfterDays: { type: Number },
+    },
+    financialSettings: {
+        currency: { type: String, default: 'INR' },
+        taxRate: { type: Number, default: 0 },
+        bankDetails: {
+            accountName: String,
+            accountNumber: String,
+            bankName: String,
+            ifsc: String,
+        },
+    },
+    integrationSettings: {
+        paymentGateway: {
+            provider: { type: String, enum: ['stripe', 'razorpay', 'paypal'] },
+            apiKey: String,
+            secretKey: String,
+            enabled: { type: Boolean, default: false },
+        },
+        accounting: {
+            provider: { type: String, enum: ['quickbooks', 'xero'] },
+            connected: { type: Boolean, default: false },
+        },
     },
     tenantProfile: {
         mobile: { type: String },

@@ -5,6 +5,8 @@ import NavbarWrapper from "@/components/NavbarWrapper";
 import { Providers } from "@/components/Providers";
 import BottomNav from "@/components/dashboard/BottomNav";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { CustomThemeProvider } from "@/context/CustomThemeContext";
+import MainWrapper from "@/components/MainWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,6 +48,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
+        suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased text-slate-900 bg-[var(--background)] transition-colors duration-300`}
       >
         <ThemeProvider
@@ -55,11 +58,13 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Providers>
-            <NavbarWrapper />
-            <main className="pb-20 lg:pb-0">
-              {children}
-            </main>
-            <BottomNav />
+            <CustomThemeProvider>
+              <NavbarWrapper />
+              <MainWrapper>
+                {children}
+              </MainWrapper>
+              <BottomNav />
+            </CustomThemeProvider>
           </Providers>
         </ThemeProvider>
       </body>

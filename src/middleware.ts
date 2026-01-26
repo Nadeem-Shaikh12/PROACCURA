@@ -30,6 +30,7 @@ export async function middleware(req: NextRequest) {
 
         // If user is logged in and trying to access auth pages (Login, Register, Landing), redirect to dashboard
         if (authPaths.includes(pathname)) {
+            if (role === 'admin') return NextResponse.redirect(new URL('/admin', req.url));
             if (role === 'tenant') return NextResponse.redirect(new URL('/tenant/dashboard', req.url));
             if (role === 'landlord') return NextResponse.redirect(new URL('/landlord/dashboard', req.url));
         }
@@ -44,8 +45,14 @@ export async function middleware(req: NextRequest) {
             return NextResponse.redirect(new URL('/tenant/dashboard', req.url));
         }
 
+        // Admin Route Protection
+        if (pathname.startsWith('/admin') && role !== 'admin') {
+            return NextResponse.redirect(new URL('/login', req.url));
+        }
+
         // Root redirect for /dashboard
         if (pathname === '/dashboard') {
+            if (role === 'admin') return NextResponse.redirect(new URL('/admin', req.url));
             if (role === 'tenant') return NextResponse.redirect(new URL('/tenant/dashboard', req.url));
             if (role === 'landlord') return NextResponse.redirect(new URL('/landlord/dashboard', req.url));
         }
@@ -61,5 +68,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/', '/login', '/register', '/tenant/:path*', '/landlord/:path*', '/dashboard/:path*']
+    matcher: ['/', '/login', '/register', '/tenant/:path*', '/landlord/:path*', '/dashboard/:path*', '/admin/:path*']
 };

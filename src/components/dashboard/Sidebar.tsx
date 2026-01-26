@@ -17,7 +17,7 @@ export default function Sidebar() {
         { icon: FileText, label: 'Documents', href: '/landlord/dashboard/documents' },
         { icon: PieChart, label: 'Reports', href: '/landlord/dashboard/reports' }, // New Reports Link
         { icon: FileText, label: 'Requests', href: '/landlord/dashboard/requests' },
-        { icon: Settings, label: 'Settings', href: '/landlord/dashboard/settings' },
+        { icon: Settings, label: 'Settings', href: '/landlord/settings' },
     ];
 
     return (
