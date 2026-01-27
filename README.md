@@ -1,49 +1,71 @@
-# PROACCURA
+# 🏙️ PROACCURA
 
-**PROACCURA** is a comprehensive Tenant-Landlord Management System designed to streamline property management, communication, and administrative tasks. Built with modern web technologies, it offers a seamless experience for landlords to manage properties and tenants to handle their stay-related needs.
+> A next-generation Tenant-Landlord Management System streamlining property operations and enhancing tenant experiences.
 
-![Status](https://img.shields.io/badge/Status-Active-success)
-![Next.js](https://img.shields.io/badge/Next.js-16.1.1-black)
-![React](https://img.shields.io/badge/React-19.2.3-blue)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.0-38bdf8)
+![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge&logo=statuspage)
+![Next.js](https://img.shields.io/badge/Next.js-15.1.4-black?style=for-the-badge&logo=next.js)
+![React](https://img.shields.io/badge/React-19.2.3-blue?style=for-the-badge&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.0-38bdf8?style=for-the-badge&logo=tailwindcss)
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
+
+---
+
+## 📖 Table of Contents
+
+- [Overview](#-overview)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [Scripts](#-scripts)
+- [Deployment](#-deployment)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+---
+
+## 🔍 Overview
+
+**PROACCURA** is a comprehensive solution designed to bridge the gap between landlords and tenants. It replaces outdated, manual property management methods with a sleek, digital interface. From financial tracking and lease management to maintenance requests and community engagement, PROACCURA handles it all in one secure platform.
 
 ---
 
 ## 🚀 Features
 
-### 🏢 For Landlords
-- **Dashboard:** Real-time overview of properties, occupancy, and financial metrics.
-- **Property Management:** Add, edit, and manage property details and listings.
-- **Tenant Management:** Onboard tenants, track leases, and manage permissions.
-- **Financial Tracking:** Monitor rent payments, expenses, and generate financial reports.
-- **Maintenance Requests:** Receive, track, and resolve maintenance tickets efficiently.
-- **Document Hub:** Securely store and share lease agreements and notices.
+### For Landlords 🏢
+*   **📊 Dynamic Dashboard**: Real-time insights into occupancy rates, financial health, and maintenance status.
+*   **🏘️ Property Hub**: Centralized management for all property listings and details.
+*   **👥 Tenant Oversight**: Seamless onboarding, lease tracking, and permission management.
+*   **💰 Financial Suite**: Automated rent tracking, expense logging, and detailed financial reports.
+*   **🛠️ Maintenance Control**: Efficient ticketing system to track and resolve property issues.
+*   **📂 Document Vault**: Secure storage for leases, contracts, and legal notices.
 
-### 🏠 For Tenants
-- **Personal Dashboard:** View lease details, upcoming payments, and notifications.
-- **Maintenance Reporting:** Easily report issues with descriptions and attachments.
-- **Community Board:** Connect and communicate with the community.
-- **Payments:** View payment history and pending dues.
-- **Document Access:** Access important documents shared by the landlord.
+### For Tenants 🏠
+*   **🖥️ Personal Portal**: A dedicated dashboard for lease info, payments, and alerts.
+*   **🔧 Issue Reporting**: Easy-to-use maintenance request system with image uploads.
+*   **💬 Community Board**: A space to connect with neighbors and building management.
+*   **💳 Payments**: Transparent payment history and upcoming due date tracking.
+*   **📄 Digital Papers**: Instant access to shared documents and agreements.
 
-### 🔐 Core Features
-- **Role-Based Access Control:** Secure authentication and authorization for Admins, Landlords, and Tenants.
-- **Messaging System:** Built-in chat and notification system for direct communication.
-- **Multi-Language Support:** Localized interface (e.g., English, Marathi).
-- **Responsive Design:** Fully optimized for desktop, tablet, and mobile devices.
+### Core Capabilities 🔐
+*   **🛡️ Role-Based Security**: Robust authentication for Admins, Landlords, and Tenants via JWT.
+*   **💬 Real-time Messaging**: Built-in chat for direct and instant communication.
+*   **🌍 Multi-Language**: Accessible interface supporting multiple languages (e.g., English, Marathi).
+*   **📱 Fully Responsive**: Optimized experience across Desktop, Tablet, and Mobile.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Framework:** [Next.js 16](https://nextjs.org/) (App Router)
-- **Language:** [TypeScript](https://www.typescriptlang.org/)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/) & [Framer Motion](https://www.framer.com/motion/) (Animations)
-- **Database:** [MongoDB](https://www.mongodb.com/) (via Mongoose)
-- **Authentication:** Custom JWT (jose) & Bcryptjs
-- **Charts:** [Recharts](https://recharts.org/)
-- **Utilities:** `date-fns`, `uuid`, `pdfkit` (PDF Generation)
+| Category | Technologies |
+| :--- | :--- |
+| **Frontend** | [Next.js 15](https://nextjs.org/) (App Router), [React 19](https://react.dev/), [Tailwind CSS](https://tailwindcss.com/), [Framer Motion](https://www.framer.com/motion/) |
+| **Backend** | [Next.js API Routes](https://nextjs.org/docs/api-routes/introduction), [Node.js](https://nodejs.org/) |
+| **Database** | [MongoDB](https://www.mongodb.com/) (Mongoose ODM) |
+| **Auth** | Custom JWT (jose), Bcryptjs |
+| **Visualization** | [Recharts](https://recharts.org/) |
+| **Utilities** | `date-fns`, `uuid`, `pdfkit` |
 
 ---
 
@@ -52,92 +74,102 @@
 ```bash
 tenant-landlord/
 ├── src/
-│   ├── app/                # Next.js App Router pages and API routes
-│   │   ├── api/            # Backend API endpoints
-│   │   ├── landlord/       # Landlord specific pages
-│   │   ├── tenant/         # Tenant specific pages
-│   │   ├── admin/          # Admin specific pages
+│   ├── app/                # Next.js App Router (Pages & API)
+│   │   ├── api/            # Backend API Endpoints
+│   │   ├── landlord/       # Landlord Module
+│   │   ├── tenant/         # Tenant Module
 │   │   └── ...
-│   ├── components/         # Reusable UI components
-│   │   ├── dashboard/      # Dashboard widgets
-│   │   ├── messaging/      # Chat components
-│   │   └── ...
-│   ├── lib/                # Utility functions and database connections
-│   ├── models/             # Mongoose database models
-│   ├── locales/            # Localization files (i18n)
+│   ├── components/         # Reusable UI Components
+│   ├── lib/                # Database & Utility Functions
+│   ├── models/             # Mongoose Data Models
 │   └── ...
-├── public/                 # Static assets
-└── package.json            # Project dependencies and scripts
+├── public/                 # Static Assets (Images, Icons)
+└── package.json            # Dependencies & Scripts
 ```
 
 ---
 
 ## ⚡ Getting Started
 
+Follow these steps to set up the project locally.
+
 ### Prerequisites
-Ensure you have the following installed:
-- [Node.js](https://nodejs.org/) (v18 or higher)
-- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
-- [MongoDB](https://www.mongodb.com/) connection string
+
+*   **Node.js**: v18 or higher
+*   **Package Manager**: npm or yarn
+*   **Database**: MongoDB Connection String (Atlas or Local)
 
 ### Installation
 
-1.  **Clone the repository:**
+1.  **Clone the Repository**
     ```bash
     git clone https://github.com/Nadeem-Shaikh12/PROACCURA.git
     cd tenant-landlord
     ```
 
-2.  **Install dependencies:**
+2.  **Install Dependencies**
     ```bash
     npm install
     # or
     yarn install
     ```
 
-3.  **Environment Setup:**
-    Create a `.env.local` file in the root directory and add your environment variables:
+3.  **Configure Environment**
+    Create a `.env.local` file in the root directory:
     ```env
     MONGODB_URI=your_mongodb_connection_string
-    JWT_SECRET=your_jwt_secret_key
+    JWT_SECRET=your_secure_jwt_secret
     NEXT_PUBLIC_API_URL=http://localhost:3000
     ```
 
-4.  **Run the development server:**
+4.  **Run Development Server**
     ```bash
     npm run dev
     ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
+    Visit [http://localhost:3000](http://localhost:3000) to view the application.
 
 ---
 
 ## 📜 Scripts
 
-| Script | Description |
+| Command | Description |
 | :--- | :--- |
-| `npm run dev` | Starts the development server. |
-| `npm run build` | Builds the application for production. |
-| `npm run start` | Runs the built application in production mode. |
-| `npm run lint` | Runs ESLint to check for code quality issues. |
+| `npm run dev` | Starts the development server with hot-reload. |
+| `npm run build` | Compiles the application for production. |
+| `npm run start` | Runs the built production application. |
+| `npm run lint` | Checks for code quality and style issues. |
+
+---
+
+## ☁️ Deployment
+
+The easiest way to deploy your Next.js app is using the [Vercel Platform](https://vercel.com/new).
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FNadeem-Shaikh12%2FPROACCURA)
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please follow these steps:
-1.  Fork the repository.
-2.  Create a new branch (`git checkout -b feature/YourFeature`).
-3.  Commit your changes (`git commit -m 'Add some feature'`).
-4.  Push to the branch (`git push origin feature/YourFeature`).
-5.  Open a Pull Request.
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1.  Fork the Project
+2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4.  Push to the Branch (`git push origin feature/AmazingFeature`)
+5.  Open a Pull Request
 
 ---
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-**Developed by Nadeem Shaikh**
+<p align="center">
+  Developed with ❤️ by <strong>Nadeem Shaikh</strong>
+</p>
