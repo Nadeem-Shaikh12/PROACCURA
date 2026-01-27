@@ -73,10 +73,11 @@
         "mobile": "9876543210",
         "city": "Aurangabad",
         "state": "Maharashtra",
-        "aadhaarNumber": "1234567890",
+        "aadhaarNumber": "9876543210",
         "isProfileComplete": true,
         "paymentStatus": "PENDING"
-      }
+      },
+      "status": "active"
     },
     {
       "id": "9JOKiD-1EATH05WO-feHb",
@@ -132,15 +133,43 @@
       "email": "nadimshaikh34@gmail.com",
       "passwordHash": "$2b$10$CrCaWPSWTGf52tDnknPAEuGUDdFsQ2QRhSmM9BfDO2oks4tr9mMfu",
       "role": "tenant",
-      "mobile": "",
+      "mobile": "9876543210",
       "aadhaar": "",
       "tenantProfile": {
         "mobile": "9876543210",
         "city": "Aurangabad",
         "state": "Maharashtra",
-        "aadhaarNumber": "1234567890",
+        "aadhaarNumber": "9876543210",
         "isProfileComplete": true,
         "paymentStatus": "PENDING"
+      },
+      "status": "active",
+      "language": "English",
+      "timezone": "UTC",
+      "notificationPreferences": {
+        "email": {
+          "maintenance": true,
+          "payments": true,
+          "documents": true,
+          "marketing": false
+        },
+        "push": {
+          "messages": false,
+          "requests": false,
+          "reminders": false
+        }
+      },
+      "portalPreferences": {
+        "theme": "light",
+        "landingPage": "dashboard",
+        "emailFormat": "html"
+      },
+      "securitySettings": {
+        "twoFactorEnabled": false
+      },
+      "privacySettings": {
+        "dataSharing": true,
+        "marketing": false
       }
     },
     {
@@ -164,7 +193,7 @@
       "name": "Harsh Tambatkar",
       "address": "Aurangabad",
       "units": 20,
-      "occupiedUnits": 5,
+      "occupiedUnits": 7,
       "type": "Apartment",
       "monthlyRent": 1500,
       "createdAt": "2026-01-24T07:00:41.611Z"
@@ -355,6 +384,42 @@
       "submittedAt": "2026-01-24T14:40:06.251Z",
       "updatedAt": "2026-01-24T14:40:50.854Z",
       "verifiedAt": "2026-01-24T14:40:50.854Z"
+    },
+    {
+      "id": "f14b1084-6f71-448f-b200-d0e56c62778f",
+      "tenantId": "vppxjiwORaZU2JmpCZV86",
+      "fullName": "Harsh Tambatkar",
+      "mobile": "9876543210",
+      "idProofType": "Aadhaar",
+      "idProofNumber": "9876543210",
+      "city": "Aurangabad",
+      "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
+      "propertyId": "clomzuo8y",
+      "status": "approved",
+      "paymentStatus": "paid",
+      "paymentAmount": 116.82,
+      "transactionId": "TXN_5DFD5X3H6",
+      "submittedAt": "2026-01-27T03:50:53.852Z",
+      "updatedAt": "2026-01-27T03:51:15.990Z",
+      "verifiedAt": "2026-01-27T03:51:15.990Z"
+    },
+    {
+      "id": "354aaad3-222c-4b3d-bfae-27893ee7e248",
+      "tenantId": "4QZTgsHgm1UAvtROgzyfg",
+      "fullName": "Shaikh Nadeem",
+      "mobile": "9876543210",
+      "idProofType": "Aadhaar",
+      "idProofNumber": "9876543210",
+      "city": "Aurangabad",
+      "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
+      "propertyId": "clomzuo8y",
+      "status": "approved",
+      "paymentStatus": "paid",
+      "paymentAmount": 116.82,
+      "transactionId": "TXN_C548FWB1W",
+      "submittedAt": "2026-01-27T13:25:39.039Z",
+      "updatedAt": "2026-01-27T13:26:19.738Z",
+      "verifiedAt": "2026-01-27T13:26:19.738Z"
     }
   ],
   "history": [
@@ -507,6 +572,22 @@
       "description": "Resident moved out from moon delight penthouse . Stay finalized.",
       "date": "2026-01-26T19:35:34.514Z",
       "createdBy": "wtTo9PmsS_KIPU5wJaQJw"
+    },
+    {
+      "id": "42e22029-0cd7-4191-87fa-a9fb8e0a6dc0",
+      "tenantId": "vppxjiwORaZU2JmpCZV86",
+      "type": "JOINED",
+      "description": "Tenant verified and joined the property.",
+      "date": "2026-01-27T03:51:15.995Z",
+      "createdBy": "cYMGn50Zv3iB6KR_v8R7y"
+    },
+    {
+      "id": "5ce13c79-30b0-472d-b58c-afdc5a041202",
+      "tenantId": "4QZTgsHgm1UAvtROgzyfg",
+      "type": "JOINED",
+      "description": "Tenant verified and joined the property.",
+      "date": "2026-01-27T13:26:19.744Z",
+      "createdBy": "cYMGn50Zv3iB6KR_v8R7y"
     }
   ],
   "notifications": [
@@ -929,6 +1010,26 @@
       "type": "REMARK_ADDED",
       "isRead": false,
       "createdAt": "2026-01-26T19:35:36.864Z"
+    },
+    {
+      "id": "0b7abd9e-36cc-4062-a38b-237bdc730be0",
+      "userId": "vppxjiwORaZU2JmpCZV86",
+      "role": "tenant",
+      "title": "Application Approved!",
+      "message": "Your verification request has been approved by the landlord. Welcome home!",
+      "type": "REMARK_ADDED",
+      "isRead": false,
+      "createdAt": "2026-01-27T03:51:16.017Z"
+    },
+    {
+      "id": "6cce692d-690d-4bb8-b265-b810369a14d0",
+      "userId": "4QZTgsHgm1UAvtROgzyfg",
+      "role": "tenant",
+      "title": "Application Approved!",
+      "message": "Your verification request has been approved by the landlord. Welcome home!",
+      "type": "REMARK_ADDED",
+      "isRead": false,
+      "createdAt": "2026-01-27T13:26:19.771Z"
     }
   ],
   "bills": [
@@ -1014,7 +1115,7 @@
       "receiverId": "vppxjiwORaZU2JmpCZV86",
       "content": "Thank you! Payment has been received.",
       "timestamp": "2026-01-24T09:01:16.655Z",
-      "isRead": false,
+      "isRead": true,
       "type": "text"
     },
     {
@@ -1098,7 +1199,7 @@
       "receiverId": "vppxjiwORaZU2JmpCZV86",
       "content": "Hello! Just a friendly reminder that rent is due soon.",
       "timestamp": "2026-01-26T19:27:00.460Z",
-      "isRead": false,
+      "isRead": true,
       "type": "text"
     },
     {
@@ -1107,6 +1208,28 @@
       "receiverId": "4QZTgsHgm1UAvtROgzyfg",
       "content": "Hello! Just a friendly reminder that rent is due soon.",
       "timestamp": "2026-01-26T19:27:00.461Z",
+      "isRead": true,
+      "type": "text"
+    },
+    {
+      "id": "a02dd670-f443-4508-a952-8165ec7d72a1",
+      "senderId": "cYMGn50Zv3iB6KR_v8R7y",
+      "receiverId": "vppxjiwORaZU2JmpCZV86",
+      "content": "📎 Attachment",
+      "timestamp": "2026-01-27T09:17:44.187Z",
+      "isRead": false,
+      "type": "file",
+      "fileUrl": "/uploads/files/file-bbc88d39-ea24-4f9b-98b1-49ceebf54afc.jpg",
+      "fileName": "—Pngtree—cyber security theme_1002455.jpg",
+      "fileType": "image/jpeg",
+      "fileSize": 6177232
+    },
+    {
+      "id": "1U62m9qrcxefv0-KGm4I_",
+      "senderId": "cYMGn50Zv3iB6KR_v8R7y",
+      "receiverId": "vppxjiwORaZU2JmpCZV86",
+      "content": "Thank you! Payment has been received.",
+      "timestamp": "2026-01-27T12:48:42.494Z",
       "isRead": false,
       "type": "text"
     }
@@ -1203,6 +1326,22 @@
       "joinDate": "2026-01-24T14:40:50.880Z",
       "status": "MOVED_OUT",
       "moveOutDate": "2026-01-26T19:27:29.275Z"
+    },
+    {
+      "id": "cc6bb9a1-a240-4ace-b835-c454a3471937",
+      "tenantId": "vppxjiwORaZU2JmpCZV86",
+      "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
+      "propertyId": "clomzuo8y",
+      "joinDate": "2026-01-27T03:51:16.000Z",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "95cb9878-4614-4c36-8ea9-12d7d189d709",
+      "tenantId": "4QZTgsHgm1UAvtROgzyfg",
+      "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
+      "propertyId": "clomzuo8y",
+      "joinDate": "2026-01-27T13:26:19.749Z",
+      "status": "ACTIVE"
     }
   ],
   "supportArticles": [
@@ -1260,5 +1399,7 @@
       "createdAt": "2026-01-26T17:33:15.138Z",
       "updatedAt": "2026-01-26T17:33:15.138Z"
     }
-  ]
+  ],
+  "expenses": [],
+  "maintenanceRequests": []
 }

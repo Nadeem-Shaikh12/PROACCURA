@@ -1,0 +1,124 @@
+﻿
+> tenant-landlord@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 4.5s
+  Running TypeScript ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/94) ...
+  Generating static pages using 11 workers (23/94) 
+  Generating static pages using 11 workers (46/94) 
+  Generating static pages using 11 workers (70/94) 
+Γ£ô Generating static pages using 11 workers (94/94) in 604.3ms
+  Finalizing page optimization ...
+
+Route (app)
+Γöî Γùï /
+Γö£ Γùï /_not-found
+Γö£ Γùï /access-revoked
+Γö£ Γùï /admin
+Γö£ Γùï /admin/security
+Γö£ Γùï /admin/support
+Γö£ ╞Æ /api/admin/stats
+Γö£ ╞Æ /api/admin/support/tickets
+Γö£ ╞Æ /api/admin/support/tickets/[id]
+Γö£ ╞Æ /api/announcements
+Γö£ ╞Æ /api/auth/check-status
+Γö£ ╞Æ /api/auth/login
+Γö£ ╞Æ /api/auth/logout
+Γö£ ╞Æ /api/auth/me
+Γö£ ╞Æ /api/auth/password
+Γö£ ╞Æ /api/auth/profile
+Γö£ ╞Æ /api/auth/register
+Γö£ ╞Æ /api/auth/verify-mfa
+Γö£ ╞Æ /api/contacts
+Γö£ ╞Æ /api/documents
+Γö£ ╞Æ /api/documents/[id]
+Γö£ ╞Æ /api/documents/sign
+Γö£ ╞Æ /api/documents/upload
+Γö£ ╞Æ /api/landlord/analytics
+Γö£ ╞Æ /api/landlord/bills
+Γö£ ╞Æ /api/landlord/documents
+Γö£ ╞Æ /api/landlord/history
+Γö£ ╞Æ /api/landlord/properties
+Γö£ ╞Æ /api/landlord/reports
+Γö£ ╞Æ /api/landlord/requests
+Γö£ ╞Æ /api/landlord/schedules
+Γö£ ╞Æ /api/landlord/tenants
+Γö£ ╞Æ /api/landlord/tenants/end
+Γö£ ╞Æ /api/landlord/verify
+Γö£ ╞Æ /api/landlords
+Γö£ ╞Æ /api/maintenance
+Γö£ ╞Æ /api/maintenance/[id]
+Γö£ ╞Æ /api/messages
+Γö£ ╞Æ /api/messages/broadcast
+Γö£ ╞Æ /api/messages/unread
+Γö£ ╞Æ /api/notifications
+Γö£ ╞Æ /api/payments
+Γö£ ╞Æ /api/properties/search
+Γö£ ╞Æ /api/reviews
+Γö£ ╞Æ /api/support/kb
+Γö£ ╞Æ /api/support/tickets
+Γö£ ╞Æ /api/support/tickets/[id]
+Γö£ ╞Æ /api/tenant/bills
+Γö£ ╞Æ /api/tenant/bills/[id]/pdf
+Γö£ ╞Æ /api/tenant/documents
+Γö£ ╞Æ /api/tenant/export
+Γö£ ╞Æ /api/tenant/history
+Γö£ ╞Æ /api/tenant/profile
+Γö£ ╞Æ /api/tenant/stay
+Γö£ ╞Æ /api/tenant/verify
+Γö£ ╞Æ /api/upload/audio
+Γö£ ╞Æ /api/upload/file
+Γö£ Γùï /landlord/dashboard
+Γö£ Γùï /landlord/dashboard/bills
+Γö£ Γùï /landlord/dashboard/documents
+Γö£ Γùï /landlord/dashboard/maintenance
+Γö£ Γùï /landlord/dashboard/properties
+Γö£ ╞Æ /landlord/dashboard/properties/[id]
+Γö£ Γùï /landlord/dashboard/reports
+Γö£ Γùï /landlord/dashboard/requests
+Γö£ Γùï /landlord/dashboard/settings
+Γö£ Γùï /landlord/dashboard/tenants
+Γö£ Γùï /landlord/messages
+Γö£ Γùï /landlord/onboarding
+Γö£ Γùï /landlord/settings
+Γö£ Γùï /landlord/settings/account
+Γö£ Γùï /landlord/settings/documents
+Γö£ Γùï /landlord/settings/financial
+Γö£ Γùï /landlord/settings/integrations
+Γö£ Γùï /landlord/settings/localization
+Γö£ Γùï /landlord/settings/notifications
+Γö£ Γùï /landlord/settings/portal
+Γö£ Γùï /landlord/settings/properties
+Γö£ Γùï /landlord/settings/security
+Γö£ Γùï /landlord/settings/support
+Γö£ Γùï /landlord/settings/theme
+Γö£ Γùï /login
+Γö£ Γùï /register
+Γö£ Γùï /tenant/dashboard
+Γö£ Γùï /tenant/dashboard/apply
+Γö£ Γùï /tenant/dashboard/bills
+Γö£ Γùï /tenant/dashboard/community
+Γö£ Γùï /tenant/dashboard/documents
+Γö£ Γùï /tenant/dashboard/help
+Γö£ Γùï /tenant/dashboard/history
+Γö£ Γùï /tenant/dashboard/lease
+Γö£ Γùï /tenant/dashboard/maintenance
+Γö£ Γùï /tenant/dashboard/notifications
+Γö£ Γùï /tenant/dashboard/report
+Γö£ Γùï /tenant/dashboard/settings
+Γö£ Γùï /tenant/messages
+Γö£ Γùï /tenant/onboarding
+Γöö Γùï /tenant/pending
+
+
+╞Æ Proxy (Middleware)
+
+Γùï  (Static)   prerendered as static content
+╞Æ  (Dynamic)  server-rendered on demand
+

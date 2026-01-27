@@ -102,7 +102,7 @@ export default function LandlordMaintenancePage() {
                         <div key={req.id} className="bg-white p-6 rounded-[32px] border border-zinc-100 shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col lg:flex-row gap-6">
                             {/* Status Stripe */}
                             <div className={`w-2 rounded-full self-stretch flex-shrink-0 ${req.status === 'OPEN' ? 'bg-amber-400' :
-                                    req.status === 'IN_PROGRESS' ? 'bg-blue-400' : 'bg-emerald-400'
+                                req.status === 'IN_PROGRESS' ? 'bg-blue-400' : 'bg-emerald-400'
                                 }`}></div>
 
                             <div className="flex-1">
