@@ -615,6 +615,23 @@ class DBAdapter {
         }
     }
 
+    async deleteBill(id: string) {
+        await this.init();
+        if (this.useMongo) {
+            await Models.Bill.deleteOne({ id });
+            return true;
+        } else {
+            const db = await this.readJSON();
+            const initialLen = db.bills.length;
+            db.bills = db.bills.filter(b => b.id !== id);
+            if (db.bills.length < initialLen) {
+                await this.writeJSON(db);
+                return true;
+            }
+            return false;
+        }
+    }
+
     // =========================================================================
     // DOCUMENT METHODS
     // =========================================================================
@@ -625,7 +642,7 @@ class DBAdapter {
             return []; // Placeholder as model logic is complex
         } else {
             const db = await this.readJSON();
-            return db.documents.filter(d => d.userId === userId);
+            return db.documents.filter(d => d.tenantId === userId || d.landlordId === userId);
         }
     }
 
@@ -801,8 +818,93 @@ class DBAdapter {
     }
 
     // =========================================================================
+    // MAINTENANCE METHODS
+    // =========================================================================
+    async addMaintenanceRequest(req: MaintenanceRequest) {
+        await this.init();
+        if (this.useMongo) {
+            const res = await Models.MaintenanceRequest.create(req);
+            return res.toObject() as unknown as MaintenanceRequest;
+        } else {
+            const db = await this.readJSON();
+            db.maintenanceRequests.push(req);
+            await this.writeJSON(db);
+            return req;
+        }
+    }
+
+    async getMaintenanceRequestsByTenant(tenantId: string) {
+        await this.init();
+        if (this.useMongo) {
+            const res = await Models.MaintenanceRequest.find({ tenantId }).sort({ createdAt: -1 }).lean();
+            return res as unknown as MaintenanceRequest[];
+        } else {
+            const db = await this.readJSON();
+            return db.maintenanceRequests.filter(r => r.tenantId === tenantId).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        }
+    }
+
+    async getMaintenanceRequestsByLandlord(landlordId: string) {
+        await this.init();
+        if (this.useMongo) {
+            const res = await Models.MaintenanceRequest.find({ landlordId }).sort({ createdAt: -1 }).lean();
+            return res as unknown as MaintenanceRequest[];
+        } else {
+            const db = await this.readJSON();
+            return db.maintenanceRequests.filter(r => r.landlordId === landlordId).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        }
+    }
+
+    async getMaintenanceRequestById(id: string) {
+        await this.init();
+        if (this.useMongo) {
+            const res = await Models.MaintenanceRequest.findOne({ id }).lean();
+            return res as unknown as MaintenanceRequest | null;
+        } else {
+            const db = await this.readJSON();
+            return db.maintenanceRequests.find(r => r.id === id) || null;
+        }
+    }
+
+    async updateMaintenanceRequest(id: string, updates: Partial<MaintenanceRequest>) {
+        await this.init();
+        if (this.useMongo) {
+            const res = await Models.MaintenanceRequest.findOneAndUpdate({ id }, updates, { new: true }).lean();
+            return res as unknown as MaintenanceRequest | null;
+        } else {
+            const db = await this.readJSON();
+            const index = db.maintenanceRequests.findIndex(r => r.id === id);
+            if (index === -1) return null;
+            db.maintenanceRequests[index] = { ...db.maintenanceRequests[index], ...updates, updatedAt: new Date().toISOString() };
+            await this.writeJSON(db);
+            return db.maintenanceRequests[index];
+        }
+    }
+
+    // =========================================================================
     // REVIEW METHODS
     // =========================================================================
+    async getReviews(userId: string) {
+        await this.init();
+        if (this.useMongo) {
+            const res = await Models.Review.find({ revieweeId: userId }).sort({ createdAt: -1 }).lean();
+            return res as unknown as Review[];
+        } else {
+            const db = await this.readJSON();
+            return db.reviews.filter(r => r.revieweeId === userId).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        }
+    }
+
+    async getAllReviews() {
+        await this.init();
+        if (this.useMongo) {
+            const res = await Models.Review.find({}).sort({ createdAt: -1 }).lean();
+            return res as unknown as Review[];
+        } else {
+            const db = await this.readJSON();
+            return [...db.reviews].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        }
+    }
     async addReview(review: Review) {
         await this.init();
         if (this.useMongo) {
@@ -888,6 +990,33 @@ class DBAdapter {
             db.supportTickets[index] = { ...db.supportTickets[index], ...updates, updatedAt: new Date().toISOString() };
             await this.writeJSON(db);
             return db.supportTickets[index];
+        }
+    }
+
+    // =========================================================================
+    // ANNOUNCEMENT METHODS
+    // =========================================================================
+    async getAnnouncements() {
+        await this.init();
+        if (this.useMongo) {
+            const res = await Models.Announcement.find({}).sort({ date: -1 }).lean();
+            return res as unknown as Announcement[];
+        } else {
+            const db = await this.readJSON();
+            return [...db.announcements].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        }
+    }
+
+    async addAnnouncement(announcement: Announcement) {
+        await this.init();
+        if (this.useMongo) {
+            const res = await Models.Announcement.create(announcement);
+            return res.toObject() as unknown as Announcement;
+        } else {
+            const db = await this.readJSON();
+            db.announcements.push(announcement);
+            await this.writeJSON(db);
+            return announcement;
         }
     }
 

@@ -28,7 +28,7 @@ export async function PUT(req: Request) {
                 name, mobile, company, address,
                 propertyDefaults, tenantPortalSettings,
                 documentSettings, financialSettings,
-                language, timezone, notificationPreferences
+                language, timezone, dateFormat, notificationPreferences
             } = body;
 
             if (name) updates.name = name;
@@ -37,6 +37,7 @@ export async function PUT(req: Request) {
             if (address) updates.address = address;
             if (language) updates.language = language;
             if (timezone) updates.timezone = timezone;
+            if (dateFormat) updates.dateFormat = dateFormat;
             if (notificationPreferences) updates.notificationPreferences = notificationPreferences;
             if (propertyDefaults) updates.propertyDefaults = propertyDefaults;
             if (tenantPortalSettings) updates.tenantPortalSettings = tenantPortalSettings;

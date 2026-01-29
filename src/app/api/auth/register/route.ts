@@ -34,8 +34,57 @@ export async function POST(req: Request) {
         }
 
         const existingUser = await db.findUserByEmail(normalizedEmail);
+
         if (existingUser) {
-            return NextResponse.json({ error: 'User already exists' }, { status: 409 });
+            // Check if user is 'removed' - if so, allow "resurrection" (Re-registration)
+            if (existingUser.status === 'removed') {
+                const passwordHash = await bcrypt.hash(password, 10);
+
+                // Update the existing user record
+                const updatedUser = await db.updateUser(existingUser.id, {
+                    name,
+                    passwordHash,
+                    role,
+                    status: role === 'tenant' ? 'inactive' : 'active',
+                    // Reset profile data if needed, or keep history. 
+                    // For now, let's keep it simple and just reactivate the account.
+                    // If tenant, they will need to complete profile again if we reset it, 
+                    // or usage existing profile. Let's assume we keep profile but require verification again.
+                });
+
+                if (!updatedUser) {
+                    return NextResponse.json({ error: 'Failed to reactivate account' }, { status: 500 });
+                }
+
+                // Create JWT
+                const token = await new SignJWT({ userId: updatedUser.id, role: updatedUser.role, name: updatedUser.name, email: updatedUser.email })
+                    .setProtectedHeader({ alg: 'HS256' })
+                    .setExpirationTime('30d')
+                    .sign(JWT_SECRET);
+
+                const response = NextResponse.json({
+                    success: true,
+                    user: {
+                        id: updatedUser.id,
+                        name: updatedUser.name,
+                        email: updatedUser.email,
+                        role: updatedUser.role
+                    }
+                });
+
+                response.cookies.set({
+                    name: 'token',
+                    value: token,
+                    httpOnly: true,
+                    path: '/',
+                    secure: process.env.NODE_ENV === 'production',
+                    maxAge: 60 * 60 * 24 * 30, // 30 days
+                });
+
+                return response;
+            } else {
+                return NextResponse.json({ error: 'User already exists' }, { status: 409 });
+            }
         }
 
         const passwordHash = await bcrypt.hash(password, 10);

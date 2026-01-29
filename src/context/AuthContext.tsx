@@ -37,6 +37,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const statusData = await statusRes.json();
 
             if (statusRes.status === 403 && statusData.revoked) {
+                // Clear the cookie so they are truly logged out and can register again
+                await fetch('/api/auth/logout', { method: 'POST' });
                 router.push('/access-revoked');
                 setUser(null);
                 return;

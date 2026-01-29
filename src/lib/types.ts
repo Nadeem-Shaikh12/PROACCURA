@@ -7,6 +7,7 @@ export interface User {
     status?: 'active' | 'inactive' | 'removed';
     mobile?: string;
     company?: string;
+    address?: string;
     profilePhoto?: string;
     language?: string;
     timezone?: string;

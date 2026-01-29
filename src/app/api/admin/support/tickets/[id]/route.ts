@@ -5,10 +5,11 @@ import { nanoid } from 'nanoid';
 
 export async function GET(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const ticket = await db.findSupportTicketById(params.id);
+        const { id } = await params;
+        const ticket = await db.findSupportTicketById(id);
         if (!ticket) return NextResponse.json({ error: 'Ticket not found' }, { status: 404 });
 
         const landlord = await db.findUserById(ticket.landlordId);
@@ -24,10 +25,11 @@ export async function GET(
 
 export async function PATCH(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const ticket = await db.findSupportTicketById(params.id);
+        const { id } = await params;
+        const ticket = await db.findSupportTicketById(id);
         if (!ticket) return NextResponse.json({ error: 'Ticket not found' }, { status: 404 });
 
         const body = await req.json();
@@ -52,7 +54,7 @@ export async function PATCH(
             updates.status = status;
         }
 
-        const updatedTicket = await db.updateSupportTicket(params.id, updates);
+        const updatedTicket = await db.updateSupportTicket(id, updates);
         return NextResponse.json(updatedTicket);
     } catch (error) {
         console.error('Error updating ticket by admin:', error);

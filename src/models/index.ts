@@ -10,6 +10,8 @@ import Review from './Review';
 import VerificationRequest from './VerificationRequest';
 import SupportArticle from './SupportArticle';
 import SupportTicket from './SupportTicket';
+import MaintenanceRequest from './MaintenanceRequest';
+import Announcement from './Announcement';
 
 export {
     User,
@@ -24,4 +26,6 @@ export {
     VerificationRequest,
     SupportArticle,
     SupportTicket,
+    MaintenanceRequest,
+    Announcement,
 };
