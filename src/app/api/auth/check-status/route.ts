@@ -2,24 +2,33 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { jwtVerify } from 'jose';
+import { cookies } from 'next/headers';
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key-change-in-production');
 
-export async function GET(req: Request) {
+export async function GET() {
     try {
-        const token = req.headers.get('cookie')?.split('token=')[1]?.split(';')[0];
+        const cookieStore = await cookies();
+        consttokenValue = cookieStore.get('token')?.value;
 
-        if (!token) {
+        if (!tokenValue) {
             return NextResponse.json({ authenticated: false }, { status: 401 });
         }
 
-        const { payload } = await jwtVerify(token, JWT_SECRET);
+        const { payload } = await jwtVerify(tokenValue, JWT_SECRET);
         const userId = payload.userId as string;
 
         const user = await db.findUserById(userId);
 
         if (!user) {
-            return NextResponse.json({ authenticated: false, reason: 'User not found' }, { status: 404 });
+            // User not found in DB but has valid token -> Likely ephemeral DB reset.
+            // Allow them to proceed so /api/auth/me can restore the session.
+            console.log(`[Auth] User ${userId} missing from DB but has valid token. Allowing session recovery.`);
+            return NextResponse.json({
+                authenticated: true,
+                status: 'active', // Assume active to allow recovery
+                revoked: false
+            });
         }
 
         if (user.status === 'removed') {
