@@ -41,7 +41,7 @@ export default function Sidebar() {
                             <ShieldCheck size={20} />
                         </div>
                         <h1 className="text-xl font-black tracking-tight text-slate-900 italic">
-                            PRO<span className="text-blue-600">ACCURA</span>
+                            Prop<span className="text-blue-600">Accura</span>
                         </h1>
                     </div>
                     <button

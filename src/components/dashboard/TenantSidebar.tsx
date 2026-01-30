@@ -41,7 +41,7 @@ export default function TenantSidebar() {
                         <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
                             <Home size={18} />
                         </div>
-                        <span className="text-xl tracking-tight text-slate-900 font-black italic">PRO<span className="text-blue-600">ACCURA</span></span>
+                        <span className="text-xl tracking-tight text-slate-900 font-black italic">Prop<span className="text-blue-600">Accura</span></span>
                     </div>
                     <button
                         onClick={closeSidebar}

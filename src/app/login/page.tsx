@@ -79,7 +79,7 @@ export default function LoginPage() {
                         <span className="text-white/50 lowercase font-normal italic">Authorized Access Only</span>
                     </motion.h1>
                     <p className="text-indigo-100 font-medium leading-relaxed">
-                        Establishing a secure connection to the ProAccura Management Hub. Please verify your identity to proceed.
+                        Establishing a secure connection to the PropAccura Management Hub. Please verify your identity to proceed.
                     </p>
                 </div>
             </div>
