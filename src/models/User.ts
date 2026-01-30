@@ -7,6 +7,7 @@ const UserSchema = new Schema<User>({
     email: { type: String, required: true, unique: true },
     passwordHash: { type: String, required: true },
     role: { type: String, enum: ['landlord', 'tenant'], required: true },
+    status: { type: String, enum: ['active', 'inactive', 'removed'], default: 'active' },
     mobile: { type: String },
     company: { type: String },
     address: { type: String },
