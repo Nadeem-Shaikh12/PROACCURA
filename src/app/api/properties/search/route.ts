@@ -37,10 +37,18 @@ export async function GET(req: Request) {
                 p.type.toLowerCase().includes(query)
             )
             .map(async (p) => {
-                const landlord = await db.findUserById(p.landlordId);
+                let landlordName = 'Unknown Landlord';
+                if (p.landlordId) {
+                    try {
+                        const landlord = await db.findUserById(p.landlordId);
+                        if (landlord) landlordName = landlord.name;
+                    } catch (e) {
+                        console.error(`Failed to fetch landlord for property ${p.id}:`, e);
+                    }
+                }
                 return {
                     ...p,
-                    landlordName: landlord?.name || 'Unknown Landlord'
+                    landlordName
                 };
             }));
 

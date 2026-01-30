@@ -17,6 +17,11 @@ if (!admin.apps.length) {
         } else {
             // Warn but don't crash - allows build to proceed without secrets
             console.warn('⚠️ Firebase credentials missing. Skipping initialization (acceptable for build time).');
+            console.warn('Missing vars:', {
+                projectId: !!process.env.FIREBASE_PROJECT_ID,
+                email: !!process.env.FIREBASE_CLIENT_EMAIL,
+                key: !!process.env.FIREBASE_PRIVATE_KEY
+            });
         }
     } catch (error: any) {
         console.error('❌ Firebase Admin Initialization Error:', error.message);
