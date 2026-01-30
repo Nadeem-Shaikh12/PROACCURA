@@ -17,6 +17,7 @@ export const hi: Translations = {
         trusted: "10,000+ मकान मालिकों का भरोसा",
         titlePrefix: "Prop",
         titleSuffix: "Accura",
+        welcome: "PropAccura में आपका स्वागत है",
         subtitle: "हर मकान मालिक और किराएदार के लिए स्मार्ट प्रबंधन",
         description: "संपत्तियों का प्रबंधन करें, किरायेदारों का सत्यापन करें, किराए और बिलों को ट्रैक करें - एक सुरक्षित प्लेटफॉर्म पर।",
         getStarted: "शुरू करें",

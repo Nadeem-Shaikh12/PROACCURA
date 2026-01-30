@@ -20,7 +20,7 @@ export async function PUT(req: Request) {
         const user = await db.findUserById(userId);
         if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 
-        let updates: any = {};
+        const updates: any = {};
 
         if (user.role === 'landlord') {
             // Landlord specific updates

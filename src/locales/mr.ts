@@ -17,6 +17,7 @@ export const mr: Translations = {
         trusted: "10,000+ घरमालकांचा विश्वास",
         titlePrefix: "Prop",
         titleSuffix: "Accura",
+        welcome: "PropAccura मध्ये आपले स्वागत आहे",
         subtitle: "प्रत्येक घरमालक आणि भाडेकरूसाठी स्मार्ट रेंटल मॅनेजमेंट",
         description: "मालमत्ता व्यवस्थापित करा, भाडेकरूंची पडताळणी करा, भाडे आणि बिले ट्रॅक करा - सर्व काही एका सुरक्षित प्लॅटफॉर्मवर.",
         getStarted: "सुरू करा",

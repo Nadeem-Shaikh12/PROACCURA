@@ -35,7 +35,7 @@ export async function PATCH(
         const body = await req.json();
         const { content, authorName, status } = body;
 
-        let updates: any = {};
+        const updates: any = {};
 
         if (content) {
             const newReply: SupportTicketReply = {
