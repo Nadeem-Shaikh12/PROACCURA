@@ -46,7 +46,12 @@ class DBAdapter {
             try {
                 await dbConnect();
             } catch (error) {
-                console.error("MongoDB Connection Failed (Falling back to JSON):", error);
+                console.error("MongoDB Connection Failed:", error);
+                // CRITICAL: In production, we cannot fall back to JSON as it is ephemeral on Vercel.
+                // We must throw an error so the user knows something is wrong (e.g., IP whitelist issue).
+                if (process.env.NODE_ENV === 'production') {
+                    throw new Error("Database connection failed. Please check MONGODB_URI and IP Whitelist in MongoDB Atlas.");
+                }
                 this.useMongo = false;
             }
         }
