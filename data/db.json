@@ -185,6 +185,23 @@
         "twoFactorEnabled": true,
         "loginHistory": []
       }
+    },
+    {
+      "id": "4x_IeJWo2afkk3vWT6HMI",
+      "name": "Shaikh Nadeem",
+      "email": "nadeem.shaikh@mgmtech.org",
+      "passwordHash": "$2b$10$Rhb4uFjR/ALUJsr9iuCuQeB4FQed3sA6WhSMKnjEwmksiauJGTcoa",
+      "role": "tenant",
+      "status": "inactive",
+      "mobile": "",
+      "tenantProfile": {
+        "mobile": "8767683071",
+        "city": "Aurangabad",
+        "state": "Maharashtra",
+        "aadhaarNumber": "9876543210",
+        "isProfileComplete": true,
+        "paymentStatus": "PENDING"
+      }
     }
   ],
   "properties": [
@@ -446,6 +463,22 @@
       "submittedAt": "2026-01-29T12:07:30.250Z",
       "updatedAt": "2026-01-29T12:07:52.273Z",
       "verifiedAt": "2026-01-29T12:07:52.273Z"
+    },
+    {
+      "id": "360d325a-3c22-4de9-bd34-a924b7bfc573",
+      "tenantId": "4x_IeJWo2afkk3vWT6HMI",
+      "fullName": "Shaikh Nadeem",
+      "mobile": "8767683071",
+      "idProofType": "Aadhaar",
+      "idProofNumber": "9876543210",
+      "city": "Aurangabad",
+      "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
+      "propertyId": "clomzuo8y",
+      "status": "pending",
+      "paymentStatus": "paid",
+      "paymentAmount": 116.82,
+      "transactionId": "TXN_5AIS98V3M",
+      "submittedAt": "2026-01-30T07:19:27.618Z"
     }
   ],
   "history": [
