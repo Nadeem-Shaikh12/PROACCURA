@@ -1056,6 +1056,15 @@ class DBAdapter {
             };
         }
     }
+
+    async getDebugStatus() {
+        await this.init();
+        return {
+            usingMongo: this.useMongo,
+            inMemoryCacheSize: this.inMemoryCache ? Object.keys(this.inMemoryCache).length : 0,
+            dbPath: DB_PATH
+        };
+    }
 }
 
 export const db = new DBAdapter();
