@@ -1,6 +1,6 @@
 {
-    "name": "Smart Rental Platform",
-    "short_name": "SmartRental",
+    "name": "PropAccura",
+    "short_name": "PropAccura",
     "description": "Secure, role-based platform for modern rentals and tenant verification.",
     "start_url": "/",
     "display": "standalone",

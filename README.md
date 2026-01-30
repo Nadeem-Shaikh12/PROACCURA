@@ -1,6 +1,6 @@
 # 🏙️ PROACCURA
 
-> A next-generation Tenant-Landlord Management System streamlining property operations and enhancing tenant experiences.
+> A next-generation Property Management System streamlining operations for Landlords and Tenants.
 
 ![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge&logo=statuspage)
 ![Next.js](https://img.shields.io/badge/Next.js-15.1.4-black?style=for-the-badge&logo=next.js)

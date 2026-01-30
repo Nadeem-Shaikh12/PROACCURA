@@ -84,12 +84,12 @@
       "id": "9JOKiD-1EATH05WO-feHb",
       "name": "Shaikh Nadeem",
       "email": "nadimshaikh74161@gmail.com",
-      "passwordHash": "$2b$10$/xDCCDqgMGBeaBwbfbWySOjF84SL0t/XPRABd6DUU4z7wNgbYXZqm",
-      "role": "admin",
+      "passwordHash": "$2b$10$wEnvIBtJs2L.ACiQIIGw.eRe9JJAnX/Deadl/LE43DGjvUUJFvJOy",
+      "role": "tenant",
       "mobile": "8767683071",
       "aadhaar": "",
       "tenantProfile": {
-        "mobile": "8767683071",
+        "mobile": "9876543210",
         "city": "Aurangabad",
         "state": "Maharashtra",
         "aadhaarNumber": "12345678901",
@@ -117,7 +117,7 @@
         "dataSharing": true,
         "marketing": false
       },
-      "status": "removed"
+      "status": "active"
     },
     {
       "id": "wtTo9PmsS_KIPU5wJaQJw",
@@ -202,6 +202,23 @@
         "isProfileComplete": true,
         "paymentStatus": "PENDING"
       }
+    },
+    {
+      "id": "e-C2PrrYsIUwk8HyeZbRc",
+      "name": "Kshitij Pingale",
+      "email": "pingalekshitij24@gmail.com",
+      "passwordHash": "$2b$10$p0p2.HnCTp2Ve6X8JuwjSueTKihXNj.eGTe2E6gsKBFq6b2SpWdCC",
+      "role": "tenant",
+      "status": "inactive",
+      "mobile": "",
+      "tenantProfile": {
+        "mobile": "08767683071",
+        "city": "Aurangabad",
+        "state": "Maharashtra",
+        "aadhaarNumber": "12345678901",
+        "isProfileComplete": true,
+        "paymentStatus": "PENDING"
+      }
     }
   ],
   "properties": [
@@ -211,7 +228,7 @@
       "name": "Harsh Tambatkar",
       "address": "Aurangabad",
       "units": 20,
-      "occupiedUnits": 9,
+      "occupiedUnits": 10,
       "type": "Apartment",
       "monthlyRent": 1500,
       "createdAt": "2026-01-24T07:00:41.611Z"
@@ -474,11 +491,31 @@
       "city": "Aurangabad",
       "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
       "propertyId": "clomzuo8y",
-      "status": "pending",
+      "status": "rejected",
       "paymentStatus": "paid",
       "paymentAmount": 116.82,
       "transactionId": "TXN_5AIS98V3M",
-      "submittedAt": "2026-01-30T07:19:27.618Z"
+      "submittedAt": "2026-01-30T07:19:27.618Z",
+      "remarks": "",
+      "updatedAt": "2026-01-30T09:02:32.163Z"
+    },
+    {
+      "id": "ca18d0d7-b4cb-4423-a19c-0a2835ee6eb6",
+      "tenantId": "9JOKiD-1EATH05WO-feHb",
+      "fullName": "Shaikh Nadeem",
+      "mobile": "9876543210",
+      "idProofType": "Aadhaar",
+      "idProofNumber": "12345678901",
+      "city": "Aurangabad",
+      "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
+      "propertyId": "clomzuo8y",
+      "status": "approved",
+      "paymentStatus": "paid",
+      "paymentAmount": 116.82,
+      "transactionId": "TXN_HFICA2U21",
+      "submittedAt": "2026-01-30T09:01:57.511Z",
+      "updatedAt": "2026-01-30T09:02:41.156Z",
+      "verifiedAt": "2026-01-30T09:02:41.156Z"
     }
   ],
   "history": [
@@ -670,6 +707,14 @@
       "type": "JOINED",
       "description": "Tenant verified and joined the property.",
       "date": "2026-01-29T12:07:52.282Z",
+      "createdBy": "cYMGn50Zv3iB6KR_v8R7y"
+    },
+    {
+      "id": "fe0c85a9-6529-4eeb-b14e-5eb5f2883c97",
+      "tenantId": "9JOKiD-1EATH05WO-feHb",
+      "type": "JOINED",
+      "description": "Tenant verified and joined the property.",
+      "date": "2026-01-30T09:02:41.169Z",
       "createdBy": "cYMGn50Zv3iB6KR_v8R7y"
     }
   ],
@@ -1213,6 +1258,26 @@
       "type": "NEW_BILL_CYCLE",
       "isRead": false,
       "createdAt": "2026-01-29T13:17:49.292Z"
+    },
+    {
+      "id": "e7c3edf7-9f5a-4674-b573-37bba9ee5826",
+      "userId": "4x_IeJWo2afkk3vWT6HMI",
+      "role": "tenant",
+      "title": "Application Rejected",
+      "message": "Your verification request was not approved. ",
+      "type": "REMARK_ADDED",
+      "isRead": false,
+      "createdAt": "2026-01-30T09:02:32.170Z"
+    },
+    {
+      "id": "d247aa71-386e-438c-8dc0-15cc9aaa437c",
+      "userId": "9JOKiD-1EATH05WO-feHb",
+      "role": "tenant",
+      "title": "Application Approved!",
+      "message": "Your verification request has been approved by the landlord. Welcome home!",
+      "type": "REMARK_ADDED",
+      "isRead": false,
+      "createdAt": "2026-01-30T09:02:41.224Z"
     }
   ],
   "bills": [
@@ -1711,6 +1776,14 @@
       "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
       "propertyId": "clomzuo8y",
       "joinDate": "2026-01-29T12:07:52.291Z",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "f45f376d-7f69-408d-9c23-1add7fee6980",
+      "tenantId": "9JOKiD-1EATH05WO-feHb",
+      "landlordId": "cYMGn50Zv3iB6KR_v8R7y",
+      "propertyId": "clomzuo8y",
+      "joinDate": "2026-01-30T09:02:41.182Z",
       "status": "ACTIVE"
     }
   ],

@@ -19,13 +19,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Smart Rental & Tenant Verification",
+  title: "PropAccura - Property Management Simplified",
   description: "Secure, role-based platform for modern rentals.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Smart Rental",
+    title: "PropAccura",
   },
   formatDetection: {
     telephone: false,
