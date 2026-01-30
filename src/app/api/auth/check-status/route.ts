@@ -9,7 +9,7 @@ const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secr
 export async function GET() {
     try {
         const cookieStore = await cookies();
-        consttokenValue = cookieStore.get('token')?.value;
+        const tokenValue = cookieStore.get('token')?.value;
 
         if (!tokenValue) {
             return NextResponse.json({ authenticated: false }, { status: 401 });
