@@ -50,7 +50,9 @@ class DBAdapter {
                 // CRITICAL: In production, we cannot fall back to JSON as it is ephemeral on Vercel.
                 // We must throw an error so the user knows something is wrong (e.g., IP whitelist issue).
                 if (process.env.NODE_ENV === 'production') {
-                    throw new Error("Database connection failed. Please check MONGODB_URI and IP Whitelist in MongoDB Atlas.");
+                    // Include the actual error message for debugging (Auth failed vs Timeout)
+                    const errorMessage = error instanceof Error ? error.message : String(error);
+                    throw new Error(`Database connection failed: ${errorMessage}. Check MONGODB_URI and IP Whitelist.`);
                 }
                 this.useMongo = false;
             }
