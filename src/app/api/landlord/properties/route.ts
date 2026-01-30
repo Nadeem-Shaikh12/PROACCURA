@@ -2,15 +2,20 @@ import { db } from '@/lib/db';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
-    const { searchParams } = new URL(req.url);
-    const landlordId = searchParams.get('landlordId');
+    try {
+        const { searchParams } = new URL(req.url);
+        const landlordId = searchParams.get('landlordId');
 
-    if (!landlordId) {
-        return NextResponse.json({ error: 'Missing landlordId' }, { status: 400 });
+        if (!landlordId) {
+            return NextResponse.json({ error: 'Missing landlordId' }, { status: 400 });
+        }
+
+        const properties = await db.getProperties(landlordId);
+        return NextResponse.json({ properties });
+    } catch (e) {
+        console.error("Properties API Error:", e);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
-
-    const properties = await db.getProperties(landlordId);
-    return NextResponse.json({ properties });
 }
 
 export async function POST(req: Request) {

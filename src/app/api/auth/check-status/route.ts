@@ -7,6 +7,7 @@ import { cookies } from 'next/headers';
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key-change-in-production');
 
 export async function GET() {
+    console.log("Check-Status API called");
     try {
         const cookieStore = await cookies();
         const tokenValue = cookieStore.get('token')?.value;
