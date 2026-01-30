@@ -5,21 +5,28 @@ import * as admin from 'firebase-admin';
 // We check if apps.length is 0 to prevent re-initialization during hot reloads
 if (!admin.apps.length) {
     try {
-        admin.initializeApp({
-            credential: admin.credential.cert({
-                projectId: process.env.FIREBASE_PROJECT_ID,
-                clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-                // Replace escaped newlines with actual newlines
-                privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-            }),
-        });
-        console.log('🔥 Firebase Admin Initialized Successfully');
+        if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_CLIENT_EMAIL && process.env.FIREBASE_PRIVATE_KEY) {
+            admin.initializeApp({
+                credential: admin.credential.cert({
+                    projectId: process.env.FIREBASE_PROJECT_ID,
+                    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+                    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+                }),
+            });
+            console.log('🔥 Firebase Admin Initialized Successfully');
+        } else {
+            // Warn but don't crash - allows build to proceed without secrets
+            console.warn('⚠️ Firebase credentials missing. Skipping initialization (acceptable for build time).');
+        }
     } catch (error: any) {
         console.error('❌ Firebase Admin Initialization Error:', error.message);
     }
 }
 
-const db = admin.firestore();
-const auth = admin.auth();
+// Export safe instances. If init was skipped, these might throw on usage, but import will succeed.
+// In a build environment (no secrets), we prioritize import success.
+const db = admin.apps.length ? admin.firestore() : {} as admin.firestore.Firestore;
+const auth = admin.apps.length ? admin.auth() : {} as admin.auth.Auth;
 
 export { db, auth };
+
