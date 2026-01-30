@@ -153,7 +153,7 @@ export default function TenantDashboard() {
                     </div>
                 </div>
                 <h1 className="text-5xl font-black text-slate-900 mb-4 tracking-tighter">Start Your Journey</h1>
-                <p className="text-slate-400 text-xl max-w-md mb-12 leading-relaxed font-bold">Elevate your living experience with Smart Rental&apos;s professional verification ecosystem.</p>
+                <p className="text-slate-400 text-xl max-w-md mb-12 leading-relaxed font-bold">Elevate your living experience with PropAccura&apos;s professional verification ecosystem.</p>
                 <Link href="/tenant/onboarding" className="group relative px-12 py-5 bg-slate-900 text-white rounded-3xl font-black text-sm uppercase tracking-widest overflow-hidden transition-all hover:scale-[1.02] active:scale-95 shadow-2xl shadow-slate-200">
                     <span className="relative z-10 flex items-center gap-3">
                         Onboard Now <ArrowUpRight size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
@@ -258,10 +258,10 @@ export default function TenantDashboard() {
 
                 {/* Row 2: Right - Community (4) */}
                 <div className={`md:col-span-12 h-full ${(stay.portalSettings?.showMaintenanceRequests === false && stay.portalSettings?.allowDocumentUploads === false)
-                        ? 'xl:col-span-12'
-                        : (stay.portalSettings?.showMaintenanceRequests === false || stay.portalSettings?.allowDocumentUploads === false)
-                            ? 'xl:col-span-8'
-                            : 'xl:col-span-4'
+                    ? 'xl:col-span-12'
+                    : (stay.portalSettings?.showMaintenanceRequests === false || stay.portalSettings?.allowDocumentUploads === false)
+                        ? 'xl:col-span-8'
+                        : 'xl:col-span-4'
                     }`}>
                     <CommunityBoardWidget />
                 </div>

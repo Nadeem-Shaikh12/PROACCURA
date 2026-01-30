@@ -15,7 +15,8 @@ export const en = {
         trusted: "Trusted by 10,000+ Landlords",
         titlePrefix: "Prop",
         titleSuffix: "Accura",
-        subtitle: "Smart Rental & Tenant Management for Every Homeowner and Renter",
+        welcome: "Welcome to PropAccura",
+        subtitle: "Your complete solution for rental management and verification",
         description: "Manage properties, verify tenants, track rent & bills, and stay organized — all in one secure platform.",
         getStarted: "Get Started",
         learnMore: "Learn How It Works"
