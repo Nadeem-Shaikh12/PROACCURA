@@ -26,7 +26,7 @@ export async function POST(req: Request) {
         const { propertyId, fullName, mobile, idProofType, idProofNumber, city, paymentStatus, paymentAmount, transactionId } = payloadData;
 
         // Check for existing pending request
-        const existingRequest = await db.findRequestByTenantId(payload.userId as string);
+        const existingRequest = await db.findTenantRequest(payload.userId as string);
         if (existingRequest && existingRequest.status === 'pending') {
             return NextResponse.json({ error: 'Verification process is already pending. Landlord will connect with you.' }, { status: 409 });
         }
@@ -78,6 +78,7 @@ export async function POST(req: Request) {
 }
 
 export async function GET() {
+    console.log('[API] Tenant Verify GET Request Received');
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
 
@@ -91,7 +92,7 @@ export async function GET() {
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
         }
 
-        const request = await db.findRequestByTenantId(payload.userId as string);
+        const request = await db.findTenantRequest(payload.userId as string);
         console.log(`[API GET] Tenant Verify Check for ${payload.userId}:`, request);
 
         let landlordName = '';
@@ -102,6 +103,7 @@ export async function GET() {
 
         return NextResponse.json({ request: request ? { ...request, landlordName } : null });
     } catch (error) {
+        console.error('[API GET] Tenant Verify Error:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }

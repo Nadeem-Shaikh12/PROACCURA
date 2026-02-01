@@ -242,17 +242,21 @@ class DBAdapter {
         }
     }
 
-    async findRequestByTenantId(tenantId: string) {
+    async findTenantRequest(tenantId: string) {
         await this.init();
         if (this.useFirebase) {
+            console.log(`[DB] Finding request for tenant ${tenantId} (No Index Mode)`);
             const snapshot = await firestore.collection('verificationRequests')
                 .where('tenantId', '==', tenantId)
-                .orderBy('submittedAt', 'desc')
-                .limit(1)
                 .get();
 
             if (snapshot.empty) return undefined;
-            return snapshot.docs[0].data() as VerificationRequest;
+
+            // Sort in memory to avoid needing a composite index
+            const requests = snapshot.docs.map(doc => doc.data() as VerificationRequest);
+            requests.sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
+
+            return requests[0];
         } else {
             const db = await this.readJSON();
             return db.verificationRequests
