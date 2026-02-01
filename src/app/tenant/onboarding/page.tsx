@@ -122,7 +122,10 @@ export default function OnboardingPage() {
                 try {
                     const data = await res.json();
                     if (data.error) errorMsg = data.error;
-                    if (data.details) console.error('Error details:', data.details);
+                    if (data.details) {
+                        console.error('Error details:', data.details);
+                        errorMsg += `\nDetails: ${data.details}`;
+                    }
                 } catch (e) {
                     console.error('Error parsing response:', e);
                 }
@@ -130,7 +133,7 @@ export default function OnboardingPage() {
             }
         } catch (e) {
             console.error(e);
-            alert('Something went wrong.');
+            alert('Something went wrong.\nCheck console for details.');
         } finally {
             setLoading(false);
         }
