@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import path from 'path';
+import cloudinary from '@/lib/cloudinary';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(request: Request) {
@@ -13,27 +12,34 @@ export async function POST(request: Request) {
         }
 
         const buffer = Buffer.from(await file.arrayBuffer());
-        const ext = path.extname(file.name) || '';
-        const filename = `file-${uuidv4()}${ext}`;
+        const filename = `${uuidv4()}-${file.name.replace(/\s+/g, '_')}`;
 
-        // Ensure directory exists
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'files');
-        await mkdir(uploadDir, { recursive: true });
+        // Upload to Cloudinary using a stream
+        const result = await new Promise<any>((resolve, reject) => {
+            const uploadStream = cloudinary.uploader.upload_stream(
+                {
+                    folder: 'tenant_uploads/files',
+                    public_id: filename,
+                    resource_type: 'auto', // Detects image/pdf/raw
+                },
+                (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
+                }
+            );
+            uploadStream.end(buffer);
+        });
 
-        const filePath = path.join(uploadDir, filename);
-        await writeFile(filePath, buffer);
-
-        // Return file info
         return NextResponse.json({
             success: true,
-            url: `/uploads/files/${filename}`,
+            url: result.secure_url,
             name: file.name,
             type: file.type,
             size: file.size
         });
 
-    } catch (error) {
-        console.error('File upload error:', error);
-        return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
+    } catch (error: any) {
+        console.error('Cloudinary upload error:', error);
+        return NextResponse.json({ error: `Upload failed: ${error.message}` }, { status: 500 });
     }
 }

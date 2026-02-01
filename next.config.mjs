@@ -6,7 +6,17 @@ const nextConfig = {
         config.resolve.alias.encoding = false;
         return config;
     },
-    turbopack: {}
+    turbopack: {},
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'res.cloudinary.com',
+                port: '',
+                pathname: '/**',
+            },
+        ],
+    },
 };
 
 export default nextConfig;

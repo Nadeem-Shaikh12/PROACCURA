@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import path from 'path';
+import cloudinary from '@/lib/cloudinary';
 import { v4 as uuidv4 } from 'uuid';
+import path from 'path';
 
 export async function POST(request: Request) {
     try {
@@ -13,26 +13,30 @@ export async function POST(request: Request) {
         }
 
         const buffer = Buffer.from(await file.arrayBuffer());
-        const filename = `audio-${uuidv4()}${path.extname(file.name) || '.webm'}`;
 
-        // Ensure directory exists
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'audio');
-        await mkdir(uploadDir, { recursive: true });
-
-        const filePath = path.join(uploadDir, filename);
-        await writeFile(filePath, buffer);
-
-        // Return public URL
-        const fileUrl = `/uploads/audio/${filename}`;
+        // Upload to Cloudinary
+        const result = await new Promise<any>((resolve, reject) => {
+            const uploadStream = cloudinary.uploader.upload_stream(
+                {
+                    folder: 'tenant_uploads/audio',
+                    resource_type: 'video', // 'video' handles audio in Cloudinary
+                },
+                (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
+                }
+            );
+            uploadStream.end(buffer);
+        });
 
         return NextResponse.json({
             success: true,
-            url: fileUrl,
-            duration: 0 // Duration calculation would require ffmpeg, skipping for MVP
+            url: result.secure_url,
+            duration: result.duration || 0
         });
 
-    } catch (error) {
-        console.error('Audio upload error:', error);
-        return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
+    } catch (error: any) {
+        console.error('Cloudinary upload error:', error);
+        return NextResponse.json({ error: `Upload failed: ${error.message}` }, { status: 500 });
     }
 }

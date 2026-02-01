@@ -26,7 +26,17 @@ export default function FileAttachmentBubble({ url, name, type, size }: FileAtta
         return (
             <div className="rounded-lg overflow-hidden border border-zinc-200 bg-zinc-100 max-w-[240px]">
                 <div className="relative w-full h-auto min-h-[120px]">
-                    <img src={url} alt={name} className="w-full h-auto object-cover max-h-[300px]" loading="lazy" />
+                    <img
+                        src={url}
+                        alt={name}
+                        className="w-full h-auto object-cover max-h-[300px]"
+                        loading="lazy"
+                        onError={(e) => {
+                            console.error('Image failed to load:', url);
+                            e.currentTarget.style.display = 'none';
+                            e.currentTarget.parentElement!.innerHTML = `<div class="p-2 text-xs text-red-500 break-all border border-red-200 bg-red-50 rounded">Failed to load: ${url}</div>`;
+                        }}
+                    />
                 </div>
             </div>
         );
