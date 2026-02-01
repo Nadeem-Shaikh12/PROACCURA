@@ -147,9 +147,9 @@ export default function TenantMessagesPage() {
         const file = e.target.files?.[0];
         if (!file || !activeContact) return;
 
-        // Validation for safety (optional limit 10MB)
-        if (file.size > 10 * 1024 * 1024) {
-            alert('File too large (Max 10MB)');
+        // Validation for safety (Max 4MB to fit Vercel Serverless limit)
+        if (file.size > 4 * 1024 * 1024) {
+            alert('File too large (Max 4MB allowed on free tier)');
             return;
         }
 
@@ -162,6 +162,17 @@ export default function TenantMessagesPage() {
                 method: 'POST',
                 body: formData
             });
+
+            if (!uploadRes.ok) {
+                const text = await uploadRes.text();
+                try {
+                    const errorJson = JSON.parse(text);
+                    throw new Error(errorJson.error || 'Upload failed');
+                } catch {
+                    throw new Error(`Upload failed: ${uploadRes.status} ${uploadRes.statusText} (File might be too large)`);
+                }
+            }
+
             const uploadData = await uploadRes.json();
 
             if (uploadData.success) {
@@ -182,10 +193,12 @@ export default function TenantMessagesPage() {
                 const res = await fetch(`/api/messages?chatWith=${activeContact.id}`);
                 const data = await res.json();
                 setMessages(data.messages || []);
+            } else {
+                throw new Error(uploadData.error || 'Unknown upload error');
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Failed to upload file', error);
-            alert('Upload failed');
+            alert(`Upload Error: ${error.message}`);
         }
     };
 
