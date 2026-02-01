@@ -19,7 +19,9 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
         }
 
-        const { propertyId, fullName, mobile, idProofType, idProofNumber, city, paymentStatus, paymentAmount, transactionId } = await req.json();
+        const payloadData = await req.json();
+        console.log('[API POST] Tenant Verify Payload:', payloadData);
+        const { propertyId, fullName, mobile, idProofType, idProofNumber, city, paymentStatus, paymentAmount, transactionId } = payloadData;
 
         // Check for existing pending request
         const existingRequest = await db.findRequestByTenantId(payload.userId as string);
@@ -54,8 +56,22 @@ export async function POST(req: Request) {
         });
 
         return NextResponse.json({ success: true, request: newRequest });
-    } catch (error) {
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    } catch (error: any) {
+        console.error('[API POST] Tenant Verify Error:', error);
+
+        let errorMessage = 'Internal Server Error';
+        let details = error instanceof Error ? error.message : String(error);
+
+        // Check for Firebase initialization failure (common in Vercel if env vars missing)
+        if (details.includes('collection is not a function') || details.includes('firestore.collection is not a function')) {
+            errorMessage = 'Server Configuration Error: Firebase credentials missing or invalid.';
+            console.error('CRITICAL: Firebase Admin not initialized. Check FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY in Vercel Settings.');
+        }
+
+        return NextResponse.json({
+            error: errorMessage,
+            details: details
+        }, { status: 500 });
     }
 }
 

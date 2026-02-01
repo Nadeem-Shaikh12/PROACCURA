@@ -118,7 +118,15 @@ export default function OnboardingPage() {
                 // Redirect to Dashboard
                 router.push('/tenant/dashboard');
             } else {
-                alert('Verification request failed. Please try again.');
+                let errorMsg = 'Verification request failed. Please try again.';
+                try {
+                    const data = await res.json();
+                    if (data.error) errorMsg = data.error;
+                    if (data.details) console.error('Error details:', data.details);
+                } catch (e) {
+                    console.error('Error parsing response:', e);
+                }
+                alert(errorMsg);
             }
         } catch (e) {
             console.error(e);

@@ -37,8 +37,15 @@ class DBAdapter {
     private inMemoryCache: JSONSchema | null = null;
 
     constructor() {
-        // Always usage Firebase in this new version, fallback to JSON only if env missing (but we have it)
-        this.useFirebase = true;
+        // Automatically detect if Firebase is initialized correctly
+        // @ts-ignore
+        this.useFirebase = !!(firestore && typeof firestore.collection === 'function');
+
+        if (!this.useFirebase) {
+            console.warn('⚠️ Firebase unimplemented or credentials missing. Falling back to JSON/Memory adapter.');
+        } else {
+            console.log('✅ DBAdapter using Firebase Firestore');
+        }
     }
 
     // HELPER: Init (No-op for Firebase as it inits on import)
@@ -478,7 +485,8 @@ class DBAdapter {
         if (this.useFirebase) {
             const doc = await firestore.collection('properties').doc(id).get();
             if (!doc.exists) return undefined;
-            return doc.data() as Property;
+            const data = doc.data();
+            return { ...data, id: doc.id } as Property;
         } else {
             const db = await this.readJSON();
             return db.properties.find(p => p.id === id);
@@ -491,7 +499,10 @@ class DBAdapter {
             const snapshot = await firestore.collection('properties')
                 .where('landlordId', '==', landlordId)
                 .get();
-            return snapshot.docs.map(doc => doc.data() as Property);
+            return snapshot.docs.map(doc => {
+                const data = doc.data();
+                return { ...data, id: doc.id } as Property;
+            });
         } else {
             const db = await this.readJSON();
             return db.properties.filter(p => p.landlordId === landlordId);
@@ -502,7 +513,10 @@ class DBAdapter {
         await this.init();
         if (this.useFirebase) {
             const snapshot = await firestore.collection('properties').get();
-            return snapshot.docs.map(doc => doc.data() as Property);
+            return snapshot.docs.map(doc => {
+                const data = doc.data();
+                return { ...data, id: doc.id } as Property;
+            });
         } else {
             const db = await this.readJSON();
             return db.properties;
