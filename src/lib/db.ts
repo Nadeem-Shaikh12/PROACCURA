@@ -118,12 +118,9 @@ class DBAdapter {
             await fs.mkdir(path.dirname(DB_PATH), { recursive: true });
             await fs.writeFile(DB_PATH, JSON.stringify(data, null, 2), 'utf-8');
         } catch (error) {
-            const err = error as { code?: string };
-            if (err.code === 'EROFS') {
-                console.warn("Read-only file system detected. Data saved to memory only.");
-            } else {
-                console.error("Failed to write to DB file:", error);
-            }
+            // In serverless/read-only environments (like Vercel), this will fail.
+            // We suppress the error and just keep data in memory.
+            console.warn("⚠️ Failed to write to DB file (likely read-only fs). Data saved to memory only.");
         }
     }
 

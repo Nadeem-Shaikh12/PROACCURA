@@ -2,10 +2,12 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
+import { v4 as uuidv4 } from 'uuid';
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key-change-in-production');
 
 export async function POST(req: Request) {
+    console.log('[API] Tenant Verify POST Request Received');
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
 
@@ -39,7 +41,7 @@ export async function POST(req: Request) {
         }
 
         const newRequest = await db.addRequest({
-            id: crypto.randomUUID(),
+            id: uuidv4(),
             tenantId: payload.userId as string,
             fullName,
             mobile,
