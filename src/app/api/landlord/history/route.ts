@@ -28,7 +28,7 @@ export async function POST(req: Request) {
         }
 
         // Verify the landlord "owns" this tenant
-        const request = await db.findRequestByTenantId(tenantId);
+        const request = await db.findTenantRequest(tenantId);
         if (!request || request.landlordId !== payload.userId) {
             return NextResponse.json({ error: 'Unauthorized to modify this tenant' }, { status: 403 });
         }

@@ -4,7 +4,7 @@ import { MOCK_LEASES, MOCK_SCHEDULES } from '@/lib/store';
 export async function checkAndTriggerMonthlyNotifications(userId: string, role: 'landlord' | 'tenant') {
     // Existing Monthly Milestone Logic
     if (role === 'tenant') {
-        const request = await db.findRequestByTenantId(userId);
+        const request = await db.findTenantRequest(userId);
         if (request && request.status === 'approved' && request.joiningDate) {
             await processMonthlyLogic(request.tenantId, request.joiningDate, 'tenant', request.fullName);
         }

@@ -32,7 +32,7 @@ async function testExport() {
         ] = await Promise.all([
             db.findUserById(userId),
             db.getTenantStay(userId),
-            db.findRequestByTenantId(userId),
+            db.findTenantRequest(userId),
             db.getTenantHistory(userId),
             db.getBillsByTenant(userId),
             db.getAllMessagesForUser(userId),
